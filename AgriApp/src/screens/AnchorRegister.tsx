@@ -7,11 +7,10 @@ import { RootStackParamList } from '../../App';
 
 export default function AnchorRegister() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
   const handleSubmit = () => {
     Alert.alert(
       'Success',
-      'Anchor registration submitted!',
+      'Anchor registration successful !',
       [
         {
           text: 'OK',
@@ -24,11 +23,15 @@ export default function AnchorRegister() {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Anchor Registration</Text>
-      <TextInput placeholder="Anchor Name" style={styles.input} />
-      <TextInput placeholder="Experience (in years)" style={styles.input} />
-      <TextInput placeholder="Location" style={styles.input} />
+      <TextInput placeholder="Anchor/Organization/Company Name" style={styles.input} />
+      <TextInput placeholder="Company Registration Number/GST Number" style={styles.input} />
+      <TextInput placeholder="Company Address" style={styles.input} />
+      <TextInput placeholder="Contact Person Name" style={styles.input} />
+      <TextInput placeholder="Contact Person Number" style={styles.input} />
+      <TextInput placeholder="Email Id" style={styles.input} />
+      <TextInput placeholder="Estimated Number of Users" style={styles.input} />
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-        <Text style={styles.btnText}>Submit</Text>
+        <Text style={styles.btnText}>Register</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

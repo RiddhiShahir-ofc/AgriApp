@@ -11,7 +11,7 @@ export default function SellerRegister() {
   const handleSubmit = () => {
     Alert.alert(
       'Success',
-      'Seller registration submitted!',
+      'Seller registration successful !',
       [
         {
           text: 'OK',
@@ -25,10 +25,11 @@ export default function SellerRegister() {
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Seller Registration</Text>
       <TextInput placeholder="Seller Name" style={styles.input} />
-      <TextInput placeholder="Shop Name" style={styles.input} />
-      <TextInput placeholder="License Number" style={styles.input} />
+      <TextInput placeholder="Business Name" style={styles.input} />
+      <TextInput placeholder="Primary Crop" style={styles.input} />
+      <TextInput placeholder="Location" style={styles.input} />
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-        <Text style={styles.btnText}>Submit</Text>
+      <Text style={styles.btnText}>Register</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

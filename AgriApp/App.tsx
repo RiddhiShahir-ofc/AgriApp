@@ -44,17 +44,17 @@ export default function App() {
         <Stack.Screen name="Register" component={Register} options={{ title: 'Register' }} />
         <Stack.Screen name="Otp" component={OTP} options={{ title: 'OTP Verification' }} />
         <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
-        <Stack.Screen name="FarmerRegister" component={FarmerRegister} options={{ title: 'Farmer Registration' }} />
-        <Stack.Screen name="BuyerRegister" component={BuyerRegister} options={{ title: 'Buyer Registration' }} />
-        <Stack.Screen name="SellerRegister" component={SellerRegister} options={{ title: 'Seller Registration' }} />
-        <Stack.Screen name="MandiOfficialRegister" component={MandiOfficialRegister} options={{ title: 'Mandi Official Registration' }} />
-        <Stack.Screen name="AnchorRegister" component={AnchorRegister} options={{ title: 'Anchor Registration' }} />
+        <Stack.Screen name="FarmerRegister" component={FarmerRegister} options={{ title: 'Back' }} />
+        <Stack.Screen name="BuyerRegister" component={BuyerRegister} options={{ title: '' }} />
+        <Stack.Screen name="SellerRegister" component={SellerRegister} options={{ title: '' }} />
+        <Stack.Screen name="MandiOfficialRegister" component={MandiOfficialRegister} options={{ title: '' }} />
+        <Stack.Screen name="AnchorRegister" component={AnchorRegister} options={{title:'Back' }} />
         <Stack.Screen name="FarmerDashboard" component={FarmerDashboard} options={{ headerShown: false }} />
         <Stack.Screen name="BuyerDashboard" component={BuyerDashboard} options={{ headerShown: false }} />
         <Stack.Screen name="SellerDashboard" component={SellerDashboard} options={{ headerShown: false }} />
         <Stack.Screen name="MandiOfficialDashboard" component={MandiOfficialDashboard} options={{ headerShown: false }} />
-        <Stack.Screen name="AnchorDashboard" component={AnchorDashboard} options={{ headerShown: false }} />
+        <Stack.Screen name="AnchorDashboard" component={AnchorDashboard} options={{ headerShown:false }} />
         </Stack.Navigator>
     </NavigationContainer>
   );
-}
+} 

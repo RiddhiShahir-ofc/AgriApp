@@ -11,7 +11,7 @@ export default function FarmerRegister() {
   const handleSubmit = () => {
     Alert.alert(
       'Success',
-      'Farmer registration submitted!',
+      'Farmer registration successful !',
       [
         {
           text: 'OK',
@@ -25,10 +25,10 @@ export default function FarmerRegister() {
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Farmer Registration</Text>
       <TextInput placeholder="Farmer Name" style={styles.input} />
-      <TextInput placeholder="Village" style={styles.input} />
-      <TextInput placeholder="Contact Number" keyboardType="phone-pad" style={styles.input} />
+      <TextInput placeholder="Village location" style={styles.input} />
+      <TextInput placeholder="Interested Crop" style={styles.input} />
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-        <Text style={styles.btnText}>Submit</Text>
+        <Text style={styles.btnText}>Register</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

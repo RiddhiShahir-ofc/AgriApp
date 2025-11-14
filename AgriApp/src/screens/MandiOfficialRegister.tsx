@@ -11,7 +11,7 @@ export default function MandiOfficialRegister() {
   const handleSubmit = () => {
     Alert.alert(
       'Success',
-      'Mandi Official registration submitted!',
+      'Mandi Official registration successful !',
       [
         {
           text: 'OK',
@@ -25,10 +25,13 @@ export default function MandiOfficialRegister() {
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Mandi Official Registration</Text>
       <TextInput placeholder="Official Name" style={styles.input} />
-      <TextInput placeholder="Designation" style={styles.input} />
-      <TextInput placeholder="Office ID" style={styles.input} />
+      <TextInput placeholder="Employee ID/Official ID" style={styles.input} />
+      <TextInput placeholder="Assigned Mandi" style={styles.input} />
+      <TextInput placeholder="Location" style={styles.input} />
+      <TextInput placeholder="Officer Role" style={styles.input} />
+      <TextInput placeholder="Email Id" style={styles.input} />
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-        <Text style={styles.btnText}>Submit</Text>
+        <Text style={styles.btnText}>Register</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

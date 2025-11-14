@@ -11,7 +11,7 @@ export default function BuyerRegister() {
   const handleSubmit = () => {
     Alert.alert(
       'Success',
-      'Buyer registration submitted!',
+      'Buyer registration successful !',
       [
         {
           text: 'OK',
@@ -26,10 +26,13 @@ export default function BuyerRegister() {
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Buyer Registration</Text>
       <TextInput placeholder="Buyer Name" style={styles.input} />
-      <TextInput placeholder="Company Name" style={styles.input} />
+      <TextInput placeholder="Business Entity" style={styles.input} />
+      <TextInput placeholder="Business Id/ GST Number" style={styles.input} />
       <TextInput placeholder="Email" keyboardType="email-address" style={styles.input} />
+      <TextInput placeholder="Location" style={styles.input} />
+      <TextInput placeholder="Intrested Crops" style={styles.input} />
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-        <Text style={styles.btnText}>Submit</Text>
+      <Text style={styles.btnText}>Register</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
