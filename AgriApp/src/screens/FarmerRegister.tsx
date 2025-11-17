@@ -1,32 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
+import { registerRole } from '../services/auth';
 
 export default function FarmerRegister() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const handleSubmit = () => {
-    Alert.alert(
-      'Success',
-      'Farmer registration successful !',
-      [
-        {
-          text: 'OK',
-          onPress: () => navigation.reset({ index: 0, routes: [{ name: 'FarmerDashboard' }] }),
-        },
-      ]
-    );
+  // const [name, setName] = useState('');
+  // const [village, setVillage] = useState('');
+  // const [crop, setCrop] = useState('');
+
+  const handleSubmit = async () => {
+    // try {
+    //   const res = await registerRole('farmer', { name, village, crop });
+
+      Alert.alert(
+        'Success',
+        'Farmer registration successful !',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'FarmerDashboard' }],
+              });
+            },
+          },
+        ]
+      );
+    // } catch (e: any) {
+    //   Alert.alert('Error', e.message || 'Farmer Registration failed');
+    // }
   };
+
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Farmer Registration</Text>
-      <TextInput placeholder="Farmer Name" style={styles.input} />
+      {/* <TextInput placeholder="Farmer Name" value={name} onChangeText={setName} style={styles.input} />
+      <TextInput placeholder="Village location" value={village} onChangeText={setVillage} style={styles.input} />
+      <TextInput placeholder="Interested Crop" value={crop} onChangeText={setCrop} style={styles.input} /> */}
+
+        <TextInput placeholder="Farmer Name" style={styles.input} />
       <TextInput placeholder="Village location" style={styles.input} />
       <TextInput placeholder="Interested Crop" style={styles.input} />
+
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
         <Text style={styles.btnText}>Register</Text>
       </TouchableOpacity>

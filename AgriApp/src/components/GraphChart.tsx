@@ -1,37 +1,3 @@
-// import React from 'react';
-// import { View } from 'react-native';
-// import { LineChart } from 'react-native-chart-kit';
-// import { Dimensions } from 'react-native';
-
-// const screenWidth = Dimensions.get('window').width - 40;
-
-// export default function GraphChart() {
-//   const data = {
-//     labels: ['Mon', 'Tue', 'Wed', 'Thu'],
-//     datasets: [{ data: [20, 45, 28, 80] }],
-//   };
-
-//   return (
-//     <View>
-//       <LineChart
-//         data={data}
-//         width={screenWidth -32}
-//         height={160}
-//         chartConfig={{
-//           backgroundGradientFrom: '#fff',
-//           backgroundGradientTo: '#fff',
-//           decimalPlaces: 0,
-//           color: (opacity = 1) => `rgba(43,108,176, ${opacity})`,
-//           labelColor: () => '#666',
-//         }}
-//         bezier
-//         withInnerLines={false}
-//         withOuterLines={false}
-//       />
-//     </View>
-//   );
-// }
-
 import React from 'react';
 import { View } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';

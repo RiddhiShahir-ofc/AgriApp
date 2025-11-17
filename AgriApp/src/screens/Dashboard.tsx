@@ -199,9 +199,15 @@ export default function Dashboard({ navigation }: Props) {
     }
   };
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     // Apply current filters to graph
     setAppliedFilters(filters);
+
+  //    // optionally fetch aggregated data for main dashboard:
+  // const res = await getJSON(`/api/market-data?mandi=${encodeURIComponent(filters.mandi)}&crop=${encodeURIComponent(filters.crop)}`);
+  // // pass res to GraphChart or set state to pass to chart
+  // setChartData(res.chart);
+
   };
 
   return (
