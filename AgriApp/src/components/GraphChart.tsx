@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 
-const screenWidth = Dimensions.get('window').width - 40;
+const screenWidth = Dimensions.get('window').width - 60;
 
 interface GraphChartProps {
   filters?: { mandi?: string; crop?: string };

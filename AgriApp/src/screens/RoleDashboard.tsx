@@ -5,7 +5,6 @@ import RoleReports from './roleTabs/RoleReports';
 import RoleNotifications from './roleTabs/RoleNotifications';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
-import { View, Text } from 'react-native';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Dashboard'> & { role: string };
 

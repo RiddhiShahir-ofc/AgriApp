@@ -84,7 +84,7 @@ const [initialRoute, setInitialRoute] = useState<'Landing' | 'FarmerDashboard' |
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Landing">
+      <Stack.Navigator initialRouteName={initialRoute}>
         <Stack.Screen name="Landing" component={Landing} options={{ headerShown: false }} />
         <Stack.Screen name="Register" component={Register} options={{ title: 'Register' }} />
         <Stack.Screen name="Otp" component={OTP} options={{ title: 'OTP Verification' }} />

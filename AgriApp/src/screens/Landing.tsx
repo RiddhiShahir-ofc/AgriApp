@@ -27,13 +27,13 @@ export default function Landing({ navigation }: Props) {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.subtitle}>Overview</Text>
+      <Text style={styles.subtitle}>Daily Market Watch</Text>
 
       <TouchableOpacity style={styles.graphWrap} onPress={() => navigation.navigate('Register', { fromGraph: true })}>
         <GraphChart />
       </TouchableOpacity>
 
-      <Text style={styles.hint}>Selected: {lang === 'en' ? 'English' : lang === 'hi' ? 'हिंदी' : 'मराठी'}</Text>
+      
     </SafeAreaView>
   );
 }
@@ -48,3 +48,4 @@ const styles = StyleSheet.create({
   graphWrap: { borderWidth: 1, borderColor: '#ddd', borderRadius: 12, padding: 12 },
   hint: { marginTop: 12, color: '#666' },
 });
+
