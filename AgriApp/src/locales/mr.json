@@ -16,6 +16,16 @@
     "otp_sent": "ओटीपी पाठविला",
     "otp_demo_message": "डेमो साठी ओटीपी आहे {code}",
     "mobile_placeholder": "आपला 10 अंकी मोबाईल नंबर प्रविष्ट करा",
-    "send_otp": "ओटीपी पाठवा"
+    "send_otp": "ओटीपी पाठवा",
+    "otp_code_is": "ओटीपी कोड आहे {code}",
+
+    "verify_otp": "ओटीपी सत्यापित करा",
+    "otp_sent_to": "मोबाईल नंबर {phone} वर ओटीपी पाठविला",
+    "enter_otp_placeholder": "ओटीपी प्रविष्ट करा",
+    "verify_button": "सत्यापित करा",
+    "success_title": "यशस्वी",    
+    "success_logged_in": "लॉग इन झाले",
+    "failed_title": "अयशस्वी",
+    "failed_incorrect_otp": "चुकीचा ओटीपी"
   
 }

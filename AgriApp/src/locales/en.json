@@ -15,6 +15,16 @@
     "otp_sent": "OTP Sent",
     "otp_demo_message": "For demo the OTP is {code}",
     "mobile_placeholder": "Enter your 10 digit Mobile number",
-    "send_otp": "Send OTP"
+    "send_otp": "Send OTP",
+    "otp_code_is": "The OTP code is {code}",
+
+    "verify_otp": "Verify OTP",
+    "otp_sent_to": "OTP Sent to Mobile Number",
+    "enter_otp_placeholder": "Enter OTP",
+    "verify_button": "Verify",
+    "success_title": "Success",
+    "success_logged_in": "Logged in",
+    "failed_title": "Failed",
+    "failed_incorrect_otp": "Incorrect OTP"
   
 }

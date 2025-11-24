@@ -5,11 +5,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-import { LanguageProvider } from './src/context/LanguageContext';
-import { ThemeProvider } from './src/context/ThemeContext';
+import { LanguageProvider, useLanguage } from './src/context/LanguageContext';
+import { ThemeProvider, useTheme } from './src/context/ThemeContext';
 
 import Landing from './src/screens/Landing';
-import Register from './src/screens/Register';
+import Register from './src/screens/Register/Login';
 import OTP from './src/screens/Otp';
 import Dashboard from './src/screens/Dashboard';
 
@@ -92,7 +92,7 @@ const [initialRoute, setInitialRoute] = useState<'Landing' | 'FarmerDashboard' |
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
         <Stack.Screen name="Landing" component={Landing} options={{ headerShown: false }} />
-        <Stack.Screen name="Register" component={Register} options={{ title: 'Register/Login' }} />
+        <Stack.Screen name="Register" component={Register} options={{ }} />
         <Stack.Screen name="Otp" component={OTP} options={{ title: 'OTP Verification' }} />
         <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
        
