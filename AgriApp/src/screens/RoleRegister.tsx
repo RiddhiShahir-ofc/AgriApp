@@ -1,27 +1,3 @@
-// import React from 'react';
-// import { Text, StyleSheet } from 'react-native';
-// import { SafeAreaView } from 'react-native-safe-area-context';
-// import { NativeStackScreenProps } from '@react-navigation/native-stack';
-// import { RootStackParamList } from '../../App';
-
-// type Props = NativeStackScreenProps<RootStackParamList, 'Register'>;
-
-// export default function RoleRegister({ route }: Props) {
-//   const { role } = route.params || {};
-
-//   return (
-//     <SafeAreaView style={styles.container}>
-//       <Text style={styles.title}>Register as {role ? role.toUpperCase() : 'User'}</Text>
-//       <Text>Here you will add form fields specific to {role} registration.</Text>
-//     </SafeAreaView>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: { flex: 1, padding: 20 },
-//   title: { fontSize: 24, fontWeight: '700', marginBottom: 10 },
-// });
-
 import React from 'react';
 import {Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

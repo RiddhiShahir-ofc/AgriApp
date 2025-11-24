@@ -1,8 +1,12 @@
+import './src/i18n';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LanguageSwitcher } from './src/components/LanguageSwitcher';
 
 import Landing from './src/screens/Landing';
 import Register from './src/screens/Register';
@@ -86,7 +90,7 @@ const [initialRoute, setInitialRoute] = useState<'Landing' | 'FarmerDashboard' |
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
         <Stack.Screen name="Landing" component={Landing} options={{ headerShown: false }} />
-        <Stack.Screen name="Register" component={Register} options={{ title: 'Register' }} />
+        <Stack.Screen name="Register" component={Register} options={{ title: 'Register/Login' }} />
         <Stack.Screen name="Otp" component={OTP} options={{ title: 'OTP Verification' }} />
         <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
        

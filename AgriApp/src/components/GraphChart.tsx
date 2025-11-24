@@ -40,3 +40,4 @@ export default function GraphChart({ filters }: GraphChartProps) {
   );
 }
 
+
