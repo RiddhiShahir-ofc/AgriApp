@@ -5,8 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 
+import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
+
 export default function AnchorRegister() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { theme } = useTheme();
+  const { t } = useLanguage();
+ 
   const handleSubmit = () => {
     Alert.alert(
       'Success',
@@ -21,7 +27,7 @@ export default function AnchorRegister() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <Text style={styles.title}>Anchor Registration</Text>
       <TextInput placeholder="Anchor/Organization/Company Name" style={styles.input} />
       <TextInput placeholder="Company Registration Number/GST Number" style={styles.input} />

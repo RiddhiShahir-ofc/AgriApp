@@ -8,6 +8,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { launchCamera, launchImageLibrary, CameraOptions, ImageLibraryOptions } from 'react-native-image-picker';
 import { addRole } from '.././utils/storage'; 
 
+import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
+
 export default function FarmerRegister() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -15,6 +18,9 @@ export default function FarmerRegister() {
   const [village, setVillage] = useState('');
   const [crop, setCrop] = useState('');
   const [profileImage, setProfileImage] = useState<string | null>(null);
+
+  const { theme } = useTheme();
+  const { t } = useLanguage();
 
   const requestCameraPermission = async () => {
     if (Platform.OS !== 'android') return true;
@@ -70,7 +76,6 @@ export default function FarmerRegister() {
     if (phone) await addRole(phone, "farmer");  // or buyer/seller etc.
     await AsyncStorage.setItem('LOGGED_IN_ROLE', 'farmer');
 
-    // Save farmer profile example
     await AsyncStorage.setItem('farmerProfile', JSON.stringify({ name, village, crop, profileImage, phone }));
 
     Alert.alert('Success', 'Farmer registered successfully!', [
@@ -79,22 +84,22 @@ export default function FarmerRegister() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Farmer Registration</Text>
+   <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
+      <Text style={styles.title}>{t('farmer_reg')}</Text>
 
       <View style={styles.imageContainer}>
-        {profileImage ? <Image source={{ uri: profileImage }} style={styles.profileImage} /> : <Text style={styles.imageLabel}>No Image Selected</Text>}
+        {profileImage ? <Image source={{ uri: profileImage }} style={styles.profileImage} /> : <Text style={styles.imageLabel}>{t('no_image')}</Text>}
         <View style={styles.row}>
-          <TouchableOpacity style={styles.smallBtn} onPress={openCamera}><Text style={styles.btnText}>📸 Take Photo</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.smallBtn} onPress={openGallery}><Text style={styles.btnText}>🖼️ Choose From Gallery</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.smallBtn} onPress={openCamera}><Text style={styles.btnText}>📸 {t('take_photo')}</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.smallBtn} onPress={openGallery}><Text style={styles.btnText}>🖼️ {t('gallery')}</Text></TouchableOpacity>
         </View>
       </View>
 
-      <TextInput placeholder="Farmer Name" style={styles.input} value={name} onChangeText={setName} />
-      <TextInput placeholder="Village Location" style={styles.input} value={village} onChangeText={setVillage} />
-      <TextInput placeholder="Interested Crop" style={styles.input} value={crop} onChangeText={setCrop} />
+      <TextInput placeholder={t('farmer_name')} style={styles.input} value={name} onChangeText={setName} />
+      <TextInput placeholder={t('village')} style={styles.input} value={village} onChangeText={setVillage} />
+      <TextInput placeholder={t('intrested_crop')} style={styles.input} value={crop} onChangeText={setCrop} />
 
-      <TouchableOpacity style={styles.btn} onPress={onRegister}><Text style={styles.btnText}>Register</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.btn} onPress={onRegister}><Text style={styles.btnText}>{t('register')}</Text></TouchableOpacity>
     </SafeAreaView>
   );
 }

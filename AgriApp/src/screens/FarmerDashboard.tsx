@@ -6,6 +6,9 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 
+import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
+
 export default function FarmerDashboard() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   // const [profile, setProfile] = useState<any>(null);
@@ -16,12 +19,15 @@ export default function FarmerDashboard() {
 
   const goBack = () => navigation.navigate('Dashboard');
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={goBack} style={styles.backBtn}><Text style={styles.backText}>← Back</Text></TouchableOpacity>
-      <Text style={styles.title}>Farmer Dashboard</Text>
+  const { theme } = useTheme();
+  const { t } = useLanguage();
 
-      <Text style={styles.text}>Welcome Farmer! Here you can see your lots, crops, and earnings summary.</Text>
+  return (
+   <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
+      <TouchableOpacity onPress={goBack} style={styles.backBtn}><Text style={styles.backText}>{t('back')}</Text></TouchableOpacity>
+      <Text style={styles.title}>{t('farmer_dashboard')}</Text>
+
+      <Text style={styles.text}>{t('farmer_message')}</Text>
     </SafeAreaView>
   );
 } 

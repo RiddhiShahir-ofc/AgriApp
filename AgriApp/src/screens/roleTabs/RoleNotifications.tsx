@@ -1,11 +1,17 @@
 // src/screens/roleTabs/RoleNotifications.tsx
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet, FlatList } from 'react-native';
+import { Text, ActivityIndicator, StyleSheet, FlatList } from 'react-native';
 import { getJSON } from '../../services/mockapi';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function RoleNotifications({ role }: { role: string }) {
   const [loading, setLoading] = useState(true);
   const [notes, setNotes] = useState<any[]>([]);
+
+  const { theme } = useTheme();
+  const { t } = useLanguage();
 
   useEffect(() => {
     (async () => {
@@ -23,10 +29,10 @@ export default function RoleNotifications({ role }: { role: string }) {
   if (loading) return <ActivityIndicator style={{marginTop:20}} />;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <Text style={styles.title}>{role.toUpperCase()} — Notifications</Text>
       <FlatList data={notes} keyExtractor={(_,i) => String(i)} renderItem={({item}) => <Text style={styles.item}>• {item}</Text>} />
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -7,6 +7,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootStackParamList } from '../../App';
 import { addRole } from '.././utils/storage'; 
 
+import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
+
 export default function SellerRegister() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -14,6 +17,9 @@ export default function SellerRegister() {
   const [businessname, setBusinessName] = useState('');
   const [primarycrop, setPrimaryCrop] = useState('');
   const [location, setLocation] = useState('');
+
+  const { theme } = useTheme();
+  const { t } = useLanguage();
 
     const handleSubmit = async () => {
 
@@ -56,7 +62,7 @@ export default function SellerRegister() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <Text style={styles.title}>Seller Registration</Text>
       <TextInput placeholder="Seller Name" style={styles.input}value={sellername} onChangeText={setSellerName} />
       <TextInput placeholder="Business Name" style={styles.input}value={businessname} onChangeText={setBusinessName} />

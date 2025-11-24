@@ -26,6 +26,41 @@
     "success_title": "यशस्वी",    
     "success_logged_in": "लॉग इन झाले",
     "failed_title": "अयशस्वी",
-    "failed_incorrect_otp": "चुकीचा ओटीपी"
+    "failed_incorrect_otp": "चुकीचा ओटीपी",
+
+    "dashboard_title": "डॅशबोर्ड",
+    "logout": "लॉगआउट",
+    "welcome": "स्वागत आहे",
+    "select_role": "भूमिका निवडा",
+    "market_trends": "बाजार प्रवृत्ती",
+    "error_title": "त्रुटी",
+    "error_phone_not_found": "फोन नंबर सापडला नाही.",
+    "success_logged_out": "वापरकर्ता यशस्वीपणे लॉग आउट झाला",
+
+    "farmer": "शेतकरी",
+    "buyer": "खरेदीदार",
+    "seller": "विक्रेता",
+    "mandi_official": "मंडी अधिकारी",
+    "anchor": "एंकर",
+
+    "search": "शोधा",
+    "mandi": "मंडी",
+    "crop": "पिक",
+    "enter_mandi": "मंडीचे नाव प्रविष्ट करा",
+    "enter_crop": "पिकाचे नाव प्रविष्ट करा",
+
+    "farmer_dashboard": "शेतकरी डॅशबोर्ड",
+    "farmer_message": "शेतकरी स्वागत आहे! येथे आपण आपले लॉट्स, पिके, आणि कमाई सारांश पाहू शकता.",
+    "back": "← मागे",
+
+    "farmer_reg": "शेतकरी नोंदणी",
+    "no_image":"कोणतीही प्रतिमा निवडलेली नाही",
+    "select_image": "प्रतिमा निवडा",
+    "take_photo":"फोटो घ्या",
+    "gallery":"गॅलरीमधून निवडा",
+    "farmer_name":"शेतकरी नाव",
+    "village":"गावाचे नाव",
+    "intrested_crop":"स्वारस्य असलेली पिके",
+    "register": "नोंदणी करा"
   
 }

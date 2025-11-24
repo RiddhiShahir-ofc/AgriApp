@@ -26,7 +26,42 @@
     "success_title": "सफलता",
     "success_logged_in": "लॉग इन हो गया",
     "failed_title": "विफल",
-    "failed_incorrect_otp": "गलत ओटीपी"
+    "failed_incorrect_otp": "गलत ओटीपी",
+
+    "dashboard_title": "डैशबोर्ड",
+    "logout": "लॉगआउट",
+    "welcome": "स्वागत है",
+    "select_role": "भूमिका चुनें",
+    "market_trends": "बाजार रुझान",
+    "error_title": "त्रुटि",
+    "error_phone_not_found": "फोन नंबर नहीं मिला।",
+    "success_logged_out": "उपयोगकर्ता सफलतापूर्वक लॉग आउट हुआ",
+
+    "farmer": "किसान",
+    "buyer": "खरीदार",
+    "seller": "विक्रेता",
+    "mandi_official": "मंडी अधिकारी",
+    "anchor": "एंकर",
+    
+    "search": "खोजें",
+    "mandi": "मंडी",
+    "crop": "फसल",
+    "enter_mandi": "मंडी का नाम दर्ज करें",
+    "enter_crop": "फसल का नाम दर्ज करें",
+
+    "farmer_dashboard": "किसान डैशबोर्ड",
+    "farmer_message": "स्वागत है किसान! यहां आप अपने लॉट्स, फसलों, और कमाई का सारांश देख सकते हैं।",
+    "back": "← वापस",
+
+    "farmer_reg": "किसान पंजीकरण",
+    "no_image":"कोई छवि चयनित नहीं",
+    "select_image": "छवि चुनें",
+    "take_photo":"फोटो लें",
+    "gallery":"गैलरी से चुनें",
+    "farmer_name":"किसान का नाम",
+    "village":"गांव का नाम",
+    "intrested_crop":"रुचि वाली फसलें",
+    "register":"रजिस्टर करें"
 
   
 }

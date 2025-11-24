@@ -33,7 +33,7 @@ export default function OTP({ navigation, route }: Props) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <Text style={styles.title}>{t('verify_otp')}</Text>
        <Text>{t('otp_sent_to') + ' ' + phone}</Text>
       <TextInput value={otp} onChangeText={setOtp} keyboardType="number-pad" placeholder={t('enter_otp_placeholder')} style={styles.input} />

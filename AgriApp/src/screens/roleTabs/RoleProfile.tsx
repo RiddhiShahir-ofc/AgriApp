@@ -1,11 +1,16 @@
 // src/screens/roleTabs/RoleProfile.tsx
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';  
 import { getJSON } from '../../services/mockapi';
 
 export default function RoleProfile({ role }: { role: string }) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>(null);
+  const { theme } = useTheme();
+  const { t } = useLanguage();
 
   useEffect(() => {
     (async () => {
@@ -23,11 +28,11 @@ export default function RoleProfile({ role }: { role: string }) {
   if (loading) return <ActivityIndicator style={{marginTop:20}} />;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <Text style={styles.title}>{role.toUpperCase()} — Profile</Text>
       <Text>Basic data (mock):</Text>
       <Text>{JSON.stringify(data, null, 2)}</Text>
-    </View>
+    </SafeAreaView>
   );
 }
 

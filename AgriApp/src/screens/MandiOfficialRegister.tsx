@@ -5,8 +5,13 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 
+import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
+
 export default function MandiOfficialRegister() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { theme } = useTheme();
+  const { t } = useLanguage();
 
   const handleSubmit = () => {
     Alert.alert(
@@ -22,7 +27,7 @@ export default function MandiOfficialRegister() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <Text style={styles.title}>Mandi Official Registration</Text>
       <TextInput placeholder="Official Name" style={styles.input} />
       <TextInput placeholder="Employee ID/Official ID" style={styles.input} />

@@ -25,6 +25,41 @@
     "success_title": "Success",
     "success_logged_in": "Logged in",
     "failed_title": "Failed",
-    "failed_incorrect_otp": "Incorrect OTP"
-  
+    "failed_incorrect_otp": "Incorrect OTP",
+
+    "dashboard_title": "Dashboard",
+    "logout": "Logout",
+    "welcome": "Welcome",
+    "select_role": "Select Role",
+    "market_trends": "Market Trends",
+    "error_title": "Error",
+    "error_phone_not_found": "Phone number not found.",
+    "success_logged_out": "User Logged out Successfully",
+
+    "farmer": "Farmer",
+    "buyer": "Buyer",
+    "seller": "Seller",
+    "mandi_official": "Mandi Official",
+    "anchor": "Anchor",
+
+    "search": "Search",
+    "mandi": "Mandi",
+    "crop": "Crop",
+    "enter_mandi": "Enter Mandi Name",
+    "enter_crop": "Enter Crop Name",
+
+    "farmer_dashboard": "Farmer Dashboard",
+    "farmer_message": "Welcome Farmer! Here you can see your lots, crops, and earnings summary.",
+    "back": "← Back",
+
+    "farmer_reg": "Farmer Registration",
+    "no_image":"No Image Selected",
+    "select_image": "Select Image",
+    "take_photo":"Take Photo",
+    "gallery":"Choose from Gallery",
+    "farmer_name":"Farmer Name",
+    "village":"Village Location",
+    "intrested_crop":"Intrested Crop",
+    "register":"Register"
+
 }

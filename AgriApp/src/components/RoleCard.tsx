@@ -1,12 +1,17 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
+import { useLanguage } from '../context/LanguageContext';
+
 interface RoleCardProps {
   name: string;
   onPress: () => void;
 }
 
 export default function RoleCard({ name, onPress }: RoleCardProps) {
+
+  const { t } = useLanguage();
+
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <Text style={styles.cardText}>{name}</Text>

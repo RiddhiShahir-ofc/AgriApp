@@ -7,6 +7,9 @@ import { RootStackParamList } from '../../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { addRole } from '.././utils/storage'; 
 
+import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
+
 export default function BuyerRegister() {
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -17,6 +20,9 @@ export default function BuyerRegister() {
   const [email, setEmail] = useState('');
   const [location, setLocation] = useState('');
   const [intrestedcrops, setIntrestedCrops] = useState('');
+
+  const { theme } = useTheme();
+  const { t } = useLanguage();
 
   const handleSubmit =async () => {
 
@@ -52,7 +58,7 @@ export default function BuyerRegister() {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <Text style={styles.title}>Buyer Registration</Text>
       <TextInput placeholder="Buyer Name" style={styles.input} value={buyername} onChangeText={setBuyerName} />
       <TextInput placeholder="Business Entity" style={styles.input} value={businessentity} onChangeText={setBusinessEntity} />

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { useLanguage } from '../context/LanguageContext';
 
 interface FilterProps {
   filters: { mandi: string; crop: string };
@@ -8,26 +9,29 @@ interface FilterProps {
 }
 
 export default function FilterBar({ filters, setFilters, onSearch }: FilterProps) {
+ 
+ const { t } = useLanguage();
+
   return (
     <View style={styles.filterContainer}>
-      <Text style={styles.label}>Mandi:</Text>
+      <Text style={styles.label}>{t('mandi')}</Text>
       <TextInput
         style={styles.input}
-        placeholder="Enter mandi name"
+        placeholder={t('enter_mandi')}
         value={filters.mandi}
         onChangeText={(t) => setFilters({ ...filters, mandi: t })}
       />
 
-      <Text style={styles.label}>Crop:</Text>
+      <Text style={styles.label}>{t('crop')}</Text>
       <TextInput
         style={styles.input}
-        placeholder="Enter crop name" 
+        placeholder={t('enter_crop')}
         value={filters.crop}
         onChangeText={(t) => setFilters({ ...filters, crop: t })}
       />
 
       <TouchableOpacity style={styles.searchBtn} onPress={onSearch}>
-        <Text style={styles.searchText}>Search</Text>
+        <Text style={styles.searchText}>{t('search')}</Text>
       </TouchableOpacity>
     </View>
   );

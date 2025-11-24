@@ -1,15 +1,22 @@
 // src/screens/roleTabs/RoleReports.tsx
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { getJSON } from '../../services/mockapi';
 import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
+
+import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 const screenWidth = Dimensions.get('window').width - 32;
 
 export default function RoleReports({ role }: { role: string }) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<number[]>([]);
+
+  const { theme } = useTheme();
+  const { t } = useLanguage();
 
   useEffect(() => {
     (async () => {
@@ -27,7 +34,7 @@ export default function RoleReports({ role }: { role: string }) {
   if (loading) return <ActivityIndicator style={{marginTop:20}} />;
 
   return (
-    <View style={styles.container}>
+   <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <Text style={styles.title}>{role.toUpperCase()} — Reports</Text>
       <LineChart
         data={{ labels:['A','B','C','D'], datasets:[{ data }] }}
@@ -42,7 +49,7 @@ export default function RoleReports({ role }: { role: string }) {
         }}
         bezier
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

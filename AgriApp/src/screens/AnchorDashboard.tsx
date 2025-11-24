@@ -5,14 +5,20 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 
+import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
+
 export default function AnchorDashboard() {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    
+    const { theme } = useTheme();
+    const { t } = useLanguage();
     
       const goBack = () => {
         navigation.navigate('Dashboard');
       };
   return (
-    <SafeAreaView style={styles.container}>
+   <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <TouchableOpacity onPress={goBack} style={styles.backBtn}>
         <Text style={styles.backText}>← Back</Text>
       </TouchableOpacity>
