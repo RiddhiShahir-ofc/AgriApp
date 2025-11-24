@@ -1,12 +1,12 @@
-import './src/i18n';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { LanguageSwitcher } from './src/components/LanguageSwitcher';
+
+import { LanguageProvider } from './src/context/LanguageContext';
+import { ThemeProvider } from './src/context/ThemeContext';
 
 import Landing from './src/screens/Landing';
 import Register from './src/screens/Register';
@@ -87,6 +87,8 @@ const [initialRoute, setInitialRoute] = useState<'Landing' | 'FarmerDashboard' |
    }
 
   return (
+    <ThemeProvider>
+    <LanguageProvider>
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
         <Stack.Screen name="Landing" component={Landing} options={{ headerShown: false }} />
@@ -107,5 +109,7 @@ const [initialRoute, setInitialRoute] = useState<'Landing' | 'FarmerDashboard' |
         <Stack.Screen name="AnchorDashboard" component={AnchorDashboard} options={{ headerShown:false }} />
         </Stack.Navigator>
     </NavigationContainer>
+    </LanguageProvider>
+    </ThemeProvider>
   );
 } 

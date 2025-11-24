@@ -4,8 +4,18 @@
     "selectLanguage": "आपली आवडती भाषा निवडा",
     "dailyMarketWatch": "दैनिक बाजार निरीक्षण",
     "loginRegister": "लॉगिन / नोंदणी",
-    "lang_english": "English",
-    "lang_hindi": "हिंदी",
-    "lang_marathi": "मराठी"
+    "english": "English",
+    "hindi": "हिंदी",
+    "marathi": "मराठी",
+    "modedark": "डार्क मोड",
+    "modelight": "लाइट मोड",
+    "selectTheme": "आपली आवडती थीम निवडा",
+
+    "enter_mobile_number": "मोबाईल नंबर प्रविष्ट करा",
+    "enter_valid_phone_alert": "कृपया वैध 10 अंकी फोन नंबर प्रविष्ट करा",
+    "otp_sent": "ओटीपी पाठविला",
+    "otp_demo_message": "डेमो साठी ओटीपी आहे {code}",
+    "mobile_placeholder": "आपला 10 अंकी मोबाईल नंबर प्रविष्ट करा",
+    "send_otp": "ओटीपी पाठवा"
   
 }

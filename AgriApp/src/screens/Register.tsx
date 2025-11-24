@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
+import { TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 import { sendOtp } from '../services/auth';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTheme } from '@react-navigation/native';
+import { useLanguage } from '../context/LanguageContext';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Register'>;
 
 export default function Register({ navigation }: Props) {
   const [phone, setPhone] = useState('');
+  const theme = useTheme();
+  const {t} = useLanguage();
 
   const onSend = async () => {
-    if (!phone || phone.length < 10 || phone.length > 10) return Alert.alert('Enter a valid 10 digit phone number');
+    if (!phone || phone.length < 10 || phone.length > 10) return Alert.alert(t('enter_valid_phone_alert'));
     const code = await sendOtp(phone); // returns code for testing
-    Alert.alert('OTP Sent', `For demo the OTP is ${code}`);
+    Alert.alert(t('otp_sent'), `t('otp_code_is')} ${code}`);
     navigation.navigate('Otp', { phone });
   };
 

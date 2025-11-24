@@ -1,11 +1,20 @@
 {
-  
     "title": "Welcome to AgriApp",
     "selectLanguage": "Select preferred Language",
     "dailyMarketWatch": "Daily Market Watch",
     "loginRegister": "Login / Register",
-    "lang_english": "English",
-    "lang_hindi": "हिंदी",
-    "lang_marathi": "मराठी"
+    "english": "English",
+    "hindi": "हिंदी",
+    "marathi": "मराठी",
+    "modedark": "Dark Mode",
+    "modelight": "Light Mode",
+    "selectTheme": "Select Preffered Theme",
+
+    "enter_mobile_number": "Enter Mobile Number",
+    "enter_valid_phone_alert": "Enter a valid 10 digit phone number",
+    "otp_sent": "OTP Sent",
+    "otp_demo_message": "For demo the OTP is {code}",
+    "mobile_placeholder": "Enter your 10 digit Mobile number",
+    "send_otp": "Send OTP"
   
 }

@@ -21,7 +21,7 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
       <Text style={styles.label}>Crop:</Text>
       <TextInput
         style={styles.input}
-        placeholder="Enter crop name"
+        placeholder="Enter crop name" 
         value={filters.crop}
         onChangeText={(t) => setFilters({ ...filters, crop: t })}
       />
