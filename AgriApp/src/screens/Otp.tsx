@@ -23,7 +23,7 @@ export default function OTP({ navigation, route }: Props) {
     setLoading(true);
     const ok = await verifyOtp(phone, otp);
     setLoading(false);
-    if (ok) {
+    if (t('ok')) {
       await AsyncStorage.setItem('LOGGED_IN_USER', phone);
       Alert.alert(t('success_title'), t('success_logged_in'));
       navigation.reset({ index: 0, routes: [{ name: 'Dashboard' }] });
@@ -34,9 +34,9 @@ export default function OTP({ navigation, route }: Props) {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
-      <Text style={styles.title}>{t('verify_otp')}</Text>
-       <Text>{t('otp_sent_to') + ' ' + phone}</Text>
-      <TextInput value={otp} onChangeText={setOtp} keyboardType="number-pad" placeholder={t('enter_otp_placeholder')} style={styles.input} />
+      <Text style={[styles.title,{color:theme.text}]}>{t('verify_otp')}</Text>
+       <Text style={[styles.subtitle,{color:theme.text}]}>{t('otp_sent_to') + ' ' + phone}</Text>
+      <TextInput value={otp} onChangeText={setOtp} keyboardType="number-pad" placeholder={t('enter_otp_placeholder')} style={[styles.input,{color:theme.input}]} />
       <TouchableOpacity style={styles.btn} onPress={onVerify} disabled={loading}>
         {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>{t('verify_button')}</Text>}
       </TouchableOpacity>
@@ -50,4 +50,5 @@ const styles = StyleSheet.create({
   input: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12, marginTop: 16 },
   btn: { marginTop: 12, backgroundColor: '#2b6cb0', padding: 12, borderRadius: 8, alignItems: 'center' },
   btnText: { color: '#fff', fontWeight: '700' },
+  subtitle: { fontSize: 18, marginBottom: 12 },
 });

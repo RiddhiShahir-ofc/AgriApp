@@ -83,15 +83,15 @@ switch (roleId) {
     <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <ScrollView>
         <View style={styles.header}>
-          <Text style={styles.title}>{t('dashboard_title')}</Text>
+          <Text style={[styles.title,{color:theme.text}]}>{t('dashboard_title')}</Text>
           <TouchableOpacity onPress={logout} style={styles.logoutBtn}>
             <Text style={styles.logoutText}>{t('logout')}</Text>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.sub}>{t('welcome')}{phone ? `, ${phone}` : ''}</Text>
+        <Text style={[styles.sub,{color:theme.text}]}>{t('welcome')}{phone ? `, ${phone}` : ''}</Text>
 
-        <Text style={styles.sectionTitle}>{t('select_role')}</Text>
+        <Text style={[styles.sectionTitle,{color:theme.text}]}>{t('select_role')}</Text>
         <View style={styles.rolesContainer}>
           {roles.map((r) => (
             <RoleCard key={r.id} name={r.name} onPress={() => handleRoleSelect(r.id)} />
@@ -105,7 +105,7 @@ switch (roleId) {
        {/* Graph */}
 
        <View style={styles.graphContainer}>
-          <Text style={styles.sectionTitle}>{t('market_trends')}</Text>
+          <Text style={[styles.sectionTitle,{color:theme.text}]}>{t('market_trends')}</Text>
           <GraphChart filters={appliedFilters} />
         </View>
 

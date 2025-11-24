@@ -50,11 +50,11 @@ export default function SellerRegister() {
     );
   
     Alert.alert(
-      'Success',
-      'Seller registration successful !',
+      t('success_title'),
+      t('seller_reg_success'),
       [
         {
-          text: 'OK',
+          text: t('ok'),
           onPress: () => navigation.reset({ index: 0, routes: [{ name: 'SellerDashboard' }] }),
         },
       ]
@@ -63,13 +63,13 @@ export default function SellerRegister() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
-      <Text style={styles.title}>Seller Registration</Text>
-      <TextInput placeholder="Seller Name" style={styles.input}value={sellername} onChangeText={setSellerName} />
-      <TextInput placeholder="Business Name" style={styles.input}value={businessname} onChangeText={setBusinessName} />
-      <TextInput placeholder="Primary Crop" style={styles.input}value={primarycrop} onChangeText={setPrimaryCrop} />
-      <TextInput placeholder="Location" style={styles.input}value={location} onChangeText={setLocation} />
+      <Text style={[styles.title,{color:theme.text}]}>{t('seller_reg')}</Text>
+      <TextInput placeholder={t('seller_name')} style={[styles.input,{color:theme.input}]}value={sellername} onChangeText={setSellerName} />
+      <TextInput placeholder={t('business_name')} style={[styles.input,{color:theme.input}]}value={businessname} onChangeText={setBusinessName} />
+      <TextInput placeholder={t('primary_crop')} style={[styles.input,{color:theme.text}]}value={primarycrop} onChangeText={setPrimaryCrop} />
+      <TextInput placeholder={t('location')} style={[styles.input,{color:theme.input}]} placeholderTextColor={theme.text} value={location} onChangeText={setLocation} />
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-      <Text style={styles.btnText}>Register</Text>
+      <Text style={[styles.btnText,{color:theme.text}]}>{t('register')}</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -78,7 +78,7 @@ export default function SellerRegister() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
   title: { fontSize: 24, fontWeight: '700', marginBottom: 12 },
-  input: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10, marginBottom: 10 },
+  input: { borderWidth: 1, borderRadius: 8, padding: 10, marginBottom: 10 },
   btn: { backgroundColor: '#2b6cb0', padding: 12, borderRadius: 8, alignItems: 'center' },
-  btnText: { color: '#fff', fontWeight: '700' },
+  btnText: { fontWeight: '700' },
 });

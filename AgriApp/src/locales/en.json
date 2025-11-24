@@ -60,6 +60,47 @@
     "farmer_name":"Farmer Name",
     "village":"Village Location",
     "intrested_crop":"Intrested Crop",
-    "register":"Register"
+    "register":"Register",
+
+    "missing_fields":"'Missing Fields', 'Please fill all the mandatory fields.'",
+    "buyer_reg_success":"Buyer registered successfully!",
+    "buyer_reg":"Buyer Registration",
+    "buyer_name":"Buyer Name",
+    "business_name":"Business Name",
+    "business_id":"Business Id/ GST Number",
+
+    "mandi_official_dashboard":"Mandi Official Dashboard",
+    "mandi_official_msg":"Monitor live auctions, farmer submissions, and approvals here.",
+
+    "mandi_official_reg":"Mandi Official Registration",
+    "official_name":"Official Name",
+    "official_id":"Official ID/ Employee ID",
+    "official_role":"Officer Role",
+    "email_id":"Email Id",
+    "assigned_mandi" : "Assigned Mandi",
+    "mandi_official_reg_success":"Mandi Official registered successfully!",
+    "location":"Location",
+
+    "anchor_registration":"Anchor Registration",
+    "anchor_reg_success":"Anchor registered successfully!",
+    "anchor_dashboard":"Anchor Dashboard",
+    "anchor_msg":"Welcome Anchor! Here you can manage contracts, monitor shipments, track your assigned lots, farmers, and transaction summaries and track payments.",
+    
+    "name":"Anchor/Organization/Company Name",
+    "company_reg_number":"Company Registration Number/GST Number",
+    "company_address":"Company Address",
+    "estimated_users":"Estimated Number of Users",
+    "contact_number":"Contact Person Number",
+    "email":"Email Id",
+    "contact_person":"Contact Person Name",
+    "ok":"OK",
+
+    "seller_dashboard":"Seller Dashboard",
+    "seller_msg":"Manage your listed items, bids, and completed sales.",
+
+    "seller_reg":"Seller Registration",
+    "seller_name":"Seller Name",
+    "primary_crop":"Primary Crop",
+    "seller_reg_success":"Seller registered successfully!"
 
 }

@@ -49,7 +49,7 @@ export default function FarmerRegister() {
     const options: CameraOptions = { mediaType: 'photo', saveToPhotos: true, quality: 0.8 };
     launchCamera(options, (resp) => {
       if (resp.didCancel) return;
-      if (resp.errorMessage) return Alert.alert('Error', resp.errorMessage);
+      if (resp.errorMessage) return Alert.alert(t('error_title'), resp.errorMessage);
       if (resp.assets && resp.assets.length > 0) setProfileImage(resp.assets[0].uri || null);
     });
   };
@@ -61,7 +61,7 @@ export default function FarmerRegister() {
     const options: ImageLibraryOptions = { mediaType: 'photo', selectionLimit: 1 };
     launchImageLibrary(options, (resp) => {
       if (resp.didCancel) return;
-      if (resp.errorMessage) return Alert.alert('Error', resp.errorMessage);
+      if (resp.errorMessage) return Alert.alert(t('error_title'), resp.errorMessage);
       if (resp.assets && resp.assets.length > 0) setProfileImage(resp.assets[0].uri || null);
     });
   };
@@ -85,7 +85,7 @@ export default function FarmerRegister() {
 
   return (
    <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
-      <Text style={styles.title}>{t('farmer_reg')}</Text>
+      <Text style={[styles.title,{color:theme.text}]}>{t('farmer_reg')}</Text>
 
       <View style={styles.imageContainer}>
         {profileImage ? <Image source={{ uri: profileImage }} style={styles.profileImage} /> : <Text style={styles.imageLabel}>{t('no_image')}</Text>}
@@ -96,7 +96,7 @@ export default function FarmerRegister() {
       </View>
 
       <TextInput placeholder={t('farmer_name')} style={styles.input} value={name} onChangeText={setName} />
-      <TextInput placeholder={t('village')} style={styles.input} value={village} onChangeText={setVillage} />
+      <TextInput placeholder={t('village')} style={[styles.input,{color:theme.text}]} value={village} onChangeText={setVillage} />
       <TextInput placeholder={t('intrested_crop')} style={styles.input} value={crop} onChangeText={setCrop} />
 
       <TouchableOpacity style={styles.btn} onPress={onRegister}><Text style={styles.btnText}>{t('register')}</Text></TouchableOpacity>

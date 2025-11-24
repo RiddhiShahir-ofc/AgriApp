@@ -20,10 +20,10 @@ export default function MandiOfficialDashboard() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <TouchableOpacity onPress={goBack} style={styles.backBtn}>
-        <Text style={styles.backText}>← Back</Text>
+        <Text style={styles.backText}>{t('back')}</Text>
       </TouchableOpacity>   
-      <Text style={styles.title}>Mandi Official Dashboard</Text>
-      <Text style={styles.text}>Monitor live auctions, farmer submissions, and approvals here.</Text>
+      <Text style={styles.title}>{t('mandi_official_dashboard')}</Text>
+      <Text style={styles.text}>{t('mandi_official_msg')}</Text>
     </SafeAreaView>
   );
 }

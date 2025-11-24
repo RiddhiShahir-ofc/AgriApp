@@ -15,11 +15,11 @@ export default function AnchorRegister() {
  
   const handleSubmit = () => {
     Alert.alert(
-      'Success',
-      'Anchor registration successful !',
+      t('success_title'),
+      t('anchor_reg_success'),
       [
         {
-          text: 'OK',
+          text: t('ok'),
           onPress: () => navigation.reset({ index: 0, routes: [{ name: 'AnchorDashboard' }] }),
         },
       ]
@@ -28,16 +28,16 @@ export default function AnchorRegister() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
-      <Text style={styles.title}>Anchor Registration</Text>
-      <TextInput placeholder="Anchor/Organization/Company Name" style={styles.input} />
-      <TextInput placeholder="Company Registration Number/GST Number" style={styles.input} />
-      <TextInput placeholder="Company Address" style={styles.input} />
-      <TextInput placeholder="Contact Person Name" style={styles.input} />
-      <TextInput placeholder="Contact Person Number" style={styles.input} />
-      <TextInput placeholder="Email Id" style={styles.input} />
-      <TextInput placeholder="Estimated Number of Users" style={styles.input} />
+      <Text style={[styles.title,{color:theme.input}]}>{t('anchor_registration')}</Text>
+      <TextInput placeholder={t('name')} style={[styles.input,{color:theme.input}]} />
+      <TextInput placeholder={t('company_reg_number')} style={[styles.input,{color:theme.input}]} />
+      <TextInput placeholder={t('company_address')} style={[styles.input,{color:theme.input}]} />
+      <TextInput placeholder={t('contact_person')} style={[styles.input,{color:theme.input}]} />
+      <TextInput placeholder={t('contact_number')} style={[styles.input,{color:theme.input}]} />
+      <TextInput placeholder={t('email')} style={[styles.input,{color:theme.input}]} />
+      <TextInput placeholder={t('estimated_users')} style={[styles.input,{color:theme.input}]} />
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-        <Text style={styles.btnText}>Register</Text>
+        <Text style={styles.btnText}>{t('register')}</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

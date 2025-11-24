@@ -15,11 +15,11 @@ export default function MandiOfficialRegister() {
 
   const handleSubmit = () => {
     Alert.alert(
-      'Success',
-      'Mandi Official registration successful !',
+      t('success_title'),
+      t('mandi_official_reg_success'),
       [
         {
-          text: 'OK',
+          text: t('ok'),
           onPress: () => navigation.reset({ index: 0, routes: [{ name: 'MandiOfficialDashboard' }] }),
         },
       ]
@@ -28,15 +28,16 @@ export default function MandiOfficialRegister() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
-      <Text style={styles.title}>Mandi Official Registration</Text>
-      <TextInput placeholder="Official Name" style={styles.input} />
-      <TextInput placeholder="Employee ID/Official ID" style={styles.input} />
-      <TextInput placeholder="Assigned Mandi" style={styles.input} />
-      <TextInput placeholder="Location" style={styles.input} />
-      <TextInput placeholder="Officer Role" style={styles.input} />
-      <TextInput placeholder="Email Id" style={styles.input} />
+      <Text style={[styles.title,{color:theme.input}]}>{t('mandi_official_reg')}</Text>
+      <TextInput placeholder={t('official_name')} style={[styles.input,{color:theme.input}]} />
+      <TextInput placeholder={t('official_id')} style={[styles.input,{color:theme.input}]} />
+      <TextInput placeholder={t('assigned_mandi')} style={[styles.input,{color:theme.input}]} />
+      <TextInput placeholder={t('location')} style={[styles.input,{color:theme.input}]} />
+      <TextInput placeholder={t('official_role')} style={[styles.input,{color:theme.input}]} />
+      <TextInput placeholder={t('email_id')} style={[styles.input,{color:theme.input}]} />
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-        <Text style={styles.btnText}>Register</Text>
+      <Text style={[styles.btnText,{color:theme.text}]}>{t('register')}</Text>
+        
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -47,6 +48,6 @@ const styles = StyleSheet.create({
   title: { fontSize: 24, fontWeight: '700', marginBottom: 12 },
   input: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10, marginBottom: 10 },
   btn: { backgroundColor: '#2b6cb0', padding: 12, borderRadius: 8, alignItems: 'center' },
-  btnText: { color: '#fff', fontWeight: '700' },
+  btnText: { fontWeight: '700' },
 });
 

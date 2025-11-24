@@ -25,9 +25,9 @@ export default function FarmerDashboard() {
   return (
    <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <TouchableOpacity onPress={goBack} style={styles.backBtn}><Text style={styles.backText}>{t('back')}</Text></TouchableOpacity>
-      <Text style={styles.title}>{t('farmer_dashboard')}</Text>
+      <Text style={[styles.title,{color:theme.text}]}>{t('farmer_dashboard')}</Text>
 
-      <Text style={styles.text}>{t('farmer_message')}</Text>
+      <Text style={[styles.text,{color:theme.text}]}>{t('farmer_message')}</Text>
     </SafeAreaView>
   );
 } 

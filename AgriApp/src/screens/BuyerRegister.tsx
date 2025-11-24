@@ -59,15 +59,15 @@ export default function BuyerRegister() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
-      <Text style={styles.title}>Buyer Registration</Text>
-      <TextInput placeholder="Buyer Name" style={styles.input} value={buyername} onChangeText={setBuyerName} />
-      <TextInput placeholder="Business Entity" style={styles.input} value={businessentity} onChangeText={setBusinessEntity} />
-      <TextInput placeholder="Business Id/ GST Number" style={styles.input}  value={businessid} onChangeText={setBusinessID}/>
-      <TextInput placeholder="Email" keyboardType="email-address" style={styles.input}  value={email} onChangeText={setEmail} />
-      <TextInput placeholder="Location" style={styles.input} value={location} onChangeText={setLocation}/>
-      <TextInput placeholder="Intrested Crops" style={styles.input}  value={intrestedcrops} onChangeText={setIntrestedCrops}/>
+      <Text style={[styles.title,{color :theme.text}]}>Buyer Registration</Text>
+      <TextInput placeholder="Buyer Name" style={[styles.input,{color :theme.text}]} value={buyername} onChangeText={setBuyerName} />
+      <TextInput placeholder="Business Entity" style={[styles.input,{color :theme.text}]} value={businessentity} onChangeText={setBusinessEntity} />
+      <TextInput placeholder="Business Id/ GST Number" style={[styles.input,{color :theme.text}]}  value={businessid} onChangeText={setBusinessID}/>
+      <TextInput placeholder="Email" keyboardType="email-address" style={[styles.input,{color :theme.text}]}  value={email} onChangeText={setEmail} />
+      <TextInput placeholder="Location" style={[styles.input,{color :theme.text}]} value={location} onChangeText={setLocation}/>
+      <TextInput placeholder="Intrested Crops" style={[styles.input,{color :theme.text}]}  value={intrestedcrops} onChangeText={setIntrestedCrops}/>
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-      <Text style={styles.btnText}>Register</Text>
+      <Text style={styles.btnText}>{t('register')}</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

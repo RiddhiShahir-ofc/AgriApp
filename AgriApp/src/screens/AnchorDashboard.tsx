@@ -13,17 +13,17 @@ export default function AnchorDashboard() {
     
     const { theme } = useTheme();
     const { t } = useLanguage();
-    
+
       const goBack = () => {
         navigation.navigate('Dashboard');
       };
   return (
    <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <TouchableOpacity onPress={goBack} style={styles.backBtn}>
-        <Text style={styles.backText}>← Back</Text>
+        <Text style={styles.backText}>{t('back')}</Text>
       </TouchableOpacity>
-      <Text style={styles.title}>Anchor Dashboard</Text>
-      <Text style={styles.text}>Track your assigned lots, farmers, and transaction summaries.</Text>
+      <Text style={[styles.title,{color :theme.text}]}>{t('anchor_dashboard')}</Text>
+      <Text style={[styles.text,{color :theme.text}]}>{t('anchor_msg')}</Text>
     </SafeAreaView>
   );
 }
