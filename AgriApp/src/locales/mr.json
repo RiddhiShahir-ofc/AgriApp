@@ -120,12 +120,26 @@
     "seller_reg_success":"विक्रेता यशस्वीपणे नोंदणीकृत झाला!",
 
     "farm_location":"शेताचे स्थान",
-    "land_size":"जमिनीचा आकार",
+    "land_size":"जमिनीचा आकार( एकरांमध्ये )",
     "farm_crop":"पिक",
     "farm_details":"शेत तपशील",
     "add":"शेत जोडा",
     "error_generic":"काहीतरी चुकले आहे. कृपया पुन्हा प्रयत्न करा.",
     "list_of_farms":"शेतांची यादी",
-    "fill_farm_fields":"कृपया शेत तपशील भरा."
+    "fill_farm_fields":"कृपया शेत तपशील भरा.",
+
+    "daily_market_price_chart_title":"दैनिक बाजार भाव",
+    "chart_placeholder_text":"येथे बाजार भाव चार्ट दिसेल.",
+    "pre_register_lot":"पूर्व-नोंदणी लॉट",
+    "short_term_forecast":"लघु कालावधी पूर्वानुमान",
+    "fill_mandi_search":"कृपया मंडी आणि पिक भरा शोधण्यासाठी.",
+    "daily_market_price":"दैनिक बाजार भाव",
+
+    "forecast_results":"पूर्वानुमान परिणाम",
+    "forcast_summary":"लघु कालावधी पूर्वानुमान सारांश येथे दाखविला जाईल.",
+    "info":"माहिती",
+    "forecast_fetching":"पूर्वानुमान मिळवत आहे (डेमो)",
+    "forecast_horizon":"पूर्वानुमान कालावधी (दिवसांमध्ये)",
+    "get_forecast":"पूर्वानुमान मिळवा"
    
 }

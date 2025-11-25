@@ -25,6 +25,8 @@ import SellerDashboard from './src/screens/SellerDashboard';
 import MandiOfficialDashboard from './src/screens/MandiOfficialDashboard';
 import AnchorDashboard from './src/screens/AnchorDashboard';
 
+import ShortTermForecast from './src/screens/ShortTermForcast';
+
 export type RootStackParamList = {
   Landing: undefined;
   Register: { fromGraph?: boolean } | undefined;
@@ -43,6 +45,8 @@ export type RootStackParamList = {
   SellerDashboard: undefined;
   MandiOfficialDashboard: undefined;
   AnchorDashboard: undefined;
+
+  ShortTermForecast: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -107,6 +111,8 @@ const [initialRoute, setInitialRoute] = useState<'Landing' | 'FarmerDashboard' |
         <Stack.Screen name="SellerDashboard" component={SellerDashboard} options={{ headerShown: false }} />
         <Stack.Screen name="MandiOfficialDashboard" component={MandiOfficialDashboard} options={{ headerShown: false }} />
         <Stack.Screen name="AnchorDashboard" component={AnchorDashboard} options={{ headerShown:false }} />
+
+        <Stack.Screen name="ShortTermForecast" component={ShortTermForecast} />
         </Stack.Navigator>
     </NavigationContainer>
     </LanguageProvider>

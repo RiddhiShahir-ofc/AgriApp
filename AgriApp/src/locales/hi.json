@@ -120,12 +120,27 @@
     "seller_reg_success":"विक्रेता सफलतापूर्वक पंजीकृत हुआ!",
 
     "farm_location":"खेत का स्थान",
-    "land_size":"भूमि का आकार",
+    "land_size":"भूमि का आकार (एकड़ में)",
     "farm_crop":"फसल",
     "add":"खेत जोड़ें",
     "farm_details":"खेत विवरण",
     "error_generic":"कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
     "list_of_farms":"खेतों की सूची",
-    "fill_farm_fields":"कृपया खेत विवरण भरें।"
+    "fill_farm_fields":"कृपया खेत विवरण भरें।",
+
+    "daily_market_price_chart_title":"दैनिक बाजार मूल्य चार्ट",
+    "short_term_forecast":"लघु अवधि पूर्वानुमान ",
+    "chart_placeholder_text":"बाजार मूल्य चार्ट यहां प्रदर्शित किया जाएगा।",
+    "pre_register_lot":"लॉट पूर्व-पंजीकरण",
+    "fill_mandi_search":"कृपया मंडी और फसल भरें ताकि खोजा जा सके।",
+    "daily_market_price":"दैनिक बाजार मूल्य",
+
+    "forecast_results":"पूर्वानुमान परिणाम",
+    "forcast_summary":"लघु अवधि पूर्वानुमान सारांश यहां दिखाया जाएगा।",
+    "get_forecast":"पूर्वानुमान प्राप्त करें",
+    "forecast_horizon":"पूर्वानुमान सीमा (दिनों में)",
+    "forecast_fetching":"पूर्वानुमान प्राप्त किया जा रहा है (डेमो)",
+    "info":"जानकारी"
+   
   
 }

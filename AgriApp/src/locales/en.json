@@ -118,13 +118,27 @@
     "primary_crop":"Primary Crop",
     "seller_reg_success":"Seller registered successfully!",
 
-    "land_size":"Land Size",
+    "land_size":"Land Size (in acres)",
     "farm_location":"Farm Location",
     "farm_crop":"Crop",
     "add":"Add Farm",
     "farm_details":"Farm Details",
     "error_generic":"Something went wrong. Please try again.",
     "list_of_farms":"List of Farms",
-    "fill_farm_fields":"Please fill in farm details."
+    "fill_farm_fields":"Please fill in farm details.",
+
+    "daily_market_price_chart_title":"Daily Market Price",
+    "chart_placeholder_text":"Market price chart will be displayed here.",
+    "pre_register_lot":"Pre-Register Lot",
+    "short_term_forecast":"Short Term Forecast",
+    "fill_mandi_search":"Please fill in mandi and crop to search.",
+    "daily_market_price":"Daily Market Price",
+
+    "info":"Info",
+    "forecast_fetching":"Fetching forecast (demo)",
+    "forecast_horizon":"Forecast Horizon (days)",
+    "get_forecast":"Get Forecast",
+    "forcast_summary":"Short_Term_Forecast Summary will be shown here.",
+    "forecast_results":"Forecast Results"
 
 }
