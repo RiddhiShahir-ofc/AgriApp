@@ -38,7 +38,7 @@ export default function OTP({ navigation, route }: Props) {
        <Text style={[styles.subtitle,{color:theme.text}]}>{t('otp_sent_to') + ' ' + phone}</Text>
       <TextInput value={otp} onChangeText={setOtp} keyboardType="number-pad" placeholder={t('enter_otp_placeholder')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.text}]} />
       <TouchableOpacity style={styles.btn} onPress={onVerify} disabled={loading}>
-        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>{t('verify_button')}</Text>}
+        {loading ? <ActivityIndicator color="#fff" /> : <Text style={[styles.btnText,{color:theme.text}]}>{t('verify_button')}</Text>}
       </TouchableOpacity>
     </SafeAreaView>
   );

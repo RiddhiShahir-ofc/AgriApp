@@ -141,7 +141,25 @@
     "forecast_horizon":"पूर्वानुमान सीमा (दिनों में)",
     "forecast_fetching":"पूर्वानुमान प्राप्त किया जा रहा है (डेमो)",
     "info":"जानकारी",
-    "loading":"लोड हो रहा है..."
-   
-  
+    "loading":"लोड हो रहा है...",
+
+    "pre_register_title": "काटे गए फसल लॉट रजिस्टर करें",
+    "pre_register_subtitle": "नीलामी के लिए अपनी कटाई की गई फसलें पूर्व-रजिस्टर करें",
+    "crop_label": "फसल",
+    "select_crop": "फसल चुनें",
+    "grade_label": "ग्रेड",
+    "select_grade": "ग्रेड चुनें",
+    "quantity_label": "मात्रा (क्विंटल)",
+    "enter_quantity": "मात्रा दर्ज करें (क्विंटल)",
+    "mandi_label": "मंडी स्थान",
+    "select_mandi": "मंडी चुनें",
+    "arrival_label": "अपेक्षित आगमन तिथि",
+    "enter_date": "dd-mm-yy",
+    "add_lot": "लॉट जोड़ें",
+    "your_registered_lots": "आपके पंजीकृत लॉट",
+    "no_lots": "अभी कोई लॉट पंजीकृत नहीं है",
+    "lot_added_success": "लॉट सफलतापूर्वक जोड़ा गया",
+    "fill_crop": "कृपया फसल चुनें",
+    "fill_quantity": "कृपया मात्रा दर्ज करें",
+    "fill_mandi": "कृपया मंडी चुनें"
 }

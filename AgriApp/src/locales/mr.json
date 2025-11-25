@@ -141,6 +141,27 @@
     "forecast_fetching":"पूर्वानुमान मिळवत आहे (डेमो)",
     "forecast_horizon":"पूर्वानुमान कालावधी (दिवसांमध्ये)",
     "get_forecast":"पूर्वानुमान मिळवा",
-    "loading":"लोड करत आहे..."
-   
+    "loading":"लोड करत आहे...",
+
+    "pre_register_title": "कापलेले पीक लॉट नोंदवा",
+    "pre_register_subtitle": "नीलामीसाठी आपल्या कापलेल्या पिकांचे पूर्व-नोंदणी करा",
+    "crop_label": "पीक",
+    "select_crop": "पीक निवडा",
+    "grade_label": "ग्रेड",
+    "select_grade": "ग्रेड निवडा",
+    "quantity_label": "प्रमाण (क्विंटल)",
+    "enter_quantity": "प्रमाण प्रविष्ट करा (क्विंटल)",
+    "mandi_label": "मंडी स्थान",
+    "select_mandi": "मंडी निवडा",
+    "arrival_label": "अपेक्षित आगमन तारीख",
+    "enter_date": "dd-mm-yy",
+    "add_lot": "लॉट जोडा",
+    "your_registered_lots": "आपले नोंदणीकृत लॉट",
+    "no_lots": "अद्याप कोणतेही लॉट नोंदणीकृत नाहीत",
+    "lot_added_success": "लॉट यशस्वीरीत्या जोडला गेला",
+    "fill_crop": "कृपया पीक निवडा",
+    "fill_quantity": "कृपया प्रमाण प्रविष्ट करा",
+    "fill_mandi": "कृपया मंडी निवडा"
 }
+
+

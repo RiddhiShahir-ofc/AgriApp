@@ -26,6 +26,7 @@ import MandiOfficialDashboard from './src/screens/MandiOfficialDashboard';
 import AnchorDashboard from './src/screens/AnchorDashboard';
 
 import ShortTermForecast from './src/screens/ShortTermForcast';
+import PreRegisterLot from './src/screens/PreRegisterLot';
 
 export type RootStackParamList = {
   Landing: undefined;
@@ -47,6 +48,7 @@ export type RootStackParamList = {
   AnchorDashboard: undefined;
 
   ShortTermForecast: undefined;
+  PreRegisterLot: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -113,6 +115,7 @@ const [initialRoute, setInitialRoute] = useState<'Landing' | 'FarmerDashboard' |
         <Stack.Screen name="AnchorDashboard" component={AnchorDashboard} options={{ headerShown:false }} />
 
         <Stack.Screen name="ShortTermForecast" component={ShortTermForecast} />
+        <Stack.Screen name="PreRegisterLot" component={PreRegisterLot} />
         </Stack.Navigator>
     </NavigationContainer>
     </LanguageProvider>

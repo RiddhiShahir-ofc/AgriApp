@@ -140,6 +140,26 @@
     "get_forecast":"Get Short Term Forecast",
     "forcast_summary":"Short_Term_Forecast Summary will be shown here.",
     "forecast_results":"Forecast Results",
-    "loading":"Loading..."
+    "loading":"Loading...",
+
+    "pre_register_title": "Register Harvested Crop Lot",
+    "pre_register_subtitle": "Pre-Register your harvested crops for Auction",
+    "select_crop": "select crop",
+    "grade_label": "Grade",
+    "select_grade": "select grade",
+    "quantity_label": "Quantity (quintal)",
+    "enter_quantity": "Enter Quantity (quintal)",
+    "mandi_label": "Mandi Location",
+    "select_mandi": "select mandi",
+    "arrival_label": "Expected Arrival Date",
+    "enter_date": "dd-mm-yy",
+    "add_lot": "Add Lot",
+    "your_registered_lots": "Your Registered Lots",
+    "no_lots": "No lots registered yet",
+    "lot_added_success": "Lot added successfully",
+    "fill_crop": "Please select crop",
+    "fill_quantity": "Please enter quantity",
+    "fill_mandi": "Please select mandi"
+  
 
 }
