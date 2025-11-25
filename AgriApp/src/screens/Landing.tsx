@@ -59,7 +59,7 @@ export default function Landing({ navigation }: Props) {
       <Text style={[styles.subtitle, {color :theme.text}]}>{t('dailyMarketWatch')}</Text>
 
       <TouchableOpacity
-        style={styles.graphWrap}
+        style={[styles.graphWrap,{ borderColor:theme.text}]}
         onPress={() => navigation.navigate('Register', { fromGraph: true })}
       >
         <GraphChart />
@@ -68,7 +68,7 @@ export default function Landing({ navigation }: Props) {
       <View style={{ height: 20 }} />
 
       <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.btnText}>{t('loginRegister')}</Text>
+        <Text style={[styles.btnText,{color:theme.text}]}>{t('loginRegister')}</Text>
       </TouchableOpacity>
 
     </SafeAreaView>
@@ -82,9 +82,9 @@ const styles = StyleSheet.create({
   langBtn: { padding: 10, borderWidth: 1, borderColor: '#ddd', borderRadius: 8 },
   active: { backgroundColor: '#dba4a4ff' ,color:'#000'},
   subtitle: { fontSize: 18, marginBottom: 12 },
-  graphWrap: { borderWidth: 1, borderColor: '#ddd', borderRadius: 12, padding: 12 },
+  graphWrap: { borderWidth: 1, borderRadius: 12, padding: 12 },
   btn: { marginTop: 12, backgroundColor: '#2b6cb0', padding: 12, borderRadius: 8, alignItems: 'center' },
-  btnText: { color: '#fff', fontWeight: '700' },
+  btnText: { fontWeight: '700' },
   toggleContainer: {flexDirection: 'row',alignItems: 'center',justifyContent: 'space-between', marginBottom: 16 },
   label: { fontSize: 16 },
   langText: { fontSize: 16 },

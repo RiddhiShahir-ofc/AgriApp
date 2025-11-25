@@ -28,13 +28,13 @@ export default function MandiOfficialRegister() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
-      <Text style={[styles.title,{color:theme.input}]}>{t('mandi_official_reg')}</Text>
-      <TextInput placeholder={t('official_name')} style={[styles.input,{color:theme.input}]} />
-      <TextInput placeholder={t('official_id')} style={[styles.input,{color:theme.input}]} />
-      <TextInput placeholder={t('assigned_mandi')} style={[styles.input,{color:theme.input}]} />
-      <TextInput placeholder={t('location')} style={[styles.input,{color:theme.input}]} />
-      <TextInput placeholder={t('official_role')} style={[styles.input,{color:theme.input}]} />
-      <TextInput placeholder={t('email_id')} style={[styles.input,{color:theme.input}]} />
+      <Text style={[styles.title,{color:theme.text}]}>{t('mandi_official_reg')}</Text>
+      <TextInput placeholder={t('official_name')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} />
+      <TextInput placeholder={t('official_id')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} />
+      <TextInput placeholder={t('assigned_mandi')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} />
+      <TextInput placeholder={t('location')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} />
+      <TextInput placeholder={t('official_role')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} />
+      <TextInput placeholder={t('email_id')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} />
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
       <Text style={[styles.btnText,{color:theme.text}]}>{t('register')}</Text>
         
@@ -46,7 +46,7 @@ export default function MandiOfficialRegister() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
   title: { fontSize: 24, fontWeight: '700', marginBottom: 12 },
-  input: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10, marginBottom: 10 },
+  input: { borderWidth: 1, borderRadius: 8, padding: 10, marginBottom: 10 },
   btn: { backgroundColor: '#2b6cb0', padding: 12, borderRadius: 8, alignItems: 'center' },
   btnText: { fontWeight: '700' },
 });

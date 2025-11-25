@@ -22,8 +22,8 @@ export default function BuyerDashboard() {
       <TouchableOpacity onPress={goBack} style={styles.backBtn}>
         <Text style={styles.backText}>{t('back')}</Text>
       </TouchableOpacity>
-      <Text style={[styles.title,{color :theme.text}]}>Buyer Dashboard</Text>
-      <Text style={[styles.text,{color :theme.text}]}>View and manage your purchase orders and lots available for bidding.</Text>
+      <Text style={[styles.title,{color :theme.text}]}>{t('buyer_dashboard')}</Text>
+      <Text style={[styles.text,{color :theme.text}]}>{t('buyer_msg')}</Text>
     </SafeAreaView>
   );
 }
@@ -31,8 +31,8 @@ export default function BuyerDashboard() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
   title: { fontSize: 26, fontWeight: '700', marginBottom: 10 },
-  text: { fontSize: 16, color: '#333' },
-    backText: { color: '#2b6cb0', fontWeight: '700', fontSize: 16 },
+  text: { fontSize: 16, color: 'theme.text' },
+  backText: { color: '#2b6cb0', fontWeight: '700', fontSize: 16 },
   backBtn: {
     alignSelf: 'flex-start',
     backgroundColor: '#edf2f7',

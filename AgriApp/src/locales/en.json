@@ -13,10 +13,10 @@
     "enter_mobile_number": "Enter Mobile Number",
     "enter_valid_phone_alert": "Enter a valid 10 digit phone number",
     "otp_sent": "OTP Sent",
-    "otp_demo_message": "For demo the OTP is {code}",
+    "otp_demo_message": "For demo the OTP is",
     "mobile_placeholder": "Enter your 10 digit Mobile number",
     "send_otp": "Send OTP",
-    "otp_code_is": "The OTP code is {code}",
+    "otp_code_is": "The OTP code is ",
 
     "verify_otp": "Verify OTP",
     "otp_sent_to": "OTP Sent to Mobile Number",
@@ -53,6 +53,7 @@
     "back": "← Back",
 
     "farmer_reg": "Farmer Registration",
+    "farmer_reg_success":"Farmer registered successfully!",
     "no_image":"No Image Selected",
     "select_image": "Select Image",
     "take_photo":"Take Photo",
@@ -62,11 +63,25 @@
     "intrested_crop":"Intrested Crop",
     "register":"Register",
 
+    "missing_some_fields":"Missing Fields", 
+    "fill_fields":"Please fill all fields & upload a photo.",
+    "permission_req":"Permission required", 
+    "storage":"Storage permission denied.",
+    "camera":"Camera permission denied.",
+    "storage_permission":"Storage permission",
+    "app_storage_permission":"App needs storage permission to select photos.",
+    "camera_permission":"Camera permission",
+    "app_needs_photo":"App needs camera to take photos.",
+    "allow":"Allow",
+
+    "buyer_dashboard":"Buyer Dashboard",
+    "buyer_msg":"View and manage your purchase orders and lots available for bidding.",
+
     "missing_fields":"'Missing Fields', 'Please fill all the mandatory fields.'",
     "buyer_reg_success":"Buyer registered successfully!",
     "buyer_reg":"Buyer Registration",
     "buyer_name":"Buyer Name",
-    "business_name":"Business Name",
+    "business_name":"Business Entity Name",
     "business_id":"Business Id/ GST Number",
 
     "mandi_official_dashboard":"Mandi Official Dashboard",
@@ -101,6 +116,15 @@
     "seller_reg":"Seller Registration",
     "seller_name":"Seller Name",
     "primary_crop":"Primary Crop",
-    "seller_reg_success":"Seller registered successfully!"
+    "seller_reg_success":"Seller registered successfully!",
+
+    "land_size":"Land Size",
+    "farm_location":"Farm Location",
+    "farm_crop":"Crop",
+    "add":"Add Farm",
+    "farm_details":"Farm Details",
+    "error_generic":"Something went wrong. Please try again.",
+    "list_of_farms":"List of Farms",
+    "fill_farm_fields":"Please fill in farm details."
 
 }

@@ -28,7 +28,7 @@ export default function BuyerRegister() {
 
     if (!buyername || !businessentity || !businessid || !email || !location || !intrestedcrops) {
 
-      return Alert.alert('Missing Fields', 'Please fill all the mandatory fields.');
+      return Alert.alert(t('missing_fields'));
 
     }
 
@@ -45,11 +45,11 @@ export default function BuyerRegister() {
     await AsyncStorage.setItem('farmerProfile', JSON.stringify({ buyername, businessentity, businessid, email, location, intrestedcrops, phone }));
 
     Alert.alert(
-      'Success',
-      'Buyer registration successful !',
+      t('success_title'),
+      t('buyer_reg_success'),
       [
         {
-          text: 'OK',
+          text: t('ok'),
           onPress: () => navigation.reset({ index: 0, routes: [{ name: 'BuyerDashboard' }] }),
         },
       ]
@@ -59,13 +59,13 @@ export default function BuyerRegister() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
-      <Text style={[styles.title,{color :theme.text}]}>Buyer Registration</Text>
-      <TextInput placeholder="Buyer Name" style={[styles.input,{color :theme.text}]} value={buyername} onChangeText={setBuyerName} />
-      <TextInput placeholder="Business Entity" style={[styles.input,{color :theme.text}]} value={businessentity} onChangeText={setBusinessEntity} />
-      <TextInput placeholder="Business Id/ GST Number" style={[styles.input,{color :theme.text}]}  value={businessid} onChangeText={setBusinessID}/>
-      <TextInput placeholder="Email" keyboardType="email-address" style={[styles.input,{color :theme.text}]}  value={email} onChangeText={setEmail} />
-      <TextInput placeholder="Location" style={[styles.input,{color :theme.text}]} value={location} onChangeText={setLocation}/>
-      <TextInput placeholder="Intrested Crops" style={[styles.input,{color :theme.text}]}  value={intrestedcrops} onChangeText={setIntrestedCrops}/>
+      <Text style={[styles.title,{color :theme.text}]}>{t('buyer_reg')}</Text>
+      <TextInput placeholder={t('buyer_name')} style={[styles.input,{color :theme.text},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={buyername} onChangeText={setBuyerName} />
+      <TextInput placeholder={t('business_name')} style={[styles.input,{color :theme.text},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={businessentity} onChangeText={setBusinessEntity} />
+      <TextInput placeholder={t('business_id')} style={[styles.input,{color :theme.text},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={businessid} onChangeText={setBusinessID}/>
+      <TextInput placeholder={t('email_id')} keyboardType="email-address" style={[styles.input,{color :theme.text},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={email} onChangeText={setEmail} />
+      <TextInput placeholder={t('location')} style={[styles.input,{color :theme.text},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={location} onChangeText={setLocation}/>
+      <TextInput placeholder={t('intrested_crop')} style={[styles.input,{color :theme.text},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={intrestedcrops} onChangeText={setIntrestedCrops}/>
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
       <Text style={styles.btnText}>{t('register')}</Text>
       </TouchableOpacity>
@@ -76,7 +76,7 @@ export default function BuyerRegister() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
   title: { fontSize: 24, fontWeight: '700', marginBottom: 12 },
-  input: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10, marginBottom: 10 },
+  input: { borderWidth: 1, borderRadius: 8, padding: 10, marginBottom: 10 },
   btn: { backgroundColor: '#2b6cb0', padding: 12, borderRadius: 8, alignItems: 'center' },
   btnText: { color: '#fff', fontWeight: '700' },
 });

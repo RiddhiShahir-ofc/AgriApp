@@ -40,6 +40,7 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
 const styles = StyleSheet.create({
   filterContainer: {
     backgroundColor: '#f9f9f9',
+    borderColor: 'theme.text',
     padding: 10,
     borderRadius: 10,
     marginBottom: 10,
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
   label: { fontWeight: '600', marginTop: 8 },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: 'theme.text',
     borderRadius: 8,
     padding: 8,
     marginTop: 4,
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   searchText: {
-    color: '#fff',
+    color: 'theme.text',
     fontWeight: '700',
   },
 });

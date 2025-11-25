@@ -105,7 +105,7 @@ switch (roleId) {
        {/* Graph */}
 
        <View style={styles.graphContainer}>
-          <Text style={[styles.sectionTitle,{color:theme.text}]}>{t('market_trends')}</Text>
+          <Text style={[styles.sectionTitle,{color:theme.text},{borderColor:theme.text}]}>{t('market_trends')}</Text>
           <GraphChart filters={appliedFilters} />
         </View>
 
@@ -118,11 +118,11 @@ const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
   title: { fontSize: 26, fontWeight: '700' },
-  logoutBtn: { backgroundColor: '#e53e3e', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8 },
-  logoutText: { color: '#fff', fontWeight: '600' },
+  logoutBtn: { backgroundColor: '#d63333ff', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8 },
+  logoutText: { color: 'theme.text', fontWeight: '600' },
   sub: { color: '#555', marginBottom: 15 },
   sectionTitle: { fontSize: 18, fontWeight: '600', marginVertical: 10 },
   rolesContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
   graphContainer: { marginBottom: 20 },
-  graphWrap: { borderWidth: 1, borderColor: '#ddd', borderRadius: 12, padding: 12 },
+  graphWrap: { borderWidth: 1, borderRadius: 12, padding: 12 },
 });

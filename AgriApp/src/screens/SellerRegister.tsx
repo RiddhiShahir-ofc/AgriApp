@@ -64,10 +64,10 @@ export default function SellerRegister() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <Text style={[styles.title,{color:theme.text}]}>{t('seller_reg')}</Text>
-      <TextInput placeholder={t('seller_name')} style={[styles.input,{color:theme.input}]}value={sellername} onChangeText={setSellerName} />
-      <TextInput placeholder={t('business_name')} style={[styles.input,{color:theme.input}]}value={businessname} onChangeText={setBusinessName} />
-      <TextInput placeholder={t('primary_crop')} style={[styles.input,{color:theme.text}]}value={primarycrop} onChangeText={setPrimaryCrop} />
-      <TextInput placeholder={t('location')} style={[styles.input,{color:theme.input}]} placeholderTextColor={theme.text} value={location} onChangeText={setLocation} />
+      <TextInput placeholder={t('seller_name')} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={sellername} onChangeText={setSellerName} />
+      <TextInput placeholder={t('business_name')} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={businessname} onChangeText={setBusinessName} />
+      <TextInput placeholder={t('primary_crop')} style={[styles.input,{color:theme.text},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={primarycrop} onChangeText={setPrimaryCrop} />
+      <TextInput placeholder={t('location')} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={location} onChangeText={setLocation} />
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
       <Text style={[styles.btnText,{color:theme.text}]}>{t('register')}</Text>
       </TouchableOpacity>
@@ -78,7 +78,7 @@ export default function SellerRegister() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
   title: { fontSize: 24, fontWeight: '700', marginBottom: 12 },
-  input: { borderWidth: 1, borderRadius: 8, padding: 10, marginBottom: 10 },
+  input: { borderWidth: 1 ,borderRadius: 8, padding: 10, marginBottom: 10 },
   btn: { backgroundColor: '#2b6cb0', padding: 12, borderRadius: 8, alignItems: 'center' },
   btnText: { fontWeight: '700' },
 });

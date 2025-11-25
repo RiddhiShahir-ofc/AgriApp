@@ -19,14 +19,14 @@ export default function Register({ navigation }: Props) {
   const onSend = async () => {
     if (!phone || phone.length < 10 || phone.length > 10) return Alert.alert(t('enter_valid_phone_alert'));
     const code = await sendOtp(phone); // returns code for testing
-    Alert.alert(t('otp_sent'), `t('otp_code_is')} ${code}`);
+    Alert.alert(t('otp_sent'), t('otp_code_is') + code);
     navigation.navigate('Otp', { phone });
   };
 
   return (
     <SafeAreaView style={[styles.container, {backgroundColor:theme.background}]}>
       <Text style={[styles.title, {color :theme.text}]}>{t('enter_mobile_number')}</Text>
-      <TextInput keyboardType="phone-pad" placeholder={t('mobile_placeholder')}  style={[styles.input,{color :theme.text}]} value={phone} onChangeText={setPhone} />
+      <TextInput keyboardType="phone-pad" placeholder={t('mobile_placeholder')}  style={[styles.input,{color :theme.text}]} placeholderTextColor={theme.text} value={phone} onChangeText={setPhone} />
       <TouchableOpacity style={styles.btn} onPress={onSend}>
         <Text style={[styles.btnText, {color :theme.text}]}>{t('send_otp')}</Text>
       </TouchableOpacity>
