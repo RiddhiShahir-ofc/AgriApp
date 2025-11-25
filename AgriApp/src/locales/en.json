@@ -137,8 +137,9 @@
     "info":"Info",
     "forecast_fetching":"Fetching forecast (demo)",
     "forecast_horizon":"Forecast Horizon (days)",
-    "get_forecast":"Get Forecast",
+    "get_forecast":"Get Short Term Forecast",
     "forcast_summary":"Short_Term_Forecast Summary will be shown here.",
-    "forecast_results":"Forecast Results"
+    "forecast_results":"Forecast Results",
+    "loading":"Loading..."
 
 }
