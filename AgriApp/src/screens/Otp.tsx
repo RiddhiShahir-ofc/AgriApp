@@ -50,5 +50,5 @@ const styles = StyleSheet.create({
   input: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12, marginTop: 16 },
   btn: { marginTop: 12, backgroundColor: '#2b6cb0', padding: 12, borderRadius: 8, alignItems: 'center' },
   btnText: { color: '#fff', fontWeight: '700' },
-  subtitle: { fontSize: 18, marginBottom: 12 },
+  subtitle: { fontSize: 18, marginBottom: 12 }
 });

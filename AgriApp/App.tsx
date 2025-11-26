@@ -4,9 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-import { LanguageProvider, useLanguage } from './src/context/LanguageContext';
-import { ThemeProvider, useTheme } from './src/context/ThemeContext';
+import { LanguageProvider } from './src/context/LanguageContext';
+import { ThemeProvider } from './src/context/ThemeContext';
 
 import Landing from './src/screens/Landing';
 import Register from './src/screens/Register/Login';
@@ -54,9 +53,16 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
-
-const [loading, setLoading] = useState(true);
-const [initialRoute, setInitialRoute] = useState<'Landing' | 'FarmerDashboard' | 'BuyerDashboard' | 'SellerDashboard' | 'MandiOfficialDashboard' | 'AnchorDashboard' | 'Dashboard'>('Landing');
+  const [loading, setLoading] = useState(true);
+  const [initialRoute, setInitialRoute] = useState<
+    | 'Landing'
+    | 'FarmerDashboard'
+    | 'BuyerDashboard'
+    | 'SellerDashboard'
+    | 'MandiOfficialDashboard'
+    | 'AnchorDashboard'
+    | 'Dashboard'
+  >('Landing');
 
   useEffect(() => {
     // On app start, check if user+role exist — auto-redirect to that role dashboard
@@ -66,12 +72,24 @@ const [initialRoute, setInitialRoute] = useState<'Landing' | 'FarmerDashboard' |
         const role = await AsyncStorage.getItem('LOGGED_IN_ROLE');
         if (phone && role) {
           switch (role) {
-            case 'farmer': setInitialRoute('FarmerDashboard'); break;
-            case 'buyer': setInitialRoute('BuyerDashboard'); break;
-            case 'seller': setInitialRoute('SellerDashboard'); break;
-            case 'mandi': setInitialRoute('MandiOfficialDashboard'); break;
-            case 'anchor': setInitialRoute('AnchorDashboard'); break;
-            default: setInitialRoute('Dashboard'); break;
+            case 'farmer':
+              setInitialRoute('FarmerDashboard');
+              break;
+            case 'buyer':
+              setInitialRoute('BuyerDashboard');
+              break;
+            case 'seller':
+              setInitialRoute('SellerDashboard');
+              break;
+            case 'mandi':
+              setInitialRoute('MandiOfficialDashboard');
+              break;
+            case 'anchor':
+              setInitialRoute('AnchorDashboard');
+              break;
+            default:
+              setInitialRoute('Dashboard');
+              break;
           }
         } else {
           setInitialRoute('Landing');
@@ -86,39 +104,40 @@ const [initialRoute, setInitialRoute] = useState<'Landing' | 'FarmerDashboard' |
 
   if (loading) {
     return (
-        <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-          <ActivityIndicator size="large" />
-        </View>
-      );
-   }
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <ThemeProvider>
-    <LanguageProvider>
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={initialRoute}>
-        <Stack.Screen name="Landing" component={Landing} options={{ headerShown: false }} />
-        <Stack.Screen name="Register" component={Register} options={{ }} />
-        <Stack.Screen name="Otp" component={OTP} options={{ title: 'OTP Verification' }} />
-        <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
-       
-        <Stack.Screen name="FarmerRegister" component={FarmerRegister} options={{ title: 'Back' }} />
-        <Stack.Screen name="BuyerRegister" component={BuyerRegister} options={{ title: 'Back' }} />
-        <Stack.Screen name="SellerRegister" component={SellerRegister} options={{ title: 'Back' }} />
-        <Stack.Screen name="MandiOfficialRegister" component={MandiOfficialRegister} options={{ title: 'Back' }} />
-        <Stack.Screen name="AnchorRegister" component={AnchorRegister} options={{title:'Back' }} />
-        
-        <Stack.Screen name="FarmerDashboard" component={FarmerDashboard} options={{ headerShown: false }} />
-        <Stack.Screen name="BuyerDashboard" component={BuyerDashboard} options={{ headerShown: false }} />
-        <Stack.Screen name="SellerDashboard" component={SellerDashboard} options={{ headerShown: false }} />
-        <Stack.Screen name="MandiOfficialDashboard" component={MandiOfficialDashboard} options={{ headerShown: false }} />
-        <Stack.Screen name="AnchorDashboard" component={AnchorDashboard} options={{ headerShown:false }} />
+      <LanguageProvider>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName={initialRoute}>
+            <Stack.Screen name="Landing" component={Landing} options={{ headerShown: false }} />
+            <Stack.Screen name="Register" component={Register} options={{}} />
+            {/* Use a static title here so we don't call useLanguage before the provider is mounted */}
+            <Stack.Screen name="Otp" component={OTP} options={{ title: 'Verify OTP' }} />
+            <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
 
-        <Stack.Screen name="ShortTermForecast" component={ShortTermForecast} />
-        <Stack.Screen name="PreRegisterLot" component={PreRegisterLot} />
-        </Stack.Navigator>
-    </NavigationContainer>
-    </LanguageProvider>
+            <Stack.Screen name="FarmerRegister" component={FarmerRegister} options={{ title: 'Back' }} />
+            <Stack.Screen name="BuyerRegister" component={BuyerRegister} options={{ title: 'Back' }} />
+            <Stack.Screen name="SellerRegister" component={SellerRegister} options={{ title: 'Back' }} />
+            <Stack.Screen name="MandiOfficialRegister" component={MandiOfficialRegister} options={{ title: 'Back' }} />
+            <Stack.Screen name="AnchorRegister" component={AnchorRegister} options={{ title: 'Back' }} />
+
+            <Stack.Screen name="FarmerDashboard" component={FarmerDashboard} options={{ headerShown: false }} />
+            <Stack.Screen name="BuyerDashboard" component={BuyerDashboard} options={{ headerShown: false }} />
+            <Stack.Screen name="SellerDashboard" component={SellerDashboard} options={{ headerShown: false }} />
+            <Stack.Screen name="MandiOfficialDashboard" component={MandiOfficialDashboard} options={{ headerShown: false }} />
+            <Stack.Screen name="AnchorDashboard" component={AnchorDashboard} options={{ headerShown: false }} />
+
+            <Stack.Screen name="ShortTermForecast" component={ShortTermForecast} />
+            <Stack.Screen name="PreRegisterLot" component={PreRegisterLot} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </LanguageProvider>
     </ThemeProvider>
   );
-} 
+}

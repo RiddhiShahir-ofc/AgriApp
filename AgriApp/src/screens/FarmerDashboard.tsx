@@ -566,9 +566,6 @@
 
 
 
-
-
-// 
 import React, { useEffect, useState } from 'react';
 import {
   Text,
@@ -675,7 +672,7 @@ export default function FarmerDashboard() {
     try {
       await AsyncStorage.setItem('LAST_MANDI_SEARCH', JSON.stringify({ mandiName, cropName }));
     } catch (e) {}
-    Alert.alert(t('search') ?? 'Search', `${t('mandi_label') ?? 'Mandi'}: ${mandiName}\n${t('crop') ?? 'Crop'}: ${cropName}`);
+    Alert.alert(t('search') ?? 'Search', `${t('mandi') ?? 'Mandi'}: ${mandiName}\n${t('crop') ?? 'Crop'}: ${cropName}`);
   };
 
   // Short-term inline forecast action
@@ -787,7 +784,6 @@ export default function FarmerDashboard() {
         {selectedTab === 'daily' && (
           <View style={[styles.searchBox, { backgroundColor: theme.background, borderColor: '#ddd' }]}>
             <Text style={[styles.searchTitle, { color: theme.text }]}>{t('mandi') ?? 'Mandi'}</Text>
-            <Text style={[styles.inputLabel, { color: theme.text }]}>{t('mandi_label') ?? 'Mandi'}</Text>
             <TextInput
               placeholder={t('enter_mandi') ?? 'Enter mandi name'}
               placeholderTextColor={theme.text ?? '#999'}
@@ -795,7 +791,7 @@ export default function FarmerDashboard() {
               onChangeText={setMandiName}
               style={[styles.input, { color: theme.text, borderColor: theme.text }]}
             />
-            <Text style={[styles.inputLabel, { color: theme.text }]}>{t('crop') ?? 'Crop'}</Text>
+            <Text style={[styles.searchTitle, { color: theme.text }]}>{t('crop') ?? 'Crop'}</Text>
             <TextInput
               placeholder={t('enter_crop') ?? 'Enter crop name'}
               placeholderTextColor={theme.text ?? '#999'}
@@ -809,12 +805,24 @@ export default function FarmerDashboard() {
           </View>
         )}
 
+        {/* Daily Market Price area */}
+        {selectedTab === 'daily' && (
+          <View style={[styles.chartBox, { borderColor: theme.text, backgroundColor: theme.background  }]}>
+            <Text style={[styles.chartTitle, { color: theme.text }]}>{t('daily_market_price_chart_title')}</Text>
+
+            {/* Placeholder chart — replace with your GraphChart component */}
+            <View style={styles.chartPlaceholder}>
+              <Text style={{ color: theme.text }}>{t('chart_placeholder_text') ?? 'Daily market price chart goes here'}</Text>
+            </View>
+          </View>
+        )}
+
         {/* Short term inline */}
         {selectedTab === 'short' && (
           <>
             <View style={[styles.searchBox, { backgroundColor: theme.background, borderColor: '#ddd' }]}>
               <Text style={[styles.searchTitle, { color: theme.text }]}>{t('mandi') ?? 'Mandi'}</Text>
-              <Text style={[styles.inputLabel, { color: theme.text }]}>{t('mandi_label') ?? 'Mandi'}</Text>
+              
               <TextInput
                 placeholder={t('enter_mandi')}
                 placeholderTextColor={theme.text ?? '#999'}
@@ -822,7 +830,7 @@ export default function FarmerDashboard() {
                 onChangeText={setStfMandi}
                 style={[styles.input, { color: theme.text, borderColor: theme.text }]}
               />
-              <Text style={[styles.inputLabel, { color: theme.text }]}>{t('crop')}</Text>
+              <Text style={[styles.searchTitle, { color: theme.text }]}>{t('crop')}</Text>
               <TextInput
                 placeholder={t('enter_crop')}
                 placeholderTextColor={theme.text ?? '#999'}
@@ -830,7 +838,7 @@ export default function FarmerDashboard() {
                 onChangeText={setStfCrop}
                 style={[styles.input, { color: theme.text, borderColor: theme.text }]}
               />
-              <Text style={[styles.inputLabel, { color: theme.text }]}>{t('forecast_horizon') ?? 'Duration (in days)'}</Text>
+              <Text style={[styles.searchTitle, { color: theme.text }]}>{t('forecast_horizon') ?? 'Duration (in days)'}</Text>
               <View style={styles.horizonRow}>
                 <TouchableOpacity
                   style={[styles.horizonBtn, horizon === '7days' ? styles.horizonBtnActive : {}]}
@@ -874,10 +882,10 @@ export default function FarmerDashboard() {
           <>
             <View style={[styles.formBox, { borderColor: '#ddd', backgroundColor: theme.background }]}>
               <View style={styles.formHeaderRow}>
-                <Text style={[styles.formTitle, { color: theme.text }]}>{t('pre_register_title') ?? 'Register Harvested Crop Lot'}</Text>
+                <Text style={[styles.title, { color: theme.text }]}>{t('pre_register_title') ?? 'Register Harvested Crop Lot'}</Text>
               </View>
 
-              <Text style={[styles.title, { color: theme.text }]}>{t('crop') ?? 'Crop'}</Text>
+              <Text style={[styles.formTitle, { color: theme.text }]}>{t('crop') ?? 'Crop'}</Text>
               <TextInput
                 placeholder={t('select_crop') ?? 'select crop'}
                 placeholderTextColor={theme.text ?? '#999'}
@@ -886,7 +894,7 @@ export default function FarmerDashboard() {
                 style={[styles.input, { color: theme.text, borderColor: theme.text }]}
               />
 
-              <Text style={[styles.title, { color: theme.text }]}>{t('grade_label') ?? 'Grade'}</Text>
+              <Text style={[styles.formTitle, { color: theme.text }]}>{t('grade_label') ?? 'Grade'}</Text>
               <TextInput
                 placeholder={t('select_grade') ?? 'select grade'}
                 placeholderTextColor={theme.text ?? '#999'}
@@ -895,7 +903,7 @@ export default function FarmerDashboard() {
                 style={[styles.input, { color: theme.text, borderColor: theme.text }]}
               />
 
-              <Text style={[styles.title, { color: theme.text }]}>{t('quantity_label') ?? 'Quantity (quintal)'}</Text>
+              <Text style={[styles.formTitle, { color: theme.text }]}>{t('quantity_label') ?? 'Quantity (quintal)'}</Text>
               <TextInput
                 placeholder={t('enter_quantity') ?? 'Enter Quantity (quintal)'}
                 placeholderTextColor={theme.text ?? '#999'}
@@ -905,7 +913,7 @@ export default function FarmerDashboard() {
                 style={[styles.input, { color: theme.text, borderColor: theme.text }]}
               />
 
-              <Text style={[styles.title, { color: theme.text }]}>{t('mandi_label') ?? 'Mandi Location'}</Text>
+              <Text style={[styles.formTitle, { color: theme.text }]}>{t('mandi_label') ?? 'Mandi Location'}</Text>
               <TextInput
                 placeholder={t('select_mandi') ?? 'select mandi'}
                 placeholderTextColor={theme.text ?? '#999'}
@@ -914,7 +922,7 @@ export default function FarmerDashboard() {
                 style={[styles.input, { color: theme.text, borderColor: theme.text }]}
               />
 
-              <Text style={[styles.title, { color: theme.text }]}>{t('arrival_label') ?? 'Expected Arrival Date'}</Text>
+              <Text style={[styles.formTitle, { color: theme.text }]}>{t('arrival_label') ?? 'Expected Arrival Date'}</Text>
               <TextInput
                 placeholder={t('enter_date') ?? 'dd-mm-yy'}
                 placeholderTextColor={theme.text ?? '#999'}

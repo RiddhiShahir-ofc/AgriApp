@@ -29,12 +29,12 @@ export default function MandiOfficialRegister() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <Text style={[styles.title,{color:theme.text}]}>{t('mandi_official_reg')}</Text>
-      <TextInput placeholder={t('official_name')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} />
-      <TextInput placeholder={t('official_id')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} />
-      <TextInput placeholder={t('assigned_mandi')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} />
-      <TextInput placeholder={t('location')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} />
-      <TextInput placeholder={t('official_role')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} />
-      <TextInput placeholder={t('email_id')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} />
+      <TextInput placeholder={t('official_name')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.text},{borderColor:theme.text}]} />
+      <TextInput placeholder={t('official_id')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.text},{borderColor:theme.text}]} />
+      <TextInput placeholder={t('assigned_mandi')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.text},{borderColor:theme.text}]} />
+      <TextInput placeholder={t('location')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.text},{borderColor:theme.text}]} />
+      <TextInput placeholder={t('official_role')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.text},{borderColor:theme.text}]} />
+      <TextInput placeholder={t('email_id')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.text},{borderColor:theme.text}]} />
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
       <Text style={[styles.btnText,{color:theme.text}]}>{t('register')}</Text>
         

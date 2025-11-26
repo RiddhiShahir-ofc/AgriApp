@@ -64,10 +64,10 @@ export default function SellerRegister() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <Text style={[styles.title,{color:theme.text}]}>{t('seller_reg')}</Text>
-      <TextInput placeholder={t('seller_name')} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={sellername} onChangeText={setSellerName} />
-      <TextInput placeholder={t('business_name')} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={businessname} onChangeText={setBusinessName} />
+      <TextInput placeholder={t('seller_name')} style={[styles.input,{color:theme.text},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={sellername} onChangeText={setSellerName} />
+      <TextInput placeholder={t('business_name')} style={[styles.input,{color:theme.text},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={businessname} onChangeText={setBusinessName} />
       <TextInput placeholder={t('primary_crop')} style={[styles.input,{color:theme.text},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={primarycrop} onChangeText={setPrimaryCrop} />
-      <TextInput placeholder={t('location')} style={[styles.input,{color:theme.input},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={location} onChangeText={setLocation} />
+      <TextInput placeholder={t('location')} style={[styles.input,{color:theme.text},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={location} onChangeText={setLocation} />
       <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
       <Text style={[styles.btnText,{color:theme.text}]}>{t('register')}</Text>
       </TouchableOpacity>
