@@ -1,4 +1,3 @@
-// src/screens/roleTabs/RoleProfile.tsx
 import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,7 +9,6 @@ export default function RoleProfile({ role }: { role: string }) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>(null);
   const { theme } = useTheme();
-  const { t } = useLanguage();
 
   useEffect(() => {
     (async () => {

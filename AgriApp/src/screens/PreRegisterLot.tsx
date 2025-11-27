@@ -1,5 +1,3 @@
-// mock image (for reference): /mnt/data/d89d0baa-92a6-445d-9a72-baedce8d780a.png
-
 import React, { useEffect, useState } from 'react';
 import {
   View,

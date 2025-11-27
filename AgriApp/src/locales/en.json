@@ -144,13 +144,13 @@
 
     "pre_register_title": "Register Harvested Crop Lot",
     "pre_register_subtitle": "Pre-Register your harvested crops for Auction",
-    "select_crop": "select crop",
+    "select_crop": "Select/Enter Crop",
     "grade_label": "Grade",
-    "select_grade": "select grade",
+    "select_grade": "Select/Enter Grade",
     "quantity_label": "Quantity (quintal)",
     "enter_quantity": "Enter Quantity (quintal)",
     "mandi_label": "Mandi Location",
-    "select_mandi": "select mandi",
+    "select_mandi": "Select/Enter Mandi",
     "arrival_label": "Expected Arrival Date",
     "enter_date": "dd-mm-yy",
     "add_lot": "Add Lot",
@@ -159,7 +159,6 @@
     "lot_added_success": "Lot added successfully",
     "fill_crop": "Please select crop",
     "fill_quantity": "Please enter quantity",
-    "fill_mandi": "Please select mandi"
-  
+    "fill_mandi": "Please Select Mandi"
 
 }
