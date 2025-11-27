@@ -159,6 +159,18 @@
     "lot_added_success": "Lot added successfully",
     "fill_crop": "Please select crop",
     "fill_quantity": "Please enter quantity",
-    "fill_mandi": "Please Select Mandi"
+    "fill_mandi": "Please Select Mandi",
+
+  "pre_bidding_title": "Available Lots for Pre-Bidding",
+  "enter_bid_value": "Enter your bid value",
+  "place_bid": "Place Bid",
+  "no_lots_available": "No pre-registered lots available at the moment",
+  "fill_bid_value": "Please enter a bid value",
+  "invalid_bid": "Please enter a valid number",
+  "bid_placed": "Your bid has been placed",
+  "lot_quantity": "Quantity",
+  "lot_date": "Auction Date",
+  "lot_owner": "Owner",
+  "pre_bidding": "Pre Bidding"
 
 }

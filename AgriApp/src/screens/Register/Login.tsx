@@ -26,7 +26,7 @@ export default function Register({ navigation }: Props) {
   return (
     <SafeAreaView style={[styles.container, {backgroundColor:theme.background}]}>
       <Text style={[styles.title, {color :theme.text}]}>{t('enter_mobile_number')}</Text>
-      <TextInput keyboardType="phone-pad" placeholder={t('mobile_placeholder')}  style={[styles.input,{color :theme.text}]} placeholderTextColor={theme.text} value={phone} onChangeText={setPhone} />
+      <TextInput keyboardType="phone-pad" placeholder={t('mobile_placeholder')}  style={[styles.input,{color :theme.text},{borderColor:theme.text}]} placeholderTextColor={theme.text} value={phone} onChangeText={setPhone} />
       <TouchableOpacity style={styles.btn} onPress={onSend}>
         <Text style={[styles.btnText, {color :theme.text}]}>{t('send_otp')}</Text>
       </TouchableOpacity>

@@ -26,6 +26,7 @@ import AnchorDashboard from './src/screens/AnchorDashboard';
 
 import ShortTermForecast from './src/screens/ShortTermForcast';
 import PreRegisterLot from './src/screens/PreRegisterLot';
+import BuyerPreBidding from './src/screens/BuyerPreBidding';
 
 export type RootStackParamList = {
   Landing: undefined;
@@ -48,6 +49,7 @@ export type RootStackParamList = {
 
   ShortTermForecast: undefined;
   PreRegisterLot: undefined;
+  BuyerPreBidding: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -135,6 +137,7 @@ export default function App() {
 
             <Stack.Screen name="ShortTermForecast" component={ShortTermForecast} />
             <Stack.Screen name="PreRegisterLot" component={PreRegisterLot} />
+            <Stack.Screen name="BuyerPreBidding" component={BuyerPreBidding} />
           </Stack.Navigator>
         </NavigationContainer>
       </LanguageProvider>

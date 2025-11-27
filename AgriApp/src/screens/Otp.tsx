@@ -36,7 +36,7 @@ export default function OTP({ navigation, route }: Props) {
     <SafeAreaView style={[styles.container, { backgroundColor:theme.background}]}>
       <Text style={[styles.title,{color:theme.text}]}>{t('verify_otp')}</Text>
        <Text style={[styles.subtitle,{color:theme.text}]}>{t('otp_sent_to') + ' ' + phone}</Text>
-      <TextInput value={otp} onChangeText={setOtp} keyboardType="number-pad" placeholder={t('enter_otp_placeholder')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.text}]} />
+      <TextInput value={otp} onChangeText={setOtp} keyboardType="number-pad" placeholder={t('enter_otp_placeholder')} placeholderTextColor={theme.text} style={[styles.input,{color:theme.text},{borderColor:theme.text}]} />
       <TouchableOpacity style={styles.btn} onPress={onVerify} disabled={loading}>
         {loading ? <ActivityIndicator color="#fff" /> : <Text style={[styles.btnText,{color:theme.text}]}>{t('verify_button')}</Text>}
       </TouchableOpacity>
