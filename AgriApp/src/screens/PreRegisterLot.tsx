@@ -175,7 +175,7 @@ export default function PreRegisterLot() {
 
         <View style={{ height: 12 }} />
 
-        <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('your_registered_lots')}</Text>
+        <Text style={[styles.title, { color: theme.text }]}>{t('your_registered_lots')}</Text>
 
         {lots.length === 0 ? (
           <View style={[styles.emptyBox, { borderColor: '#eee' }]}>
