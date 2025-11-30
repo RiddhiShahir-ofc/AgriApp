@@ -1,24 +1,46 @@
+import api from './api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { postJSON } from './mockapi';
 
-export const sendOtp = async (phone: string) => {
-  const code = Math.floor(1000 + Math.random() * 9000).toString();
-  await AsyncStorage.setItem(`OTP_${phone}`, code);
-  return code; // return code for testing/demo
-};
+export async function sendOtp(mobileNumber: string) {
+  // backend expects: { mobileNumber: "..." } (your DTO property is MobileNumber)
+  const body = { mobileNumber };
+  const res = await api.post('/auth/send-otp', body);
+  // The backend returns only message (not the OTP). For dev/testing you might return code when OTP service allows it.
+  return res.data; // { message: "OTP sent successfully." }
+}
 
-export const verifyOtp = async (phone: string, code: string) => {
-  const real = await AsyncStorage.getItem(`OTP_${phone}`);
-  return real === code;
-};
+export async function verifyOtp(mobileNumber: string, otp: string, deviceInfo?: string) {
+  const body = { mobileNumber, otp, deviceInfo };
+  const res = await api.post('/auth/verify-otp', body);
 
-// export async function verifyOtp(phone: string, otp: string) {
-//   console.log('Simulating OTP verification for:', phone, otp);
-//   //await new Promise(resolve => setTimeout(resolve, 1500)); // simulate delay
-//   return otp === '1234'; // only 1234 works
-// }
+  // your backend returns: userId, mobileNumber, accessToken, refreshToken, expiresIn, isVerified
+  const data = res.data;
+  // persist tokens & basic user info
+  await AsyncStorage.setItem('ACCESS_TOKEN', data.accessToken);
+  await AsyncStorage.setItem('REFRESH_TOKEN', data.refreshToken);
+  await AsyncStorage.setItem('LOGGED_IN_USER', data.mobileNumber);
+  await AsyncStorage.setItem('USER_ID', data.userId);
 
+  // set default header for axios instance immediately (so subsequent api calls use it)
+  api.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
+  return data;
+}
 
+export async function logout(refreshToken?: string) {
+  const token = refreshToken || (await AsyncStorage.getItem('REFRESH_TOKEN'));
+  if (!token) return;
+  try {
+    await api.post('/auth/logout', { refreshToken: token });
+  } finally {
+    await AsyncStorage.removeItem('ACCESS_TOKEN');
+    await AsyncStorage.removeItem('REFRESH_TOKEN');
+    await AsyncStorage.removeItem('LOGGED_IN_USER');
+    await AsyncStorage.removeItem('USER_ID');
+    await AsyncStorage.removeItem('LOGGED_IN_ROLE');
+    delete api.defaults.headers.common['Authorization'];
+  }
+}
 
 export async function registerRole(role: string, payload: any) {
   // Hit mock API (or real API)
@@ -42,11 +64,3 @@ export async function registerRole(role: string, payload: any) {
     role
   };
 }
-
-
-export async function logout() {
-  await AsyncStorage.removeItem('LOGGED_IN_USER');
-  await AsyncStorage.removeItem('LOGGED_IN_ROLE');
-}
-
-

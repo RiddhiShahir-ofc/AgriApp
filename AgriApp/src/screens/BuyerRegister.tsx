@@ -10,6 +10,8 @@ import { addRole } from '.././utils/storage';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 
+import { registerBuyer } from '../services/buyer';
+
 export default function BuyerRegister() {
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -26,11 +28,23 @@ export default function BuyerRegister() {
 
   const handleSubmit =async () => {
 
-    if (!buyername || !businessentity || !businessid || !email || !location || !intrestedcrops) {
+    if (!buyername || !businessentity || !businessid || !location || !intrestedcrops) {
 
       return Alert.alert(t('missing_fields'));
 
     }
+
+  //   const payload = {
+  //   buyername: buyername,
+  //   businessentity: businessentity,
+  //   businessid: businessid,
+  //   location: location,
+  //   intrestedcrops: intrestedcrops, // can be "1,2,3"
+  //   email: email // ignored by backend unless added
+  // };
+
+  // try {
+    // const response = await registerBuyer(payload);
 
     // Save role with phone and record role registration
 
@@ -42,7 +56,7 @@ export default function BuyerRegister() {
 
     // Save buyer profile example
 
-    await AsyncStorage.setItem('farmerProfile', JSON.stringify({ buyername, businessentity, businessid, email, location, intrestedcrops, phone }));
+    //await AsyncStorage.setItem('farmerProfile', JSON.stringify({ buyername, businessentity, businessid, email, location, intrestedcrops, phone }));
 
     Alert.alert(
       t('success_title'),
@@ -54,6 +68,14 @@ export default function BuyerRegister() {
         },
       ]
     );
+
+  //   } catch (err: any) {
+  //   console.log("Buyer registration error:", err.response?.data ?? err.message);
+  //   Alert.alert(
+  //     t('error_title'),
+  //     err.response?.data?.message || t('buyer_reg_failed') 
+  //   );
+  // }
   };
 
 

@@ -1,5 +1,5 @@
 
-const BASE = 'http://10.0.2.2:4000'; // Android emulator -> host machine. Use appropriate host for device or emulator.
+const BASE = 'http://10.0.2.2:5227'; 
 
 export async function postJSON(path: string, body: any) {
   const res = await fetch(`${BASE}${path}`, {

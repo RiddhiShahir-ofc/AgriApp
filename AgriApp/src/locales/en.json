@@ -79,6 +79,7 @@
 
     "missing_fields":"'Missing Fields', 'Please fill all the mandatory fields.'",
     "buyer_reg_success":"Buyer registered successfully!",
+    "buyer_reg_failed":"Buyer registration failed. Please try again.",
     "buyer_reg":"Buyer Registration",
     "buyer_name":"Buyer Name",
     "business_name":"Business Entity Name",

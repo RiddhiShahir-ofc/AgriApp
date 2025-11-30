@@ -3,11 +3,12 @@ import { Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
-import { verifyOtp } from '../services/auth';
+//import { verifyOtp } from '../services/mockauth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
+import {verifyOtp} from '../services/auth';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Otp'>;
 
@@ -20,8 +21,10 @@ export default function OTP({ navigation, route }: Props) {
   const {t} = useLanguage();
 
   const onVerify = async () => {
+     if (!otp) return Alert.alert(t('error_title'), 'Please enter OTP.');
     setLoading(true);
-    const ok = await verifyOtp(phone, otp);
+    try {
+    const ok = await verifyOtp(phone, otp,'android-emulator'); // returns true/false
     setLoading(false);
     if (t('ok')) {
       await AsyncStorage.setItem('LOGGED_IN_USER', phone);
@@ -29,6 +32,14 @@ export default function OTP({ navigation, route }: Props) {
       navigation.reset({ index: 0, routes: [{ name: 'Dashboard' }] });
     } else {
       Alert.alert(t('failed_title'), t('failed_incorrect_otp'));
+    }
+    } catch (err: any) {
+      console.error('verifyOtp error:', err.response?.data ?? err.message ?? err);
+      const msg = err.response?.data?.message ?? err.message ?? 'OTP verification failed';
+      Alert.alert(t('error_title'), msg);
+    }
+    finally {
+    setLoading(false);
     }
   };
 
