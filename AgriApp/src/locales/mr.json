@@ -180,7 +180,21 @@
 
   "type_mandi":"मंडीचे नाव टाका",
   "type_grade":"ग्रेड प्रविष्ट करा",
-  "type_crop":"पीक प्रविष्ट करा"
+  "type_crop":"पीक प्रविष्ट करा",
+
+  "mandiDashboard": "मंडी डॅशबोर्ड",
+  "delhiAzadpurMandi": "आझादपूर मंडी, दिल्ली",
+  "totalFarmers": "एकूण शेतकरी",
+  "quantity": "एकूण प्रमाण",
+  "todaysPrice": "आजची किंमत",
+  "buyers": "एकूण खरेदीदार",
+  "analytics": "विश्लेषण",
+  "networkFarmers": "नेटवर्क शेतकरी",
+  "auctionDate": "",
+  "lot": "एकूण लॉट",
+  "approved": "पूर्ण",
+  "pending": "अनुसूचित"
+
 }
 
 

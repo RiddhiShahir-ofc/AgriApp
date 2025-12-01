@@ -180,6 +180,19 @@
 
   "type_grade":"ग्रेड दर्ज करें",
   "type_mandi":"मंडी का नाम दर्ज करें",
-  "type_crop":"फसल दर्ज करें"
+  "type_crop":"फसल दर्ज करें",
+
+   "mandiDashboard": "मंडी डैशबोर्ड",
+  "delhiAzadpurMandi": "आज़ादपुर मंडी, दिल्ली",
+  "totalFarmers": "कुल किसान",
+  "quantity": "कुल मात्रा",
+  "todaysPrice": "आज का मूल्य",
+  "buyers": "कुल खरीदार",
+  "analytics": "विश्लेषण",
+  "networkFarmers": "नेटवर्क किसान",
+  "auctionDate": "नीलामी कार्यक्रम",
+  "lot": "लॉट",
+  "approved": "पूर्ण",
+  "pending": "निर्धारित"
 
 }

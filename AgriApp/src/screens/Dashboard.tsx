@@ -98,6 +98,21 @@ switch (roleId) {
           ))}
         </View>
 
+        <View style={{ marginVertical: 12 }}>
+  <TouchableOpacity
+    onPress={() => navigation.navigate('MandiDashboard')}
+    style={[{
+      backgroundColor: theme.primary,
+      paddingVertical: 12,
+      borderRadius: 10,
+      alignItems: 'center',
+      
+    }]}
+  >
+    <Text style={{ color: theme.text ?? '#fff', fontWeight: '700' }}>{t('mandi') ?? 'Mandi'}</Text>
+  </TouchableOpacity>
+</View>
+
         {/* Filters */}
 
          <FilterBar filters={filters} setFilters={setFilters} onSearch={handleSearch} />

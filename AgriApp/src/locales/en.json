@@ -177,6 +177,19 @@
   "clear": "Clear",
   "type_grade": "Type Grade",
   "type_mandi":"Type Mandi",
-  "type_crop":"Type Crop"
+  "type_crop":"Type Crop",
+
+  "mandiDashboard": "Mandi Dashboard",
+  "delhiAzadpurMandi": "Azadpur Mandi, Delhi",
+  "totalFarmers": "Total Farmers",
+  "quantity": "Quantity",
+  "todaysPrice": "Today's Price",
+  "buyers": "Buyers",
+  "analytics": "Analytics",
+  "networkFarmers": "Network Farmers",
+  "auctionDate": "Auction Schedule",
+  "lot": "lot",
+  "approved": "Completed",
+  "pending": "Scheduled"
 
 }
