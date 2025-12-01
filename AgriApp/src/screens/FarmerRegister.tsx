@@ -117,7 +117,7 @@
 //   btnText: { fontWeight: '700' },
 // });
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   TextInput,
@@ -140,6 +140,7 @@ import { addRole } from '.././utils/storage';
 
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
+import DropDownPicker from "react-native-dropdown-picker";
 
 type PropsNav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -163,6 +164,15 @@ export default function FarmerRegister() {
   const [farmCrop, setFarmCrop] = useState('');
   const [farmLandSize, setFarmLandSize] = useState('');
   const [farms, setFarms] = useState<FarmDetail[]>([]);
+
+  const [open, setOpen] = useState(false);
+  const [selectedCrops, setSelectedCrops] = useState<string[]>([]);
+  const [cropItems, setCropItems] = useState([
+  { label: 'Wheat', value: 'wheat' },
+  { label: 'Rice', value: 'rice' },
+  { label: 'Maize', value: 'maize' },
+  { label: 'Sugarcane', value: 'sugarcane' },
+]); // You can load this dynamically from DB
 
   const { theme } = useTheme();
   const { t } = useLanguage();
@@ -259,6 +269,20 @@ export default function FarmerRegister() {
     }
   };
 
+         useEffect(() => {
+  fetch('http://10.0.2.2:5227/api/crops')
+    .then(res => res.json())
+    .then(data => {
+      setCropItems(
+        data.map((c: { name: string; id: string }) => ({
+          label: c.name,  // what user sees
+          value: c.id     // what gets stored in state
+        }))
+      );
+    })
+    .catch(err => console.log("Crop Fetch Error: ", err));
+}, []);
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
@@ -295,13 +319,27 @@ export default function FarmerRegister() {
           value={village}
           onChangeText={setVillage}
         />
-        <TextInput
+        {/* <TextInput
           placeholder={t('intrested_crop')}
           placeholderTextColor={theme.text}
           style={[styles.input, { color: theme.text, borderColor: theme.text }]}
           value={crop}
           onChangeText={setCrop}
-        />
+        /> */}
+
+ <DropDownPicker
+  multiple
+  open={open}
+  value={selectedCrops}
+  items={cropItems}
+  setOpen={setOpen}
+  setValue={setSelectedCrops}
+  setItems={setCropItems}
+  placeholder={t('intrested_crop')}
+  listMode="MODAL"
+  modalProps={{ animationType: 'slide' }}
+/>
+
 
         {/* NEW: Farm Details Box */}
         <View style={[styles.farmBox, { backgroundColor: theme.background, borderColor: '#ddd' }]}>

@@ -148,9 +148,9 @@
     "reg_crop_lot": "नीलामीसाठी पीक लॉट नोंदवा",
     "pre_register_subtitle": "नीलामीसाठी आपल्या कापलेल्या पिकांचे पूर्व-नोंदणी करा",
     "crop_label": "पीक",
-    "select_crop": "पीक निवडा/प्रविष्ट करा",
+    "select_crop": "पीक निवडा",
     "grade_label": "ग्रेड",
-    "select_grade": "ग्रेड निवडा/प्रविष्ट करा",
+    "select_grade": "ग्रेड निवडा",
     "quantity_label": "प्रमाण (क्विंटल)",
     "enter_quantity": "प्रमाण प्रविष्ट करा (क्विंटल)",
     "mandi_label": "मंडी स्थान",
@@ -175,7 +175,12 @@
   "lot_quantity": "प्रमाण",
   "lot_date": "नीलामी तारीख",
   "lot_owner": "मालक",
-  "pre_bidding": "पूर्व बोली"
+  "pre_bidding": "पूर्व बोली",
+  "clear":"काढा",
+
+  "type_mandi":"मंडीचे नाव टाका",
+  "type_grade":"ग्रेड प्रविष्ट करा",
+  "type_crop":"पीक प्रविष्ट करा"
 }
 
 

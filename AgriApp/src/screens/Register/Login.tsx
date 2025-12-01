@@ -39,6 +39,7 @@ export default function Register({ navigation }: Props) {
       // attempt to extract OTP if backend provided it (dev only)
       const otpFromServer = data?.code ?? data?.otp ?? null;
       const message = data?.message ?? 'OTP sent';
+      //Alert.alert(t('otp_sent'), t('otp_code_is') + {otpFromServer});
 
       // show OTP only if backend explicitly returned it (dev/testing)
       if (otpFromServer) {

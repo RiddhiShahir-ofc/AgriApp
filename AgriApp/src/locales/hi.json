@@ -148,9 +148,9 @@
     "reg_crop_lot": "नीलामी के लिए फसल लॉट रजिस्टर करें",
     "pre_register_subtitle": "नीलामी के लिए अपनी कटाई की गई फसलें पूर्व-रजिस्टर करें",
     "crop_label": "फसल",
-    "select_crop": "फसल चुनें/ दर्ज करें",
+    "select_crop": "फसल चुनें",
     "grade_label": "ग्रेड",
-    "select_grade": "ग्रेड चुनें/ दर्ज करें",
+    "select_grade": "ग्रेड चुनें",
     "quantity_label": "मात्रा (क्विंटल)",
     "enter_quantity": "मात्रा दर्ज करें (क्विंटल)",
     "mandi_label": "मंडी स्थान",
@@ -175,6 +175,11 @@
   "lot_quantity": "मात्रा",
   "lot_date": "नीलामी तिथि",
   "lot_owner": "मालिक",
-  "pre_bidding": "पूर्व बोली लगाना"
+  "pre_bidding": "पूर्व बोली लगाना",
+  "clear":"साफ",
+
+  "type_grade":"ग्रेड दर्ज करें",
+  "type_mandi":"मंडी का नाम दर्ज करें",
+  "type_crop":"फसल दर्ज करें"
 
 }
