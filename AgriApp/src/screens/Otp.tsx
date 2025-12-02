@@ -19,13 +19,14 @@ export default function OTP({ navigation, route }: Props) {
 
   const {theme} = useTheme();
   const {t} = useLanguage();
+  
 
   const onVerify = async () => {
      if (!otp) return Alert.alert(t('error_title'), 'Please enter OTP.');
     setLoading(true);
     try {
     const ok = await verifyOtp(phone, otp,'android-emulator'); // returns true/false
-    setLoading(false);
+
     if (t('ok')) {
       await AsyncStorage.setItem('LOGGED_IN_USER', phone);
       Alert.alert(t('success_title'), t('success_logged_in'));

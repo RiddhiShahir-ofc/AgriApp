@@ -190,6 +190,8 @@
   "auctionDate": "Auction Schedule",
   "lot": "lot",
   "approved": "Completed",
-  "pending": "Scheduled"
+  "pending": "Scheduled",
+
+  "select_crops":"Please select at least one interested crop"
 
 }

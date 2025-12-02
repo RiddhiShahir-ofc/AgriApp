@@ -1,6 +1,27 @@
 import api from './api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { postJSON } from './mockapi';
+import axios from 'axios';
+
+const API_URL ='http://10.0.2.2:5227/api';
+type VerifyOtpResponse = {
+  token: string;     // JWT from backend
+  phone?: string;    // optional, if backend sends it
+  message?: string;
+};
+
+// export async function verifyOtp(
+//   phone: string,
+//   otp: string,
+//   deviceId: string
+// ): Promise<VerifyOtpResponse> {
+//   const res = await axios.post(`${API_URL}/auth/verify-otp`, {
+//     phone,
+//     otp,
+//     deviceId,
+//   });
+//    return res.data as VerifyOtpResponse;
+// }
 
 export async function sendOtp(mobileNumber: string) {
   // backend expects: { mobileNumber: "..." } (your DTO property is MobileNumber)
