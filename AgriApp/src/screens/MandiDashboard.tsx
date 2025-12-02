@@ -57,7 +57,7 @@ export default function MandiDashboard({ navigation }: any) {
       <ScrollView contentContainerStyle={{ padding: 20 }}>
         {/* Header */}
         <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.smallBtn, { borderColor: theme.text }]}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.smallBtn, { borderColor: theme.text,backgroundColor: theme.primary }]}>
             <Text style={{ color: theme.text }}>{t('back') ?? 'Back'}</Text>
           </TouchableOpacity>
 
@@ -169,12 +169,13 @@ export default function MandiDashboard({ navigation }: any) {
           </View>
         </View>
 
-        {/* Back button */}
+        {/* // Back button //
         <View style={{ marginTop: 20, marginBottom: 60 }}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.primaryBtn, { backgroundColor: theme.primary }]}>
             <Text style={{ color: '#fff', fontWeight: '700' }}>{t('back') ?? 'Back'}</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
+
       </ScrollView>
     </SafeAreaView>
   );

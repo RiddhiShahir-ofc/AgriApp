@@ -14,7 +14,7 @@ import { useLanguage } from '../context/LanguageContext';
 type Props = NativeStackScreenProps<RootStackParamList, 'Dashboard'>;
 
 const roles = [
-  { id: 'farmer', name: 'farmer' },
+  { id: 'farmer', name: 'Farmer' },
   { id: 'buyer', name: 'Buyer' },
   { id: 'seller', name: 'Seller' },
   { id: 'mandi', name: 'Mandi Official' },

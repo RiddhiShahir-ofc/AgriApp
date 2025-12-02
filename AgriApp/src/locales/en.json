@@ -118,6 +118,10 @@
     "seller_name":"Seller Name",
     "primary_crop":"Primary Crop",
     "seller_reg_success":"Seller registered successfully!",
+    "seller_reg_failed":"Seller registration failed. Please try again.",
+    "seller_profile":"Your Seller Profile",
+    "refresh":"Refresh",
+    "no_seller_profile":"No seller profile found yet. Please register below.",
 
     "land_size":"Land Size (in acres)",
     "farm_location":"Farm Location",
