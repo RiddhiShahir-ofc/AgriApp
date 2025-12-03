@@ -200,7 +200,15 @@
   "mandi_official_reg_failed":"Mandi Official Registration Failed. Please try again.",
   "error_loading_roles":"Failed to load official roles from server.",
   "invalid_mandi_id":"Entered Mandi Id is invalid, Select valid Mandi from Dropdown.",
-  "error_loading_mandis":"Failed to load mandis from server."
-           
+  "error_loading_mandis":"Failed to load mandis from server.",
+
+  "placed_bids":"My Bids",
+  "reject":"Reject",
+  "accept":"Accept",
+  "date":"Date",
+  "bidder":"Bidder",
+  "received_bids":"Received Bids on Your Lot",
+  "no_bids_yet":"No bids received yet",
+  "bid_value":"Bid"
 
 }
