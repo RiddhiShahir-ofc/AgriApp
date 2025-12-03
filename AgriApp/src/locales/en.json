@@ -196,6 +196,11 @@
   "approved": "Completed",
   "pending": "Scheduled",
 
-  "select_crops":"Please select at least one interested crop"
+  "select_crops":"Please select at least one interested crop",
+  "mandi_official_reg_failed":"Mandi Official Registration Failed. Please try again.",
+  "error_loading_roles":"Failed to load official roles from server.",
+  "invalid_mandi_id":"Entered Mandi Id is invalid, Select valid Mandi from Dropdown.",
+  "error_loading_mandis":"Failed to load mandis from server."
+           
 
 }

@@ -335,9 +335,10 @@ const SellerRegister: React.FC = () => {
             style={{ borderColor: theme.text }}
           />
         </View>
-        <Text style={{ fontSize: 12, color: theme.text, marginBottom: 8 }}>
+        {/*to show the number of existing crops}
+        {/* <Text style={{ fontSize: 12, color: theme.text, marginBottom: 8 }}>
           Crops loaded: {cropItems.length}
-        </Text>
+        </Text> */}
 
         <TouchableOpacity
           style={[styles.btn, submitting && { opacity: 0.6 }]}
