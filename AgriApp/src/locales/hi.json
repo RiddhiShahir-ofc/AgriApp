@@ -1,6 +1,6 @@
 {
   
-    "title": "Farm Bazaar में आपका स्वागत है",
+    "title": "फार्म बाज़ार में आपका स्वागत है",
     "selectLanguage": "अपनी भाषा चुनें",
     "dailyMarketWatch": "दैनिक बाजार अवलोकन",
     "loginRegister": "लॉगिन / रजिस्टर",
@@ -20,8 +20,9 @@
     "otp_code_is": "ओटीपी कोड है ",
 
     "verify_otp": "ओटीपी सत्यापित करें",
-    "otp_sent_to": "मोबाइल नंबर पर ओटीपी भेजा गया",
+    "otp_sent_to": "मोबाइल नंबर पर ओटीपी भेजा गया ।",
     "enter_otp_placeholder": "ओटीपी दर्ज करें",
+    "please_enter_otp":"कृपया पंजीकृत मोबाइल नंबर पर भेजा गया OTP दर्ज करें । ",
     "verify_button": "सत्यापित करें",
     "success_title": "सफलता",
     "success_logged_in": "लॉग इन हो गया",

@@ -1,6 +1,6 @@
 {
   
-    "title": "Farm Bazaar मध्ये आपले स्वागत आहे",
+    "title": "फार्म बाजार मध्ये आपले स्वागत आहे",
     "selectLanguage": "आपली आवडती भाषा निवडा",
     "dailyMarketWatch": "दैनिक बाजार निरीक्षण",
     "loginRegister": "लॉगिन / नोंदणी",
@@ -22,6 +22,7 @@
     "verify_otp": "ओटीपी सत्यापित करा",
     "otp_sent_to": "मोबाईल नंबर वर ओटीपी पाठविला",
     "enter_otp_placeholder": "ओटीपी प्रविष्ट करा",
+    "please_enter_otp":"कृपया नोंदणीकृत मोबाईल नंबरवर पाठवलेला OTP एंटर करा.",
     "verify_button": "सत्यापित करा",
     "success_title": "यशस्वी",    
     "success_logged_in": "लॉग इन झाले",

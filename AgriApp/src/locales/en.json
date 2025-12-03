@@ -21,6 +21,7 @@
     "verify_otp": "Verify OTP",
     "otp_sent_to": "OTP Sent to Mobile Number",
     "enter_otp_placeholder": "Enter OTP",
+    "please_enter_otp":"Please Enter OTP send to the registered mobile number",
     "verify_button": "Verify",
     "success_title": "Success",
     "success_logged_in": "Logged in",

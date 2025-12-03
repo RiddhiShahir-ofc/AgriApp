@@ -19,10 +19,10 @@ export default function OTP({ navigation, route }: Props) {
 
   const {theme} = useTheme();
   const {t} = useLanguage();
-  
+
 
   const onVerify = async () => {
-     if (!otp) return Alert.alert(t('error_title'), 'Please enter OTP.');
+     if (!otp) return Alert.alert(t('error_title'), t('please_enter_otp'));
     setLoading(true);
     try {
     const ok = await verifyOtp(phone, otp,'android-emulator'); // returns true/false
