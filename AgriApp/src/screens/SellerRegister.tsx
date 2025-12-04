@@ -126,6 +126,8 @@ const SellerRegister: React.FC = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
 
+  const [checkingStatus, setCheckingStatus] = useState(true);
+
   // ------------- Load crops from /api/crops -----------------
   useEffect(() => {
     const loadCrops = async () => {
@@ -173,6 +175,33 @@ const SellerRegister: React.FC = () => {
 
     loadCrops();
   }, [t]);
+
+ //  check seller status using /seller/status
+  useEffect(() => {
+    const checkSellerStatus = async () => {
+      try {
+        const res = await api.get('/seller/status');
+        const isSeller = !!res.data?.isSeller;
+
+        if (isSeller) {
+          // already registered as seller → go straight to dashboard
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'SellerDashboard' }],
+          });
+        } else {
+          // not seller yet → show registration form
+          setCheckingStatus(false);
+        }
+      } catch (err: any) {
+        console.warn('Seller status check failed:', err?.response ?? err);
+        // on error (e.g. 401), still show registration form
+        setCheckingStatus(false);
+      }
+    };
+
+    checkSellerStatus();
+  }, [navigation]);
 
   // ------------- Call backend /api/seller/register ----------------
   const registerSellerOnBackend = async (): Promise<void> => {
@@ -274,6 +303,21 @@ const SellerRegister: React.FC = () => {
       setSubmitting(false);
     }
   };
+
+  // 🔵 while we are checking /seller/status, show loader instead of form
+  if (checkingStatus) {
+    return (
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: theme.background }]}
+      >
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ color: theme.text }}>
+            {t('loading') ?? 'Checking seller status...'}
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   // ---------------- UI ----------------
   return (

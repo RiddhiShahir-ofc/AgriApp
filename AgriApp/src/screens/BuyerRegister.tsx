@@ -148,7 +148,10 @@ const BuyerRegister: React.FC = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
 
-  // -------- Load crops from backend (same idea as FarmerRegister) ----------
+  // 🔵 NEW: while checking /buyer/status, we hide the form
+  const [checkingStatus, setCheckingStatus] = useState(true);
+
+  // -------- Load crops from backend ----------
   useEffect(() => {
     const loadCrops = async () => {
       try {
@@ -187,6 +190,34 @@ const BuyerRegister: React.FC = () => {
 
     loadCrops();
   }, []);
+
+  // 🔵 NEW: check buyer status via backend and redirect if already registered
+  useEffect(() => {
+    const checkBuyerStatus = async () => {
+      try {
+        // api should include Authorization header with JWT
+        const res = await api.get('/buyer/status');
+        const isBuyer = !!res.data?.isBuyer;
+
+        if (isBuyer) {
+          // Already registered as buyer → go straight to dashboard
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'BuyerDashboard' }],
+          });
+        } else {
+          // Not a buyer yet → show register form
+          setCheckingStatus(false);
+        }
+      } catch (e: any) {
+        console.warn('Failed to check buyer status', e?.response ?? e);
+        // On error (e.g. 401) just show register form
+        setCheckingStatus(false);
+      }
+    };
+
+    checkBuyerStatus();
+  }, [navigation]);
 
   // --------------------- Call /buyer/register backend ----------------------
   const registerBuyerOnBackend = async (): Promise<void> => {
@@ -293,6 +324,21 @@ const BuyerRegister: React.FC = () => {
       setSubmitting(false);
     }
   };
+
+    // 🔵 NEW: while checking /buyer/status, show a loader instead of form
+  if (checkingStatus) {
+    return (
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: theme.background }]}
+      >
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ color: theme.text }}>
+            {t('loading') ?? 'Checking buyer status...'}
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   // ----------------------------- UI ----------------------------------------
   return (
