@@ -210,6 +210,12 @@
   "bidder":"Bidder",
   "received_bids":"Received Bids on Your Lot",
   "no_bids_yet":"No bids received yet",
-  "bid_value":"Bid"
+  "bid_value":"Bid",
+
+  "update_lot":"Update Lot",
+  "lot_updated_success":"Lot updated successfully",
+  "edit":"Edit",
+  "lot_update_failed" : "Failed to update lot",
+  "lot_add_failed" : "Failed to register lot, try again."
 
 }
