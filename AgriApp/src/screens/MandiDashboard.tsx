@@ -1,13 +1,6 @@
 import React, { useMemo } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  FlatList,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, FlatList } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import GraphChart from '../components/GraphChart';
@@ -105,7 +98,7 @@ export default function MandiDashboard({ navigation }: any) {
 
         {/* Distribution (simple visual) */}
         <View style={[styles.panel, { borderColor: theme.text }]}>
-          <Text style={[styles.panelTitle, { color: theme.text }]}>{t('analytics') ?? 'Analytics'}</Text>
+          <Text style={[styles.panelTitle, { color: theme.text }]}>{t('analytics') ?? 'Analytics of Crops'}</Text>
           <View style={{ marginTop: 12 }}>
             {distribution.map((d) => {
               const pct = Math.round((d.value / totalQuantity) * 100);
@@ -126,7 +119,7 @@ export default function MandiDashboard({ navigation }: any) {
         </View>
 
         {/* Farmer Contributions (simple list) */}
-        <View style={[styles.panel, { borderColor: theme.text }]}>
+        {/* <View style={[styles.panel, { borderColor: theme.text }]}>
           <Text style={[styles.panelTitle, { color: theme.text }]}>{t('networkFarmers') ?? 'Network Farmers'}</Text>
           <FlatList
             data={[
@@ -142,13 +135,12 @@ export default function MandiDashboard({ navigation }: any) {
                   <Text style={{ color: theme.text }}>{item.name}</Text>
                   <Text style={{ color: theme.text, fontSize: 12 }}>{item.qty} Q</Text>
                 </View>
-                <Text style={{ color: theme.text }}>{/* Placeholder for sparkline or percent */}</Text>
-              </View>
-            )}
-          />
-        </View>
+                <Text style={{ color: theme.text }}>{/* Placeholder for sparkline or percent *///}</Text></SafeAreaView>View>
+           // )}
+         ///>
+       // </View> */}
 
-        {/* Auction Schedule */}
+       // {/* Auction Schedule */}
         <View style={[styles.panel, { borderColor: theme.text }]}>
           <Text style={[styles.panelTitle, { color: theme.text }]}>{t('auctionDate') ?? 'Auction Schedule'}</Text>
           <View style={{ marginTop: 12 }}>
@@ -169,7 +161,7 @@ export default function MandiDashboard({ navigation }: any) {
           </View>
         </View>
 
-        {/* // Back button //
+        /* // Back button //
         <View style={{ marginTop: 20, marginBottom: 60 }}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.primaryBtn, { backgroundColor: theme.primary }]}>
             <Text style={{ color: '#fff', fontWeight: '700' }}>{t('back') ?? 'Back'}</Text>
