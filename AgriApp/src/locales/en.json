@@ -187,7 +187,7 @@
   "mandiDashboard": "Mandi Dashboard",
   "delhiAzadpurMandi": "Azadpur Mandi, Delhi",
   "totalFarmers": "Total Farmers",
-  "quantity": "Quantity",
+  "quantity": "Quantity Of Crops",
   "todaysPrice": "Today's Price",
   "buyers": "Buyers",
   "analytics": "Analytics of Crops",
@@ -216,6 +216,7 @@
   "lot_updated_success":"Lot updated successfully",
   "edit":"Edit",
   "lot_update_failed" : "Failed to update lot",
-  "lot_add_failed" : "Failed to register lot, try again."
+  "lot_add_failed" : "Failed to register lot, try again.",
+  "cropTrend":"Crop Trend"
 
 }
