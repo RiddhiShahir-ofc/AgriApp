@@ -183,6 +183,7 @@
   "type_grade": "Type Grade",
   "type_mandi":"Type Mandi",
   "type_crop":"Type Crop",
+  "failed":"Failed to place bid",
 
   "mandiDashboard": "Mandi Dashboard",
   "delhiAzadpurMandi": "Azadpur Mandi, Delhi",
@@ -217,6 +218,8 @@
   "edit":"Edit",
   "lot_update_failed" : "Failed to update lot",
   "lot_add_failed" : "Failed to register lot, try again.",
-  "cropTrend":"Crop Trend"
+  "cropTrend":"Crop Trend",
+  "expected_amount":"Expected Amount",
+  "enter_expected_amount":"Please Enter Expected Amount"
 
 }

@@ -121,3 +121,115 @@ const styles = StyleSheet.create({
   },
 });
 
+// import React, { useEffect, useState } from 'react';
+// import { View } from 'react-native';
+// import DropDownPicker from 'react-native-dropdown-picker';
+
+// import { useLanguage } from '../context/LanguageContext';
+// import { useTheme } from '../context/ThemeContext';
+// import api from '../services/api';
+
+// type Option = {
+//   label: string;
+//   value: string;
+// };
+
+// export default function MandiCropSelector() {
+//   const { t } = useLanguage();
+//   const { theme } = useTheme();
+
+//   // 🔹 Mandi state
+//   const [mandiOptions, setMandiOptions] = useState<Option[]>([]);
+//   const [selectedMandiId, setSelectedMandiId] = useState<string | null>(null);
+//   const [mandiOpen, setMandiOpen] = useState(false);
+
+//   // 🔹 Crop state (depends on selected mandi)
+//   const [cropOptions, setCropOptions] = useState<Option[]>([]);
+//   const [selectedCropId, setSelectedCropId] = useState<string | null>(null);
+//   const [cropOpen, setCropOpen] = useState(false);
+
+//   // ⬇️ Load mandis from DB
+//   useEffect(() => {
+//     const loadMandis = async () => {
+//       try {
+//         const res = await api.get('/mandis'); // adjust endpoint if needed
+//         const mapped = res.data.map((m: any) => ({
+//           // If your DB has localized names (e.g. m.nameHi), you can switch on current language here.
+//           label: `${m.mandiName}, ${m.location}`,
+//           value: String(m.mandiId),
+//         }));
+//         setMandiOptions(mapped);
+
+//         if (!selectedMandiId && mapped.length > 0) {
+//           setSelectedMandiId(mapped[0].value);
+//         }
+//       } catch (err) {
+//         console.log('Error loading mandis:', err);
+//       }
+//     };
+
+//     loadMandis();
+//   }, []);
+
+//   // ⬇️ Load crops whenever mandi changes
+//   useEffect(() => {
+//     const loadCrops = async () => {
+//       if (!selectedMandiId) {
+//         setCropOptions([]);
+//         setSelectedCropId(null);
+//         return;
+//       }
+
+//       try {
+//         // Example: /mandis/{id}/crops – change to your actual route
+//         const res = await api.get(`/mandis/${selectedMandiId}/crops`);
+//         const mapped = res.data.map((c: any) => ({
+//           // same idea: if you have multilingual fields, pick based on current language
+//           label: c.cropName,
+//           value: String(c.cropId),
+//         }));
+//         setCropOptions(mapped);
+//         setSelectedCropId(null); // reset crop when mandi changes
+//       } catch (err) {
+//         console.log('Error loading crops:', err);
+//       }
+//     };
+
+//     loadCrops();
+//   }, [selectedMandiId]);
+
+//   return (
+//     <View style={{ zIndex: 2000 }}>
+//       {/* 🔹 Mandi Dropdown */}
+//       <DropDownPicker
+//         open={mandiOpen}
+//         value={selectedMandiId}
+//         items={mandiOptions}
+//         setOpen={setMandiOpen}
+//         setValue={setSelectedMandiId}
+//         setItems={setMandiOptions}
+//         placeholder={t('select_mandi') ?? 'Select Mandi'}
+//         style={{ borderColor: theme.text, marginBottom: 8 }}
+//         dropDownContainerStyle={{ borderColor: theme.text }}
+//         listMode="MODAL"
+//         modalTitle={t('select_mandi') ?? 'Select Mandi'}
+//       />
+
+//       {/* 🔹 Crop Dropdown (depends on selected mandi) */}
+//       <DropDownPicker
+//         open={cropOpen}
+//         value={selectedCropId}
+//         items={cropOptions}
+//         setOpen={setCropOpen}
+//         setValue={setSelectedCropId}
+//         setItems={setCropOptions}
+//         placeholder={t('select_crop') ?? 'Select Crop'}
+//         disabled={!selectedMandiId}
+//         style={{ borderColor: theme.text, marginTop: 8 }}
+//         dropDownContainerStyle={{ borderColor: theme.text }}
+//         listMode="MODAL"
+//         modalTitle={t('select_crop') ?? 'Select Crop'}
+//       />
+//     </View>
+//   );
+// }

@@ -594,6 +594,7 @@ type Lot = {
   crop: string;
   grade: string;
   quantity: string;
+  sellingamount:string;
   mandi: string;
   expectedArrival: string;
   createdAt: number;
@@ -622,7 +623,7 @@ export default function BuyerDashboard() {
 
   const goBack = () => navigation.navigate('Dashboard');
 
-  // 🔵 added 'placed' tab
+  //  added 'placed' tab
   const [selectedTab, setSelectedTab] = useState<'daily' | 'short' | 'pre' | 'placed'>('daily');
 
   // Daily
@@ -642,7 +643,7 @@ export default function BuyerDashboard() {
   const [bidValues, setBidValues] = useState<Record<string, string>>({});
   const [placingBid, setPlacingBid] = useState<Record<string, boolean>>({});
 
-  // 🔵 My placed bids
+  //  My placed bids
   const [myBids, setMyBids] = useState<BidWithLot[]>([]);
   const [loadingMyBids, setLoadingMyBids] = useState(false);
 
@@ -652,7 +653,7 @@ export default function BuyerDashboard() {
   const isPredefined = (value: string, options: string[]) =>
     value === '' || options.includes(value) || value === 'Other';
 
-  // 🔵 helper to load placed bids of current user + join with lots
+  //  helper to load placed bids of current user + join with lots
   const loadMyPlacedBids = async () => {
     setLoadingMyBids(true);
     try {
@@ -714,7 +715,7 @@ export default function BuyerDashboard() {
     }
   };
 
-  // 🔵 Load lots but EXCLUDE lots where current buyer has already placed a bid
+  //  Load lots but EXCLUDE lots where current buyer has already placed a bid
   const loadAllRegisteredLots = async () => {
     setLoadingLots(true);
     try {
@@ -751,7 +752,7 @@ export default function BuyerDashboard() {
           const parsed: Lot[] = JSON.parse(json);
           const owner = key.replace('REGISTERED_LOTS_', '');
           parsed.forEach(l => {
-            // 🚫 Skip lots where this buyer has already placed a bid
+            //  Skip lots where this buyer has already placed a bid
             if (!myBidLotIds.has(l.id)) {
               aggregated.push({ ...l, owner });
             }
@@ -764,7 +765,7 @@ export default function BuyerDashboard() {
       aggregated.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
       setLots(aggregated);
     } catch (err) {
-      Alert.alert('Error', 'Failed to load available lots');
+      Alert.alert(t('error_title'), 'Failed to load available lots');
     } finally {
       setLoadingLots(false);
     }
@@ -814,7 +815,7 @@ export default function BuyerDashboard() {
     try {
       const bidder = await AsyncStorage.getItem('LOGGED_IN_USER');
       if (!bidder) {
-        Alert.alert('Error', 'Please login to place bid');
+        Alert.alert(t('error_title'), 'Please login to place bid');
         return;
       }
 
@@ -831,14 +832,14 @@ export default function BuyerDashboard() {
       });
       await AsyncStorage.setItem(bidKey, JSON.stringify(bids));
 
-      Alert.alert('Success', `Bid of ₹${value}/quintal placed!`);
+      Alert.alert(t('success_title'), `Bid of ₹${value}/quintal placed!`);
       setBidValues(s => ({ ...s, [lot.id]: '' }));
 
-      // 🔵 Immediately refresh both lists so the lot "moves" to My Bids
+      //  Immediately refresh both lists so the lot "moves" to My Bids
       await loadMyPlacedBids();
       await loadAllRegisteredLots();
     } catch (err) {
-      Alert.alert('Error', 'Failed to place bid');
+      Alert.alert(t('error_title'), t('failed'));
     } finally {
       setPlacingBid(s => ({ ...s, [lot.id]: false }));
     }
@@ -848,9 +849,10 @@ export default function BuyerDashboard() {
     <View style={[styles.lotCard, { backgroundColor: theme.background, borderColor: theme.text + '40' }]}>
       <Text style={[styles.lotTitle, { color: theme.text }]}>{item.crop} ({item.grade})</Text>
       <Text style={[styles.lotDetail, { color: theme.text }]}>Quantity: {item.quantity} quintal</Text>
+      <Text style={[styles.lotDetail, { color: theme.text }]}>{t('expected_amount')}: {item.sellingamount}</Text>
       <Text style={[styles.lotDetail, { color: theme.text }]}>Mandi: {item.mandi}</Text>
       <Text style={[styles.lotDetail, { color: theme.text }]}>Arrival: {item.expectedArrival}</Text>
-         {/* New line to show owner */}
+        {/* New line to show owner */}
       {item.owner && (
         <Text style={[styles.lotDetail, { color: theme.text }]}>
           Owner: {item.owner}
@@ -881,7 +883,7 @@ export default function BuyerDashboard() {
     </View>
   );
 
-  // 🔵 badge for bid status
+  //  badge for bid status
   const renderStatusBadge = (status?: 'pending' | 'accepted' | 'rejected') => {
     const s = status || 'pending';
     let bg = '#eee';
@@ -918,6 +920,7 @@ export default function BuyerDashboard() {
         {lot && (
           <>
             <Text style={[styles.lotDetail, { color: theme.text }]}>Quantity: {lot.quantity} quintal</Text>
+            <Text style={[styles.lotDetail, { color: theme.text }]}>Expected amount: {lot.sellingamount}</Text>
             <Text style={[styles.lotDetail, { color: theme.text }]}>Mandi: {lot.mandi}</Text>
             <Text style={[styles.lotDetail, { color: theme.text }]}>Arrival: {lot.expectedArrival}</Text>
           </>

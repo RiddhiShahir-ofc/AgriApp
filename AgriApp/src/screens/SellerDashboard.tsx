@@ -1966,16 +1966,18 @@ type Lot = {
   crop: string;
   grade: string;
   quantity: string;
+  sellingamount: string;
   mandi: string;
   expectedArrival: string;
   createdAt: number;
 };
 
-// 🔵 Bid + LotWithBids for received bids
+//  Bid + LotWithBids for received bids
 type Bid = {
   lotId: string;
   lotOwner: string;
   bidder: string;
+  sellingamount: string;
   bidValue: string;
   createdAt: number;
   status?: 'pending' | 'accepted' | 'rejected';
@@ -2016,6 +2018,7 @@ export default function SellerDashboard() {
   const [prCrop, setPrCrop] = useState('');
   const [prGrade, setPrGrade] = useState('');
   const [prQuantity, setPrQuantity] = useState('');
+  const [prSellingAmount, setPrSellingAmount] = useState('');
   const [prMandi, setPrMandi] = useState('');
   const [prExpectedArrival, setPrExpectedArrival] = useState('');
   const [lots, setLots] = useState<Lot[]>([]);
@@ -2025,13 +2028,13 @@ export default function SellerDashboard() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [dateValue, setDateValue] = useState<Date>(new Date());
 
-  // 🔵 Received bids state
+  //  Received bids state
   const [lotsWithBids, setLotsWithBids] = useState<LotWithBids[]>([]);
   const [loadingBids, setLoadingBids] = useState(false);
 
   const STORAGE_KEY_PREFIX = 'REGISTERED_LOTS_';
 
-  // ✅ Crops & Mandis from DB
+  //  Crops & Mandis from DB
   const [crops, setCrops] = useState<UICrop[]>([]);
   const [mandis, setMandis] = useState<UIMandi[]>([]);
 
@@ -2046,7 +2049,7 @@ export default function SellerDashboard() {
     [mandis],
   );
 
-  // 🔑 Grades from DB for selected crop
+  //  Grades from DB for selected crop
   const currentGrades = useMemo(() => {
     if (!prCrop) return [];
 
@@ -2066,7 +2069,7 @@ export default function SellerDashboard() {
     return value === '' || options.includes(value) || value === 'Other';
   };
 
-  // 🔵 helper: sync lots to AsyncStorage (for buyer pre-bidding)
+  //  helper: sync lots to AsyncStorage (for buyer pre-bidding)
   const syncLotsToStorage = async (lotsToStore: Lot[], ownerPhone: string | null) => {
     if (!ownerPhone) return;
     try {
@@ -2079,7 +2082,7 @@ export default function SellerDashboard() {
     }
   };
 
-  // 🔵 load lots from backend /seller/lots/all
+  //  load lots from backend /seller/lots/all
   const loadLotsFromBackend = async (ownerPhone: string | null) => {
     try {
       const res = await api.get('/seller/lots/all');
@@ -2098,6 +2101,7 @@ export default function SellerDashboard() {
           crop: d.cropName ?? d.CropName ?? d.crop ?? '',
           grade: d.grade ?? d.Grade ?? '-',
           quantity: String(d.quantity ?? d.Quantity ?? ''),
+          sellingamount: String(d.SellingAmount ?? d.sellingamount ?? ''),
           mandi:
             d.mandiName ??
             d.MandiName ??
@@ -2133,7 +2137,7 @@ export default function SellerDashboard() {
     }
   };
 
-  // 🔵 load crops & mandis from backend
+  //  load crops & mandis from backend
   useEffect(() => {
     const loadMeta = async () => {
       try {
@@ -2202,7 +2206,7 @@ export default function SellerDashboard() {
     }
   }, [prCrop, prGrade, currentGrades]);
 
-  // 🔵 Load received bids when tab changes to "received"
+  //  Load received bids when tab changes to "received"
   useEffect(() => {
     if (selectedTab === 'received' && phone) {
       loadReceivedBids(phone);
@@ -2304,7 +2308,7 @@ export default function SellerDashboard() {
     setShowDatePicker(true);
   };
 
-  // 🔑 pick the correct CropId based on selected crop & grade
+  //  pick the correct CropId based on selected crop & grade
   const pickCropIdForSelection = () => {
     if (!prCrop) return null;
 
@@ -2329,7 +2333,7 @@ export default function SellerDashboard() {
     return m?.id ?? null;
   };
 
-  // 🔵 Register lot with DB (POST /seller/lots/register)
+  //  Register lot with DB (POST /seller/lots/register)
   const addLotInline = async () => {
     if (!prCrop)
       return Alert.alert(
@@ -2365,6 +2369,7 @@ export default function SellerDashboard() {
       formData.append('CropId', String(cropId));
       formData.append('MandiId', String(mandiId));
       formData.append('Quantity', prQuantity);
+      formData.append('SellingAmount',prSellingAmount);
       formData.append('Grade', prGrade || '-');
 
       if (prExpectedArrival) {
@@ -2389,6 +2394,7 @@ export default function SellerDashboard() {
         crop: data.cropName ?? data.CropName ?? prCrop,
         grade: (data.grade ?? data.Grade ?? prGrade) || '-',
         quantity: String(data.quantity ?? data.Quantity ?? prQuantity),
+        sellingamount: String(data.sellingamount ?? data.SellingAmount ?? prSellingAmount),
         mandi:
           data.mandiName ??
           data.MandiName ??
@@ -2412,6 +2418,7 @@ export default function SellerDashboard() {
       setPrCrop('');
       setPrGrade('');
       setPrQuantity('');
+      setPrSellingAmount('');
       setPrMandi('');
       setPrExpectedArrival('');
       setDateValue(new Date());
@@ -2451,7 +2458,7 @@ export default function SellerDashboard() {
       );
   };
 
-  // 🔵 Load all bids received on this seller's lots
+  //  Load all bids received on this seller's lots
   const loadReceivedBids = async (ownerPhone: string) => {
     setLoadingBids(true);
     try {
@@ -2489,7 +2496,7 @@ export default function SellerDashboard() {
     }
   };
 
-  // 🔵 Update status for a single bid
+  //  Update status for a single bid
   const updateBidStatus = async (
     lotId: string,
     bidCreatedAt: number,
@@ -2623,7 +2630,7 @@ export default function SellerDashboard() {
             </Text>
           </TouchableOpacity>
 
-          {/* 🔵 Received Bids tab */}
+          {/*  Received Bids tab */}
           <TouchableOpacity
             style={[
               styles.tab,
@@ -3152,6 +3159,29 @@ export default function SellerDashboard() {
               <Text
                 style={[styles.formTitle, { color: theme.text }]}
               >
+                {t('expected_amount') ?? 'Expected Amount'}
+              </Text>
+              <TextInput
+                placeholder={
+                  t('enter_expected_amount') ??
+                  'Enter Expected Amount'
+                }
+                placeholderTextColor={theme.text ?? '#999'}
+                value={prQuantity}
+                onChangeText={setPrSellingAmount}
+               keyboardType="numeric"
+                style={[
+                  styles.input,
+                  {
+                    color: theme.text,
+                    borderColor: theme.text,
+                  },
+                ]}
+              />
+
+              <Text
+                style={[styles.formTitle, { color: theme.text }]}
+              >
                 {t('mandi_label') ?? 'Mandi Location'}
               </Text>
               <View
@@ -3275,7 +3305,7 @@ export default function SellerDashboard() {
           </>
         )}
 
-        {/* 🔵 RECEIVED BIDS TAB */}
+        {/*  RECEIVED BIDS TAB */}
         {selectedTab === 'received' && (
           <View
             style={[
@@ -3337,6 +3367,12 @@ export default function SellerDashboard() {
                     >
                       {t('quantity_label') ?? 'Quantity'}:{' '}
                       {lotWithBids.quantity}
+                    </Text>
+                       <Text
+                      style={[styles.lotText, { color: theme.text }]}
+                    >
+                      {t('expected_amount') ?? 'Expected Amount'}:{' '}
+                      {lotWithBids.sellingamount}
                     </Text>
                     <Text
                       style={[styles.lotText, { color: theme.text }]}
@@ -3528,6 +3564,12 @@ export default function SellerDashboard() {
             {t('quantity_label')}:{" "}
           </Text>
           {item.quantity}
+        </Text>
+           <Text style={[styles.lotText, { color: theme.text }]}>
+          <Text style={{ fontWeight: '700' }}>
+            {t('expected_amount')}:{" "}
+          </Text>
+          {item.sellingamount}
         </Text>
         <Text style={[styles.lotText, { color: theme.text }]}>
           <Text style={{ fontWeight: '700' }}>

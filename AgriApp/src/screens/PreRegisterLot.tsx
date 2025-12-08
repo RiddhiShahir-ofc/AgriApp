@@ -1,3 +1,5 @@
+///old one, new integrations not implemented.
+
 import React, { useEffect, useState } from 'react';
 import { View,Text,TextInput,TouchableOpacity,StyleSheet,ScrollView,FlatList,Alert,Platform} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

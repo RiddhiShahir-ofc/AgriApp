@@ -1247,7 +1247,7 @@ const FarmerRegister: React.FC = () => {
 
   const [submitting, setSubmitting] = useState(false);
 
-  // 🔵 NEW: while checking /farmer/status, we hide the form
+  //  NEW: while checking /farmer/status, we hide the form
   const [checkingStatus, setCheckingStatus] = useState(true);
 
   const { theme } = useTheme();
@@ -1559,7 +1559,7 @@ const FarmerRegister: React.FC = () => {
     }
   };
 
-  // 🔵 NEW: while we are checking /farmer/status, show a simple loading screen
+  //  NEW: while we are checking /farmer/status, show a simple loading screen
   if (checkingStatus) {
     return (
       <SafeAreaView

@@ -3693,6 +3693,7 @@ type Lot = {
   crop: string;
   grade: string;
   quantity: string;
+  sellingamount:string;
   mandi: string;
   expectedArrival: string;
   createdAt: number;
@@ -3744,6 +3745,7 @@ export default function FarmerDashboard() {
   const [prCrop, setPrCrop] = useState(''); // crop name
   const [prGrade, setPrGrade] = useState(''); // grade from DB
   const [prQuantity, setPrQuantity] = useState('');
+  const [prSellingAmount, setPrSellingAmount] = useState('');
   const [prMandi, setPrMandi] = useState(''); // mandi name
   const [prExpectedArrival, setPrExpectedArrival] = useState('');
   const [lots, setLots] = useState<Lot[]>([]);
@@ -3760,7 +3762,7 @@ export default function FarmerDashboard() {
 
   const STORAGE_KEY_PREFIX = 'REGISTERED_LOTS_';
 
-  // ✅ Crops & Mandis from DB
+  //  Crops & Mandis from DB
   const [crops, setCrops] = useState<UICrop[]>([]);
   const [mandis, setMandis] = useState<UIMandi[]>([]);
 
@@ -3776,7 +3778,7 @@ export default function FarmerDashboard() {
     [mandis],
   );
 
-  // 🔑 Get grades from DB for selected crop
+  //  Get grades from DB for selected crop
   const currentGrades = useMemo(() => {
     if (!prCrop) return [];
 
@@ -3796,7 +3798,7 @@ export default function FarmerDashboard() {
     return value === '' || options.includes(value) || value === 'Other';
   };
 
-  // 🔄 when crop changes, reset grade if not valid for that crop
+  //  when crop changes, reset grade if not valid for that crop
   useEffect(() => {
     if (!prCrop) {
       setPrGrade('');
@@ -3807,7 +3809,7 @@ export default function FarmerDashboard() {
     }
   }, [prCrop, prGrade, currentGrades]);
 
-  // 🔵 helper: sync lots to AsyncStorage (for buyer pre-bidding)
+  //  helper: sync lots to AsyncStorage (for buyer pre-bidding)
   const syncLotsToStorage = async (lotsToStore: Lot[], ownerPhone: string | null) => {
     if (!ownerPhone) return;
     try {
@@ -3820,7 +3822,7 @@ export default function FarmerDashboard() {
     }
   };
 
-  // 🔵 load lots from backend /farmer/lots/all
+  //  load lots from backend /farmer/lots/all
   const loadLotsFromBackend = async (ownerPhone: string | null) => {
     try {
       const res = await api.get('/farmer/lots/all');
@@ -3839,6 +3841,7 @@ export default function FarmerDashboard() {
           crop: d.cropName ?? d.CropName ?? d.crop ?? '',
           grade: d.grade ?? d.Grade ?? '-',
           quantity: String(d.quantity ?? d.Quantity ?? ''),
+          sellingamount: String(d.sellingamount?? d.SellingAmount??''),
           mandi:
             d.mandiName ??
             d.MandiName ??
@@ -3863,7 +3866,7 @@ export default function FarmerDashboard() {
     }
   };
 
-  // 🔵 load crops & mandis from backend
+  //  load crops & mandis from backend
   useEffect(() => {
     const loadMeta = async () => {
       try {
@@ -4030,13 +4033,14 @@ export default function FarmerDashboard() {
     setPrGrade('');
     setPrQuantity('');
     setPrMandi('');
+    setPrSellingAmount('');
     setPrExpectedArrival('');
     setDateValue(new Date());
     setShowDatePicker(false);
     setEditingLotId(null);
   };
 
-  // 🔑 pick the correct CropId based on selected crop & grade
+  //  pick the correct CropId based on selected crop & grade
   const pickCropIdForSelection = () => {
     if (!prCrop) return null;
 
@@ -4061,7 +4065,7 @@ export default function FarmerDashboard() {
     return m?.id ?? null;
   };
 
-  // 🔵 Register lot with CropId & MandiId from DB + selected grade
+  //  Register lot with CropId & MandiId from DB + selected grade
   const addLotInline = async () => {
     if (!prCrop)
       return Alert.alert(
@@ -4072,6 +4076,11 @@ export default function FarmerDashboard() {
       return Alert.alert(
         t('error_title') ?? 'Error',
         t('fill_quantity') ?? 'Please enter quantity',
+      );
+      if (!prSellingAmount)
+      return Alert.alert(
+        t('error_title') ?? 'Error',
+        t('expected_amount') ?? 'Please enter expected amount',
       );
     if (!prMandi)
       return Alert.alert(
@@ -4097,6 +4106,7 @@ export default function FarmerDashboard() {
       formData.append('CropId', String(cropId));
       formData.append('MandiId', String(mandiId));
       formData.append('Quantity', prQuantity);
+      formData.append('SellingAmount', prSellingAmount);
       formData.append('Grade', prGrade || '-');
 
       if (prExpectedArrival) {
@@ -4121,6 +4131,7 @@ export default function FarmerDashboard() {
         crop: data.cropName ?? data.CropName ?? prCrop,
         grade: (data.grade ?? data.Grade ?? prGrade) || '-',
         quantity: String(data.quantity ?? data.Quantity ?? prQuantity),
+        sellingamount: String(data.sellingamount ?? data.SellingAmount ?? prSellingAmount),
         mandi:
           data.mandiName ??
           data.MandiName ??
@@ -4166,9 +4177,10 @@ export default function FarmerDashboard() {
     setPrCrop(lot.crop);
     setPrGrade(lot.grade);
     setPrQuantity(lot.quantity);
+    setPrSellingAmount(lot.sellingamount);
     setPrMandi(lot.mandi);
     setPrExpectedArrival(
-      lot.expectedArrival && lot.expectedArrival !== '-' ? lot.expectedArrival : '',
+    lot.expectedArrival && lot.expectedArrival !== '-' ? lot.expectedArrival : '',
     );
 
     if (lot.expectedArrival && lot.expectedArrival.includes('-')) {
@@ -4200,6 +4212,11 @@ export default function FarmerDashboard() {
         t('error_title') ?? 'Error',
         t('fill_mandi') ?? 'Please select mandi',
       );
+       if (!prSellingAmount)
+      return Alert.alert(
+        t('error_title') ?? 'Error',
+        t('expected_amount') ?? 'Please enter Expected Amount',
+      );
 
     const cropId = pickCropIdForSelection();
     const mandiId = pickMandiIdForSelection();
@@ -4218,6 +4235,7 @@ export default function FarmerDashboard() {
       formData.append('CropId', String(cropId));
       formData.append('MandiId', String(mandiId));
       formData.append('Quantity', prQuantity);
+      formData.append('SellingAmount', prSellingAmount);
       formData.append('Grade', prGrade || '-');
       if (prExpectedArrival) {
         formData.append('ExpectedArrivalDate', dateValue.toISOString());
@@ -4240,6 +4258,7 @@ export default function FarmerDashboard() {
         crop: data.cropName ?? data.CropName ?? prCrop,
         grade: (data.grade ?? data.Grade ?? prGrade) || '-',
         quantity: String(data.quantity ?? data.Quantity ?? prQuantity),
+        sellingamount: String(data.sellingamount ?? data.SellingAmount ?? prSellingAmount),
         mandi:
           data.mandiName ??
           data.MandiName ??
@@ -4367,6 +4386,7 @@ export default function FarmerDashboard() {
     updateBidStatus(lotId, createdAt, 'rejected');
   };
 
+  // Actual Display Screen
   const ListHeaderElement = useMemo(() => {
     return (
       <View>
@@ -4979,6 +4999,30 @@ export default function FarmerDashboard() {
                 ]}
               />
 
+              {/* Amount */}
+              <Text
+                style={[styles.formTitle, { color: theme.text }]}
+              >
+                {t('expected_amount') ?? 'Expected Amount'}
+              </Text>
+              <TextInput
+                placeholder={
+                  t('enter_expected_amount') ??
+                  'Please Enter Expected Amount'
+                }
+                placeholderTextColor={theme.text ?? '#999'}
+                value={prSellingAmount}
+                onChangeText={setPrSellingAmount}
+                //keyboardType="numeric"
+                style={[
+                  styles.input,
+                  {
+                    color: theme.text,
+                    borderColor: theme.text,
+                  },
+                ]}
+              />
+
               {/* Mandi */}
               <Text
                 style={[styles.formTitle, { color: theme.text }]}
@@ -5163,13 +5207,19 @@ export default function FarmerDashboard() {
                         },
                       ]}
                     >
-                      {lotWithBids.crop} ({lotWithBids.grade})
+                      {lotWithBids.crop} ({"Grade :"}{lotWithBids.grade})
                     </Text>
                     <Text
                       style={[styles.lotText, { color: theme.text }]}
                     >
                       {t('quantity_label') ?? 'Quantity'}:{' '}
                       {lotWithBids.quantity}
+                    </Text>
+                    <Text
+                      style={[styles.lotText, { color: theme.text }]}
+                    >
+                         {t('expected_amount') ?? 'Expected Amount'}:{' '}
+                      {lotWithBids.sellingamount}
                     </Text>
                     <Text
                       style={[styles.lotText, { color: theme.text }]}
@@ -5363,6 +5413,12 @@ export default function FarmerDashboard() {
           </Text>
           {item.quantity}
         </Text>
+         <Text style={[styles.lotText, { color: theme.text }]}>
+          <Text style={{ fontWeight: '700' }}>
+            {t('expected_amount')}:{' '}
+          </Text>
+          {item.sellingamount}
+        </Text>
         <Text style={[styles.lotText, { color: theme.text }]}>
           <Text style={{ fontWeight: '700' }}>
             {t('mandi_label')}:{' '}
@@ -5382,14 +5438,14 @@ export default function FarmerDashboard() {
           onPress={() => startEditingLot(item)}
         >
           <Text style={styles.smallEditBtnText}>
-            {t('edit') ?? 'Edit'}
+            {t('edit') ?? 'Edit Lot'}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.removeBtn}
           onPress={() => removeLot(item.id)}
         >
-          <Text style={styles.removeBtnText}>×</Text>
+          <Text style={styles.removeBtnText}>Delete</Text>
         </TouchableOpacity>
       </View>
     </View>

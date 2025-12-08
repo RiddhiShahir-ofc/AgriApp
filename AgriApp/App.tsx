@@ -137,7 +137,7 @@ export default function App() {
             <Stack.Screen name="SellerDashboard" component={SellerDashboard} options={{ headerShown: false }} />
             <Stack.Screen name="MandiOfficialDashboard" component={MandiOfficialDashboard} options={{ headerShown: false }} />
             <Stack.Screen name="AnchorDashboard" component={AnchorDashboard} options={{ headerShown: false }} />
-            <Stack.Screen name="MandiDashboard" component={MandiDashboard} />
+            <Stack.Screen name="MandiDashboard" component={MandiDashboard} options={{ headerShown: false }} />
 
             <Stack.Screen name="ShortTermForecast" component={ShortTermForecast} />
             <Stack.Screen name="PreRegisterLot" component={PreRegisterLot} />

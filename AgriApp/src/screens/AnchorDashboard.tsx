@@ -23,7 +23,6 @@ export default function AnchorDashboard() {
         <Text style={styles.backText}>{t('back')}</Text>
       </TouchableOpacity>
       <Text style={[styles.title,{color :theme.text}]}>{t('anchor_dashboard')}</Text>
-      <Text style={[styles.text,{color :theme.text}]}>{t('anchor_msg')}</Text>
     </SafeAreaView>
   );
 }
