@@ -1,3 +1,4 @@
+// src/screens/MandiOfficerDashboard.tsx
 import React from 'react';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,14 +9,12 @@ import { RootStackParamList } from '../../App';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 
-export default function MandiOfficialDashboard() {
+export default function MandiOfficerDashboard() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { theme } = useTheme();
   const { t } = useLanguage();
 
-  const goBack = () => {
-    navigation.navigate('Dashboard');
-  };
+  const goBack = () => navigation.navigate('Dashboard');
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
@@ -23,12 +22,8 @@ export default function MandiOfficialDashboard() {
         <Text style={[styles.backText, { color: '#2b6cb0' }]}>{t('back')}</Text>
       </TouchableOpacity>
 
-      <Text style={[styles.title, { color: theme.text }]}>
-        {t('mandi_official_dashboard')}
-      </Text>
-      <Text style={[styles.text, { color: theme.text }]}>
-        {t('mandi_official_msg')}
-      </Text>
+      <Text style={[styles.title, { color: theme.text }]}>{t('mandi_officer_dashboard') ?? 'Mandi Officer'}</Text>
+      <Text style={[styles.text, { color: theme.text }]}>{t('mandi_officer_msg') ?? 'Welcome, you are logged in as a Mandi Officer.'}</Text>
     </SafeAreaView>
   );
 }

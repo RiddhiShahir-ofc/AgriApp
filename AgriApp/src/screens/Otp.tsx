@@ -36,8 +36,8 @@ export default function OTP({ navigation, route }: Props) {
     }
     } catch (err: any) {
       console.error('verifyOtp error:', err.response?.data ?? err.message ?? err);
-      const msg = err.response?.data?.message ?? err.message ?? 'OTP verification failed';
-      Alert.alert(t('error_title'), msg);
+      const msg = err.response?.data?.message ?? err.message ??t('failed_incorrect_otp') ??'OTP verification failed';
+      Alert.alert(t('error_title'),t('failed_incorrect_otp') ??msg);
     }
     finally {
     setLoading(false);

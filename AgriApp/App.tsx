@@ -29,6 +29,10 @@ import PreRegisterLot from './src/screens/PreRegisterLot';
 import BuyerPreBidding from './src/screens/BuyerPreBidding';
 import MandiDashboard from './src/screens/MandiDashboard';
 
+import MandiManagerDashboard from './src/screens/MandiManagerDashboard';
+import MandiApproverDashboard from './src/screens/MandiApproverDashboard';
+import MandiOfficerDashboard from './src/screens/MandiOfficerDashboard';
+
 export type RootStackParamList = {
   Landing: undefined;
   Register: { fromGraph?: boolean } | undefined;
@@ -48,6 +52,9 @@ export type RootStackParamList = {
   MandiOfficialDashboard: undefined;
   AnchorDashboard: undefined;
   MandiDashboard: undefined;
+  MandiOfficerDashboard: undefined;
+  MandiManagerDashboard: undefined;
+  MandiApproverDashboard: undefined;
 
   ShortTermForecast: undefined;
   PreRegisterLot: undefined;
@@ -138,6 +145,9 @@ export default function App() {
             <Stack.Screen name="MandiOfficialDashboard" component={MandiOfficialDashboard} options={{ headerShown: false }} />
             <Stack.Screen name="AnchorDashboard" component={AnchorDashboard} options={{ headerShown: false }} />
             <Stack.Screen name="MandiDashboard" component={MandiDashboard} options={{ headerShown: false }} />
+            <Stack.Screen name="MandiOfficerDashboard" component={MandiOfficerDashboard} options={{ headerShown: false }}/>
+            <Stack.Screen name="MandiManagerDashboard" component={MandiManagerDashboard} options={{ headerShown: false }}/>
+            <Stack.Screen name="MandiApproverDashboard" component={MandiApproverDashboard} options={{ headerShown: false }}/>
 
             <Stack.Screen name="ShortTermForecast" component={ShortTermForecast} />
             <Stack.Screen name="PreRegisterLot" component={PreRegisterLot} />

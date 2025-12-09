@@ -47,7 +47,7 @@ export default function Register({ navigation }: Props) {
         const otpStr = typeof otpFromServer === 'object' ? JSON.stringify(otpFromServer) : String(otpFromServer);
         Alert.alert(t('otp_sent'), `${message}\nCode: ${otpStr}`);
       } else {
-        Alert.alert(t('otp_sent'), message);
+        Alert.alert(t('otp_sent'));
       }
 
       navigation.navigate('Otp', { phone });
