@@ -152,12 +152,11 @@
     "reg_crop_lot": "Register crop lot for Auction",
     "pre_register_subtitle": "Pre-Register your harvested crops for Auction",
     "select_crop": "Select Crop",
-    "grade_label": "Grade",
     "select_grade": "Select Grade",
-    "quantity_label": "Quantity (quintal)",
+  
     "enter_quantity": "Enter Quantity (quintal)",
     "mandi_label": "Mandi Location",
-    "select_mandi": "Select Mandi",
+    
     "arrival_label": "Expected Arrival Date",
     "enter_date": "dd-mm-yy",
     "add_lot": "Add Lot",
@@ -293,7 +292,34 @@
     "mandi_manager_dashboard":"Mandi Manager Dashboard",
     "mandi_manager_msg":"Welcome, you are logged in as a Mandi Manager. You can Schedule Auctions ",
     "mandi_approver_dashboard":"Mandi Approver Dashboard",
-    "mandi_approver_msg":"Welcome, you are logged in as a Mandi Approver. You can Approve Lots and keep track of Lots"
+    "mandi_approver_msg":"Welcome, you are logged in as a Mandi Approver. You can Approve Lots and keep track of Lots",
 
+"register_lot_btn": "Register Lot",
+"search_owner_label": "Search Owner (existing farmer/seller)",
+"search_owner_placeholder": "Enter owner name or mobile and press search",
+"search_btn": "Search",
+"search_results": "Search Results",
+"selected_owner": "Selected Owner",
+"clear_selection": "Clear Selection",
+"manual_owner_title": "Manual Owner Entry (if not found)",
+"owner_name_placeholder": "Owner Name",
+"owner_mobile_placeholder": "Mobile Number",
+"owner_role_label": "Owner Role",
+"grade_label": "Grade",
+"quantity_label": "Quantity",
+"quantity_placeholder": "Enter quantity (e.g. 100)",
+
+"select_mandi": "Select mandi",
+"create_arrived_lot_btn": "Create Arrived Lot",
+"missing_owner_fields": "Missing owner fields",
+"fill_owner_fields": "Please provide owner name and mobile and role",
+"arrived_lot_created": "Arrived lot created successfully",
+"arrived_lot_create_failed": "Failed to create arrived lot",
+"fetch_meta_failed": "Failed to load dropdown data",
+"loading_meta": "Loading data...",
+"search_owner_failed": "Owner search failed. Try again.",
+"invalid_quantity_title": "Invalid quantity",
+"invalid_quantity_msg": "Please enter a valid quantity",
+"search_owner_min_chars": "Please enter at least 2 characters to search"
 
 }

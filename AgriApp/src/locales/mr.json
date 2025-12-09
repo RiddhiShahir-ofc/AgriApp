@@ -294,7 +294,31 @@
     "mandi_manager_dashboard":"मंडी मॅनेजर डॅशबोर्ड",
     "mandi_manager_msg":"स्वागत आहे, तुम्ही मंडी मॅनेजर म्हणून लॉग इन केले आहे. तुम्ही लिलाव शेड्यूल करू शकता",
     "mandi_approver_dashboard":"मंडी मंजुर डॅशबोर्ड",
-    "mandi_approver_msg":"स्वागत आहे, तुम्ही मंडी मंजुर म्हणून लॉग इन केले आहे. तुम्ही लॉट मंजूर करू शकता आणि लॉटचा मागोवा ठेवू शकता"
+    "mandi_approver_msg":"स्वागत आहे, तुम्ही मंडी मंजुर म्हणून लॉग इन केले आहे. तुम्ही लॉट मंजूर करू शकता आणि लॉटचा मागोवा ठेवू शकता",
+
+    "register_lot_btn": "लॉट नोंदणी करा",
+    "search_owner_label": "मालक शोधा (विद्यमान शेतकरी/विक्रेता)",
+    "search_owner_placeholder": "मालकाचे नाव किंवा मोबाईल एंटर करा आणि सर्च दाबा",
+    "search_btn": "शोध",
+    "search_results": "शोध परिणाम",
+    "selected_owner": "निवडलेला मालक",
+    "clear_selection": "निवड साफ करा",
+    "manual_owner_title": "मालकाची मॅन्युअल एंट्री (जर सापडली नाही)",
+    "owner_name_placeholder": "मालकाचे नाव",
+    "owner_mobile_placeholder": "मोबाइल नंबर",
+    "owner_role_label": "मालकाची भूमिका",
+    "quantity_placeholder": "प्रमाण एंटर करा (उदा. १००)",
+    "create_arrived_lot_btn": "आलेले लॉट तयार करा",
+    "missing_owner_fields": "मालकाचे फील्ड गहाळ आहेत",
+    "fill_owner_fields": "कृपया मालकाचे नाव आणि मोबाइल आणि भूमिका द्या",
+    "arrived_lot_created": "आलेले लॉट यशस्वीरित्या तयार केले",
+    "arrived_lot_create_failed": "आलेले लॉट तयार करण्यात अयशस्वी",
+    "fetch_meta_failed": "ड्रॉपडाउन डेटा लोड करण्यात अयशस्वी",
+    "loading_meta": "डेटा लोड करत आहे..",
+    "search_owner_failed": "मालकाचा शोध अयशस्वी झाला. पुन्हा प्रयत्न करा.",
+    "invalid_quantity_title": "अवैध प्रमाण",
+    "invalid_quantity_msg": "कृपया वैध प्रमाण प्रविष्ट करा",
+    "search_owner_min_chars": "शोधण्यासाठी कृपया किमान 2 वर्ण प्रविष्ट करा"
 }
 
 

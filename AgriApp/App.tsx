@@ -32,6 +32,7 @@ import MandiDashboard from './src/screens/MandiDashboard';
 import MandiManagerDashboard from './src/screens/MandiManagerDashboard';
 import MandiApproverDashboard from './src/screens/MandiApproverDashboard';
 import MandiOfficerDashboard from './src/screens/MandiOfficerDashboard';
+import RegisterLot from './src/screens/RegisterLot';
 
 export type RootStackParamList = {
   Landing: undefined;
@@ -59,6 +60,7 @@ export type RootStackParamList = {
   ShortTermForecast: undefined;
   PreRegisterLot: undefined;
   BuyerPreBidding: undefined;
+  RegisterLot: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -152,6 +154,8 @@ export default function App() {
             <Stack.Screen name="ShortTermForecast" component={ShortTermForecast} />
             <Stack.Screen name="PreRegisterLot" component={PreRegisterLot} />
             <Stack.Screen name="BuyerPreBidding" component={BuyerPreBidding} />
+            <Stack.Screen name="RegisterLot" component={RegisterLot} />
+
           </Stack.Navigator>
         </NavigationContainer>
       </LanguageProvider>
