@@ -351,6 +351,29 @@
 "fetch_mandis_failed":"Failed to load mandis",
 "created_by":"Created By",
 "officer":"Officer",
-"total_lots":"Total Lots"
+"total_lots":"Total Lots",
+
+"mandi_not_found_profile":"No mandi is linked to this manager profile.",
+"select_officer_required":"Please select an officer",
+"auction_created_success":"Auction created successfully",
+"scheduled_at_label":"Scheduled For",
+"assigned_officer_label":"Assigned Officer",
+"no_auctions":"No auctions scheduled yet",
+"schedule_auction_btn":"Schedule / Create Auction",
+"view_auction_schedule_btn":"View Auction Schedule",
+"profile_fetch_failed":"Failed to load manager profile.",
+"select_officer":"Select officer",
+"create_auction_title":"Create Auction",
+"auction_create_failed":"Failed to create auction",
+"created_by_label":"Created By",
+"auction_schedule_title":"Auction Schedule",
+"create_auction_btn":"Create Auction",
+"manager_name_label":"Manager",
+"fetch_auctions_failed":"Failed to fetch auction schedule",
+
+"invalid_schedule_title":"Invalid date",
+"schedule_future_only":"Please select a date & time in the future.",
+"select_date_time":"Select date & time",
+"schedule_required":"Please select schedule date & time"
 
 }

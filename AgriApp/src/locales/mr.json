@@ -318,11 +318,54 @@
     "search_owner_failed": "मालकाचा शोध अयशस्वी झाला. पुन्हा प्रयत्न करा.",
     "invalid_quantity_title": "अवैध प्रमाण",
     "invalid_quantity_msg": "कृपया वैध प्रमाण प्रविष्ट करा",
-    "search_owner_min_chars": "शोधण्यासाठी कृपया किमान 2 वर्ण प्रविष्ट करा"
+    "search_owner_min_chars": "शोधण्यासाठी कृपया किमान 2 वर्ण प्रविष्ट करा",
 
+    "prelot_id_placeholder":"पूर्व-नोंदणीकृत लॉट आयडी प्रविष्ट करा",
+    "fetch_prelot_btn":"पूर्व-नोंदणीकृत लॉट आयडी मिळवा",
+    "prelot_details":"पूर्व-नोंदणीकृत लॉट तपशील",
+    "prelot_id_label":"पूर्व-नोंदणीकृत लॉट आयडी",
+    "prelot_source":"स्रोत",
+    "prelot_not_found":"पूर्व-नोंदणीकृत लॉट सापडला नाही",
+    "enter_prelot_id":"पूर्व-नोंदणीकृत लॉट आयडी प्रविष्ट करा",
+    "prelot_fetch_failed":"पूर्व-नोंदणीकृत लॉट तपशील मिळवण्यात अयशस्वी",
+    "create_from_prelot_btn":"पूर्व-नोंदणीकृत लॉटमधून पोहोचलेले लॉट नोंदणी करा",
+    "view_arrived_lots":"आगमन केलेले लॉट पहा",
 
+    "view":"पहा",
+    "fetch_arrived_lots_failed":"आगमन प्राप्त करण्यात अयशस्वी",
+    "no_arrived_lots":"एकही पोहोचलेले लॉट सापडले नाहीत",
+    "status":"स्थिती",
+    "qr_code":"QR कोड",
+    "mobile":"मोबाइल",
+    "owner":"मालक(शेतकरी/विक्रेता)",
+    "missing_id":"आगमन केलेले लॉट आयडी गहाळ आहे",
+    "no_details":"तपशील उपलब्ध नाही",
+    "arrived_lot_details":"आगमन केलेले लॉट तपशील",
+    "lot_id":"लॉट आयडी",
+    "fetch_arrived_lot_failed":"आगमन केलेले लॉट तपशील आणण्यात अयशस्वी",
+    "fetch_mandis_failed":"मंडई लोड करण्यात अयशस्वी",
+    "created_by":"द्वारे तयार केलेले",
+    "officer":"अधिकारी",
+    "total_lots":"एकूण लॉट",
 
-    
+    "mandi_not_found_profile":"या व्यवस्थापक प्रोफाइलशी कोणतीही मंडई जोडलेली नाही.",
+    "select_officer_required":"कृपया अधिकारी निवडा",
+    "auction_created_success":"लिलाव यशस्वीरित्या तयार झाला",
+    "scheduled_at_label":"येथे शेड्यूल झाला",
+    "assigned_officer_label":"नियुक्त अधिकारी",
+    "no_auctions":"अद्याप लिलाव शेड्यूल झालेला नाही",
+    "schedule_auction_btn":"लेखापरीक्षण / लिलाव तयार करा",
+    "view_auction_schedule_btn":"लिलाव वेळापत्रक पहा",
+    "profile_fetch_failed":"व्यवस्थापक प्रोफाइल लोड करण्यात अयशस्वी.",
+    "select_officer":"अधिकारी निवडा",
+    "create_auction_title":"लिलाव तयार करा",
+    "auction_create_failed":"लिलाव तयार करण्यात अयशस्वी",
+    "created_by_label":"तयार केले",
+    "auction_schedule_title":"लिलाव वेळापत्रक",
+    "create_auction_btn":"लिलाव तयार करा",
+    "manager_name_label":"व्यवस्थापक",
+    "fetch_auctions_failed":"लिलाव वेळापत्रक आणण्यात अयशस्वी"
+
 }
 
 
