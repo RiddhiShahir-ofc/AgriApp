@@ -320,6 +320,16 @@
 "search_owner_failed": "Owner search failed. Try again.",
 "invalid_quantity_title": "Invalid quantity",
 "invalid_quantity_msg": "Please enter a valid quantity",
-"search_owner_min_chars": "Please enter at least 2 characters to search"
+"search_owner_min_chars": "Please enter at least 2 characters to search",
+
+"prelot_id_placeholder":"Enter Pre-Registered Lot Id",
+"fetch_prelot_btn":"Fetch Pre Lot",
+"prelot_details":"Pre-Registered Lot Details",
+"prelot_id_label":"Pre-Registered Lot Id",
+"prelot_source":"Source",
+"prelot_not_found":"Pre-Registered lot not found",
+"enter_prelot_id":"Enter Pre-Registered Lot Id",
+"prelot_fetch_failed":"Failed to fetch Pre-Registered Lot Details",
+"create_from_prelot_btn":"Register Arrived Lot from Pre-Registered Lot"
 
 }
