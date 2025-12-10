@@ -34,6 +34,9 @@ import MandiApproverDashboard from './src/screens/MandiApproverDashboard';
 import MandiOfficerDashboard from './src/screens/MandiOfficerDashboard';
 import RegisterLot from './src/screens/RegisterLot';
 
+import ArrivedLotDetails from './src/screens/ArrivedLotDetails';
+import ArrivedLotsList from './src/screens/ArrivedLotsList';
+
 export type RootStackParamList = {
   Landing: undefined;
   Register: { fromGraph?: boolean } | undefined;
@@ -61,6 +64,10 @@ export type RootStackParamList = {
   PreRegisterLot: undefined;
   BuyerPreBidding: undefined;
   RegisterLot: undefined;
+
+  ArrivedLotsList: { mandiId: number };
+  ArrivedLotDetails: { arrivedLotId: Number };
+
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -155,6 +162,9 @@ export default function App() {
             <Stack.Screen name="PreRegisterLot" component={PreRegisterLot} />
             <Stack.Screen name="BuyerPreBidding" component={BuyerPreBidding} />
             <Stack.Screen name="RegisterLot" component={RegisterLot} />
+
+            <Stack.Screen name="ArrivedLotDetails" component={ArrivedLotDetails} />
+            <Stack.Screen name="ArrivedLotsList" component={ArrivedLotsList} />
 
           </Stack.Navigator>
         </NavigationContainer>

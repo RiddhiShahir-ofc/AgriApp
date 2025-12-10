@@ -322,6 +322,9 @@
 "invalid_quantity_msg": "Please enter a valid quantity",
 "search_owner_min_chars": "Please enter at least 2 characters to search",
 
+
+
+
 "prelot_id_placeholder":"Enter Pre-Registered Lot Id",
 "fetch_prelot_btn":"Fetch Pre Lot",
 "prelot_details":"Pre-Registered Lot Details",
@@ -330,6 +333,24 @@
 "prelot_not_found":"Pre-Registered lot not found",
 "enter_prelot_id":"Enter Pre-Registered Lot Id",
 "prelot_fetch_failed":"Failed to fetch Pre-Registered Lot Details",
-"create_from_prelot_btn":"Register Arrived Lot from Pre-Registered Lot"
+"create_from_prelot_btn":"Register Arrived Lot from Pre-Registered Lot",
+"view_arrived_lots":"View Arrived Lots",
+
+"view":"View",
+"fetch_arrived_lots_failed":"Failed to fetch arrived lots",
+"no_arrived_lots":"No arrived lots found",
+"status":"Status",
+"qr_code":"OR Code",
+"mobile":"Mobile",
+"owner":"Owner(Farmer/Seller)",
+"missing_id":"Missing arrived lot id",
+"no_details":"No details available",
+"arrived_lot_details":"Arrived Lot Details",
+"lot_id":"Lot ID",
+"fetch_arrived_lot_failed":"Failed to fetch arrived lot details",
+"fetch_mandis_failed":"Failed to load mandis",
+"created_by":"Created By",
+"officer":"Officer",
+"total_lots":"Total Lots"
 
 }
