@@ -1,47 +1,3 @@
-// // // // import React from 'react';
-// // // // import { Text, StyleSheet, TouchableOpacity } from 'react-native';
-// // // // import { SafeAreaView } from 'react-native-safe-area-context';
-// // // // import { useNavigation } from '@react-navigation/native';
-// // // // import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-// // // // import { RootStackParamList } from '../../App';
-
-// // // // import { useTheme } from '../context/ThemeContext';
-// // // // import { useLanguage } from '../context/LanguageContext';
-
-// // // // export default function MandiManagerDashboard() {
-// // // //   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-// // // //   const { theme } = useTheme();
-// // // //   const { t } = useLanguage();
-
-// // // //   const goBack = () => navigation.navigate('Dashboard');
-
-// // // //   return (
-// // // //     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
-// // // //       <TouchableOpacity onPress={goBack} style={styles.backBtn}>
-// // // //         <Text style={[styles.backText, { color: '#2b6cb0' }]}>{t('back')}</Text>
-// // // //       </TouchableOpacity>
-
-// // // //       <Text style={[styles.title, { color: theme.text }]}>{t('mandi_manager_dashboard') ?? 'Mandi Manager'}</Text>
-// // // //       <Text style={[styles.text, { color: theme.text }]}>{t('mandi_manager_msg') ?? 'Welcome, you are logged in as a Mandi Manager.'}</Text>
-// // // //     </SafeAreaView>
-// // // //   );
-// // // // }
-
-// // // // const styles = StyleSheet.create({
-// // // //   container: { flex: 1, padding: 20 },
-// // // //   title: { fontSize: 26, fontWeight: '700', marginBottom: 10 },
-// // // //   text: { fontSize: 16 },
-// // // //   backText: { fontWeight: '700', fontSize: 16 },
-// // // //   backBtn: {
-// // // //     alignSelf: 'flex-start',
-// // // //     backgroundColor: '#edf2f7',
-// // // //     paddingVertical: 6,
-// // // //     paddingHorizontal: 12,
-// // // //     borderRadius: 6,
-// // // //     marginBottom: 10,
-// // // //   },
-// // // // });
-
 // // // import React, { useEffect, useState } from 'react';
 // // // import {
 // // //   Text,
@@ -51,6 +7,7 @@
 // // //   ActivityIndicator,
 // // //   Alert,
 // // //   ScrollView,
+// // //   Platform,
 // // // } from 'react-native';
 // // // import { SafeAreaView } from 'react-native-safe-area-context';
 // // // import { useNavigation } from '@react-navigation/native';
@@ -112,9 +69,10 @@
 
 // // //   const goBack = () => navigation.navigate('Dashboard');
 
-// // //   // Profile data (manager = mandi official with MANAGER role)
+// // //   // Profile data
 // // //   const [loadingProfile, setLoadingProfile] = useState(true);
 // // //   const [managerName, setManagerName] = useState<string>('');
+// // //   const [managerOfficialId, setManagerOfficialId] = useState<string>('');
 // // //   const [mandiId, setMandiId] = useState<number | null>(null);
 // // //   const [mandiName, setMandiName] = useState<string>('');
 
@@ -129,7 +87,9 @@
 
 // // //   const [selectedCropId, setSelectedCropId] = useState<number | null>(null);
 // // //   const [selectedOfficerId, setSelectedOfficerId] = useState<string>('');
-// // //   const [scheduledAt, setScheduledAt] = useState<Date>(new Date());
+
+// // //   // Scheduled at (future date only, picked by manager)
+// // //   const [scheduledAt, setScheduledAt] = useState<Date | null>(null);
 // // //   const [showDatePicker, setShowDatePicker] = useState(false);
 
 // // //   // Auction list
@@ -138,20 +98,19 @@
 // // //   const [loadingAuctions, setLoadingAuctions] = useState(false);
 
 // // //   // ---------------------------------------------------
-// // //   // 1) Load manager profile → mandiId + managerName
+// // //   // 1) Load manager profile → mandiId + managerName + officialId
 // // //   // ---------------------------------------------------
 // // //   useEffect(() => {
 // // //     const loadProfile = async () => {
 // // //       try {
 // // //         const res = await api.get('/mandi-official/profile');
 // // //         const data = res?.data ?? null;
-// // //         if (!data) {
-// // //           throw new Error('Profile not found');
-// // //         }
+// // //         if (!data) throw new Error('Profile not found');
 
 // // //         const name = data.officialName ?? data.OfficialName ?? '';
 // // //         const mId = data.mandiId ?? data.MandiId ?? null;
 // // //         const mName = data.mandiName ?? data.MandiName ?? '';
+// // //         const offId = data.officialId ?? data.OfficialId ?? '';
 
 // // //         if (!mId) {
 // // //           Alert.alert(
@@ -162,6 +121,7 @@
 // // //         }
 
 // // //         setManagerName(String(name));
+// // //         setManagerOfficialId(offId ? String(offId) : '');
 // // //         setMandiId(mId ? Number(mId) : null);
 // // //         setMandiName(String(mName));
 // // //       } catch (err: any) {
@@ -179,25 +139,44 @@
 // // //   }, [t]);
 
 // // //   // ---------------------------------------------------
-// // //   // 2) Load crops + officers for this mandi
+// // //   // 2) Load crops + officers for this mandi (officers are best-effort)
 // // //   // ---------------------------------------------------
 // // //   const loadMeta = async (mId: number) => {
 // // //     setLoadingMeta(true);
 // // //     try {
-// // //       const [cropsRes, officersRes] = await Promise.all([
-// // //         api.get('/crops'),
-// // //         // 🔴 IMPORTANT: adjust this endpoint if your API is different
-// // //         // Expecting something like: GET /mandi-official/officers?mandiId=...
-// // //         api.get('/mandi-official/officers', { params: { mandiId: mId } }),
-// // //       ]);
-
+// // //       // CROPS
+// // //       const cropsRes = await api.get('/crops');
 // // //       const cropData = Array.isArray(cropsRes.data) ? cropsRes.data : [];
-// // //       const officerData = Array.isArray(officersRes.data)
-// // //         ? officersRes.data
-// // //         : [];
-
 // // //       setCrops(cropData);
-// // //       setOfficers(officerData);
+
+// // //       // OFFICERS – non-fatal if fails
+// // //       try {
+// // //         const officersRes = await api.get('/mandi-official/officers', {
+// // //           params: { mandiId: mId },
+// // //         });
+// // //         const officerData = Array.isArray(officersRes.data)
+// // //           ? officersRes.data
+// // //           : [];
+
+// // //         if (officerData.length > 0) {
+// // //           setOfficers(officerData);
+// // //         } else if (managerOfficialId && managerName) {
+// // //           setOfficers([
+// // //             { officialId: managerOfficialId, officialName: managerName },
+// // //           ]);
+// // //         } else {
+// // //           setOfficers([]);
+// // //         }
+// // //       } catch (err) {
+// // //         console.log('Officer list load error (non-fatal):', err);
+// // //         if (managerOfficialId && managerName) {
+// // //           setOfficers([
+// // //             { officialId: managerOfficialId, officialName: managerName },
+// // //           ]);
+// // //         } else {
+// // //           setOfficers([]);
+// // //         }
+// // //       }
 // // //     } catch (err: any) {
 // // //       console.log('Manager meta load error', err?.response?.data ?? err);
 // // //       Alert.alert(
@@ -213,27 +192,46 @@
 // // //     if (mandiId) {
 // // //       loadMeta(mandiId);
 // // //     }
-// // //   }, [mandiId]);
+// // //     // eslint-disable-next-line react-hooks/exhaustive-deps
+// // //   }, [mandiId, managerOfficialId, managerName]);
 
 // // //   // ---------------------------------------------------
-// // //   // 3) Date picker handler
+// // //   // 3) Date picker handlers (future date only, prevents crash)
 // // //   // ---------------------------------------------------
-// // //   const onChangeDate = (_event: DateTimePickerEvent, selected?: Date) => {
-// // //     if (selected) {
-// // //       setScheduledAt(selected);
+// // //   const onChangeDate = (event: DateTimePickerEvent, date?: Date) => {
+// // //     // On Android we must hide the picker manually
+// // //     if (Platform.OS === 'android') {
+// // //       setShowDatePicker(false);
 // // //     }
-// // //     setShowDatePicker(false);
+
+// // //     // If user cancelled / dismissed, do nothing
+// // //     if (event.type === 'dismissed') {
+// // //       return;
+// // //     }
+
+// // //     if (!date) return;
+
+// // //     // Compare only by date (not time) or use full timestamp as you like
+// // //     const now = new Date();
+// // //     // We want strictly future date (cannot schedule for now or past)
+// // //     if (date.getTime() <= now.getTime()) {
+// // //       Alert.alert(
+// // //         t('invalid_schedule_title') ?? 'Invalid date',
+// // //         t('schedule_future_only') ??
+// // //           'Please select a date & time in the future.',
+// // //       );
+// // //       return;
+// // //     }
+
+// // //     setScheduledAt(date);
 // // //   };
 
-// // //   const formatDateTime = (d: Date) => {
+// // //   const formatDateTime = (d: Date | null) => {
+// // //     if (!d) return t('select_date_time') ?? 'Select date & time';
 // // //     const dd = String(d.getDate()).padStart(2, '0');
 // // //     const mm = String(d.getMonth() + 1).padStart(2, '0');
 // // //     const yyyy = d.getFullYear();
-
-// // //     const hh = String(d.getHours()).padStart(2, '0');
-// // //     const min = String(d.getMinutes()).padStart(2, '0');
-
-// // //     return `${dd}-${mm}-${yyyy} ${hh}:${min}`;
+// // //     return `${dd}-${mm}-${yyyy}`;
 // // //   };
 
 // // //   // ---------------------------------------------------
@@ -259,13 +257,28 @@
 // // //         t('select_officer_required') ?? 'Please select an officer',
 // // //       );
 // // //     }
+// // //     if (!scheduledAt) {
+// // //       return Alert.alert(
+// // //         t('error_title') ?? 'Error',
+// // //         t('schedule_required') ?? 'Please select schedule date',
+// // //       );
+// // //     }
+
+// // //     const now = new Date();
+// // //     if (scheduledAt.getTime() <= now.getTime()) {
+// // //       return Alert.alert(
+// // //         t('invalid_schedule_title') ?? 'Invalid date',
+// // //         t('schedule_future_only') ??
+// // //           'Please select a date & time in the future.',
+// // //       );
+// // //     }
 
 // // //     const dto = {
 // // //       MandiId: mandiId,
 // // //       CropId: selectedCropId,
 // // //       AssignedOfficerId: selectedOfficerId,
 // // //       ScheduledAt: scheduledAt.toISOString(),
-// // //       // CreatedByOfficialId is auto set on backend from JWT (User.GetOfficialId())
+// // //       // CreatedByOfficialId is set in backend from JWT
 // // //     };
 
 // // //     setCreating(true);
@@ -283,12 +296,10 @@
 // // //         t('auction_created_success') ?? 'Auction created successfully',
 // // //       );
 
-// // //       // reset minimal
 // // //       setSelectedCropId(null);
 // // //       setSelectedOfficerId('');
-// // //       setScheduledAt(new Date());
+// // //       setScheduledAt(null);
 
-// // //       // refresh list if visible
 // // //       if (showAuctionList) {
 // // //         loadAuctions();
 // // //       }
@@ -311,12 +322,9 @@
 // // //     if (!mandiId) return;
 // // //     setLoadingAuctions(true);
 // // //     try {
-// // //       const res = await api.get(
-// // //         '/mandiOfficialAuction/mandi/auction/all',
-// // //         {
-// // //           params: { mandiId },
-// // //         },
-// // //       );
+// // //       const res = await api.get('/mandiOfficialAuction/mandi/auction/all', {
+// // //         params: { mandiId },
+// // //       });
 
 // // //       let payload = res?.data ?? [];
 // // //       if (!Array.isArray(payload)) {
@@ -399,7 +407,7 @@
 // // //           {mandiName || mandiId ? (
 // // //             <Text style={{ color: theme.text, marginTop: 4 }}>
 // // //               {t('mandi_label') ?? 'Mandi'}:{' '}
-// // //               {mandiName || `#${mandiId}`}
+// // //               {mandiName || (mandiId ? `#${mandiId}` : '')}
 // // //             </Text>
 // // //           ) : null}
 // // //         </View>
@@ -468,8 +476,7 @@
 // // //                       value=""
 // // //                     />
 // // //                     {crops.map((c: any) => {
-// // //                       const id =
-// // //                         c.cropId ?? c.CropId ?? c.id;
+// // //                       const id = c.cropId ?? c.CropId ?? c.id;
 // // //                       const name =
 // // //                         c.cropName ?? c.CropName ?? c.name ?? '';
 // // //                       if (!id || !name) return null;
@@ -527,7 +534,7 @@
 // // //                   </Picker>
 // // //                 </View>
 
-// // //                 {/* Created By (readonly manager name) */}
+// // //                 {/* Created By */}
 // // //                 <Text style={[styles.label, { color: theme.text }]}>
 // // //                   {t('created_by_label') ?? 'Created By'}
 // // //                 </Text>
@@ -537,7 +544,7 @@
 // // //                   </Text>
 // // //                 </View>
 
-// // //                 {/* Mandi (readonly) */}
+// // //                 {/* Mandi */}
 // // //                 <Text style={[styles.label, { color: theme.text }]}>
 // // //                   {t('mandi_label') ?? 'Mandi'}
 // // //                 </Text>
@@ -558,7 +565,13 @@
 // // //                     { borderColor: theme.text },
 // // //                   ]}
 // // //                 >
-// // //                   <Text style={{ color: theme.text }}>
+// // //                   <Text
+// // //                     style={{
+// // //                       color: scheduledAt
+// // //                         ? theme.text
+// // //                         : '#9ca3af',
+// // //                     }}
+// // //                   >
 // // //                     {formatDateTime(scheduledAt)}
 // // //                   </Text>
 // // //                   <Text style={styles.calendarIcon}>📅</Text>
@@ -566,8 +579,9 @@
 
 // // //                 {showDatePicker && (
 // // //                   <DateTimePicker
-// // //                     mode="datetime"
-// // //                     value={scheduledAt}
+// // //                     mode="date"
+// // //                     value={scheduledAt ?? new Date()}
+// // //                     minimumDate={new Date()} // cannot pick past dates
 // // //                     onChange={onChangeDate}
 // // //                   />
 // // //                 )}
@@ -616,9 +630,7 @@
 // // //               </View>
 // // //             ) : (
 // // //               auctions.map((a: AuctionItem) => {
-// // //                 const id = String(
-// // //                   a.auctionId ?? a.AuctionId ?? '',
-// // //                 );
+// // //                 const id = String(a.auctionId ?? a.AuctionId ?? '');
 // // //                 const cropName =
 // // //                   a.cropName ?? a.CropName ?? '-';
 // // //                 const officerName =
@@ -630,7 +642,7 @@
 // // //                 const schedRaw =
 // // //                   a.scheduledAt ?? a.ScheduledAt ?? '';
 // // //                 const sched = schedRaw
-// // //                   ? new Date(schedRaw).toLocaleString()
+// // //                   ? new Date(schedRaw).toLocaleDateString()
 // // //                   : '-';
 
 // // //                 return (
@@ -784,6 +796,7 @@
 // // //   },
 // // // });
 
+
 // // import React, { useEffect, useState } from 'react';
 // // import {
 // //   Text,
@@ -793,14 +806,13 @@
 // //   ActivityIndicator,
 // //   Alert,
 // //   ScrollView,
+// //   Platform,
 // // } from 'react-native';
 // // import { SafeAreaView } from 'react-native-safe-area-context';
 // // import { useNavigation } from '@react-navigation/native';
 // // import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 // // import { Picker } from '@react-native-picker/picker';
-// // import DateTimePicker, {
-// //   DateTimePickerEvent,
-// // } from '@react-native-community/datetimepicker';
+// // import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 // // import { RootStackParamList } from '../../App';
 // // import { useTheme } from '../context/ThemeContext';
@@ -809,23 +821,8 @@
 
 // // type PropsNav = NativeStackNavigationProp<RootStackParamList>;
 
-// // type CropItem = {
-// //   cropId?: number;
-// //   CropId?: number;
-// //   id?: number;
-// //   cropName?: string;
-// //   CropName?: string;
-// //   name?: string;
-// // };
-
-// // type OfficerItem = {
-// //   officialId?: string;
-// //   OfficialId?: string;
-// //   id?: string;
-// //   officialName?: string;
-// //   OfficialName?: string;
-// // };
-
+// // type CropItem = { cropId?: number; CropId?: number; id?: number; cropName?: string; CropName?: string; name?: string };
+// // type OfficerItem = { officialId?: string; OfficialId?: string; id?: string; officialName?: string; OfficialName?: string; mandiId?: number };
 // // type AuctionItem = {
 // //   auctionId?: string;
 // //   AuctionId?: string;
@@ -839,10 +836,12 @@
 // //   CropName?: string;
 // //   assignedOfficerName?: string;
 // //   AssignedOfficerName?: string;
+// //   assignedOfficerId?: string;
+// //   AssignedOfficerId?: string;
 // //   status?: string;
 // //   Status?: string;
-// //   scheduledAt?: string;
-// //   ScheduledAt?: string;
+// //   scheduledAt?: string | null;
+// //   ScheduledAt?: string | null;
 // //   createdAt?: string;
 // //   CreatedAt?: string;
 // // };
@@ -854,67 +853,57 @@
 
 // //   const goBack = () => navigation.navigate('Dashboard');
 
-// //   // Profile data (manager = mandi official with MANAGER role)
+// //   // profile & mandi
 // //   const [loadingProfile, setLoadingProfile] = useState(true);
 // //   const [managerName, setManagerName] = useState<string>('');
 // //   const [managerOfficialId, setManagerOfficialId] = useState<string>('');
 // //   const [mandiId, setMandiId] = useState<number | null>(null);
 // //   const [mandiName, setMandiName] = useState<string>('');
 
-// //   // Meta dropdowns
+// //   // meta
 // //   const [crops, setCrops] = useState<CropItem[]>([]);
 // //   const [officers, setOfficers] = useState<OfficerItem[]>([]);
 // //   const [loadingMeta, setLoadingMeta] = useState(false);
 
-// //   // Create auction form
+// //   // auction list
+// //   const [auctions, setAuctions] = useState<AuctionItem[]>([]);
+// //   const [loadingAuctions, setLoadingAuctions] = useState(false);
+// //   const [showAuctionList, setShowAuctionList] = useState(false);
+
+// //   // edit state
+// //   const [editAuctionId, setEditAuctionId] = useState<string | null>(null);
+// //   const [editCropId, setEditCropId] = useState<number | null>(null);
+// //   const [editAssignedOfficerId, setEditAssignedOfficerId] = useState<string>('');
+// //   const [editScheduledAt, setEditScheduledAt] = useState<Date | null>(null);
+// //   const [showEditDatePicker, setShowEditDatePicker] = useState(false);
+// //   const [editing, setEditing] = useState(false);
+
+// //   // create form toggles (if you still use create)
 // //   const [showCreateForm, setShowCreateForm] = useState(false);
 // //   const [creating, setCreating] = useState(false);
 
-// //   const [selectedCropId, setSelectedCropId] = useState<number | null>(null);
-// //   const [selectedOfficerId, setSelectedOfficerId] = useState<string>('');
-// //   const [scheduledAt, setScheduledAt] = useState<Date>(new Date());
-// //   const [showDatePicker, setShowDatePicker] = useState(false);
-
-// //   // Auction list
-// //   const [showAuctionList, setShowAuctionList] = useState(false);
-// //   const [auctions, setAuctions] = useState<AuctionItem[]>([]);
-// //   const [loadingAuctions, setLoadingAuctions] = useState(false);
-
-// //   // ---------------------------------------------------
-// //   // 1) Load manager profile → mandiId + managerName + officialId
-// //   // ---------------------------------------------------
+// //   // ----------------------------------------------------
+// //   // load manager profile to get mandi id (same as before)
+// //   // ----------------------------------------------------
 // //   useEffect(() => {
 // //     const loadProfile = async () => {
 // //       try {
 // //         const res = await api.get('/mandi-official/profile');
 // //         const data = res?.data ?? null;
-// //         if (!data) {
-// //           throw new Error('Profile not found');
-// //         }
+// //         if (!data) throw new Error('Profile not found');
 
 // //         const name = data.officialName ?? data.OfficialName ?? '';
 // //         const mId = data.mandiId ?? data.MandiId ?? null;
 // //         const mName = data.mandiName ?? data.MandiName ?? '';
 // //         const offId = data.officialId ?? data.OfficialId ?? '';
 
-// //         if (!mId) {
-// //           Alert.alert(
-// //             t('error_title') ?? 'Error',
-// //             t('mandi_not_found_profile') ??
-// //               'No mandi is linked to this manager profile.',
-// //           );
-// //         }
-
 // //         setManagerName(String(name));
-// //         setManagerOfficialId(offId ? String(offId) : '');
+// //         setManagerOfficialId(String(offId ?? ''));
 // //         setMandiId(mId ? Number(mId) : null);
 // //         setMandiName(String(mName));
 // //       } catch (err: any) {
 // //         console.log('Manager profile load error', err?.response?.data ?? err);
-// //         Alert.alert(
-// //           t('error_title') ?? 'Error',
-// //           t('profile_fetch_failed') ?? 'Failed to load manager profile.',
-// //         );
+// //         Alert.alert(t('error_title') ?? 'Error', t('profile_fetch_failed') ?? 'Failed to load manager profile.');
 // //       } finally {
 // //         setLoadingProfile(false);
 // //       }
@@ -923,186 +912,75 @@
 // //     loadProfile();
 // //   }, [t]);
 
-// //   // ---------------------------------------------------
-// //   // 2) Load crops + officers for this mandi
-// //   //    officers API failure is now NON-FATAL
-// //   // ---------------------------------------------------
-// //   const loadMeta = async (mId: number) => {
-// //     setLoadingMeta(true);
-// //     try {
-// //       // 2.1 CROPS (required)
-// //       const cropsRes = await api.get('/crops');
-// //       const cropData = Array.isArray(cropsRes.data) ? cropsRes.data : [];
-// //       setCrops(cropData);
-
-// //       // 2.2 OFFICERS (best-effort)
-// //       try {
-// //         // 🔴 Adjust this if your actual endpoint is different
-// //         const officersRes = await api.get('/mandi-official/officers', {
-// //           params: { mandiId: mId },
-// //         });
-// //         const officerData = Array.isArray(officersRes.data)
-// //           ? officersRes.data
-// //           : [];
-
-// //         if (officerData.length > 0) {
-// //           setOfficers(officerData);
-// //         } else if (managerOfficialId && managerName) {
-// //           // fallback: use manager as only officer
-// //           setOfficers([
-// //             { officialId: managerOfficialId, officialName: managerName },
-// //           ]);
-// //         } else {
-// //           setOfficers([]);
-// //         }
-// //       } catch (err) {
-// //         console.log('Officer list load error (non-fatal):', err);
-// //         // Fallback: use manager as the only officer if possible
-// //         if (managerOfficialId && managerName) {
-// //           setOfficers([
-// //             { officialId: managerOfficialId, officialName: managerName },
-// //           ]);
-// //         } else {
-// //           setOfficers([]);
-// //         }
-// //       }
-// //     } catch (err: any) {
-// //       console.log('Manager meta load error', err?.response?.data ?? err);
-// //       Alert.alert(
-// //         t('error_title') ?? 'Error',
-// //         t('fetch_meta_failed') ?? 'Failed to load dropdown data.',
-// //       );
-// //     } finally {
-// //       setLoadingMeta(false);
-// //     }
-// //   };
-
+// //   // ----------------------------------------------------
+// //   // load meta (crops + mandi officers) when mandiId is ready
+// //   // ----------------------------------------------------
 // //   useEffect(() => {
-// //     if (mandiId) {
-// //       loadMeta(mandiId);
-// //     }
-// //     // also rerun once we know managerOfficialId/managerName,
-// //     // so fallback officer is set correctly if API fails
-// //     // eslint-disable-next-line react-hooks/exhaustive-deps
-// //   }, [mandiId, managerOfficialId, managerName]);
+// //     if (!mandiId) return;
 
-// //   // ---------------------------------------------------
-// //   // 3) Date picker handler
-// //   // ---------------------------------------------------
-// //   const onChangeDate = (_event: DateTimePickerEvent, selected?: Date) => {
-// //     if (selected) {
-// //       setScheduledAt(selected);
-// //     }
-// //     setShowDatePicker(false);
-// //   };
+// //     let mounted = true;
+// //     const loadMeta = async () => {
+// //       setLoadingMeta(true);
+// //       try {
+// //         const cropsRes = await api.get('/crops');
+// //         if (!mounted) return;
+// //         setCrops(Array.isArray(cropsRes.data) ? cropsRes.data : []);
 
-// //   const formatDateTime = (d: Date) => {
-// //     const dd = String(d.getDate()).padStart(2, '0');
-// //     const mm = String(d.getMonth() + 1).padStart(2, '0');
-// //     const yyyy = d.getFullYear();
-
-// //     const hh = String(d.getHours()).padStart(2, '0');
-// //     const min = String(d.getMinutes()).padStart(2, '0');
-
-// //     return `${dd}-${mm}-${yyyy} ${hh}:${min}`;
-// //   };
-
-// //   // ---------------------------------------------------
-// //   // 4) Create auction
-// //   // ---------------------------------------------------
-// //   const handleCreateAuction = async () => {
-// //     if (!mandiId) {
-// //       return Alert.alert(
-// //         t('error_title') ?? 'Error',
-// //         t('mandi_not_found_profile') ??
-// //           'No mandi is linked to this manager profile.',
-// //       );
-// //     }
-// //     if (!selectedCropId) {
-// //       return Alert.alert(
-// //         t('error_title') ?? 'Error',
-// //         t('fill_crop') ?? 'Please select crop',
-// //       );
-// //     }
-// //     if (!selectedOfficerId) {
-// //       return Alert.alert(
-// //         t('error_title') ?? 'Error',
-// //         t('select_officer_required') ?? 'Please select an officer',
-// //       );
-// //     }
-
-// //     const dto = {
-// //       MandiId: mandiId,
-// //       CropId: selectedCropId,
-// //       AssignedOfficerId: selectedOfficerId,
-// //       ScheduledAt: scheduledAt.toISOString(),
-// //       // CreatedByOfficialId is auto set on backend from JWT (User.GetOfficialId())
+// //         // officers endpoint - your server must accept mandiId query param
+// //         const res = await api.get('/mandi-official/mandi-officers', { params: { mandiId } });
+// //         if (!mounted) return;
+// //         const raw = Array.isArray(res.data) ? res.data : res.data?.data ?? [];
+// //         const mapped = (raw || []).map((o: any) => ({
+// //           officialId: o.officialId ?? o.OfficialId ?? o.id,
+// //           officialName: o.officialName ?? o.OfficialName ?? o.name ?? '',
+// //           mandiId: o.mandiId ?? o.MandiId ?? mandiId,
+// //         })).filter(Boolean) as OfficerItem[];
+// //         setOfficers(mapped.length ? mapped : [{ officialId: managerOfficialId, officialName: managerName, mandiId }]);
+// //       } catch (err: any) {
+// //         console.log('loadMeta error', err?.response?.data ?? err);
+// //         // fallback to manager as only officer option
+// //         setOfficers(managerOfficialId ? [{ officialId: managerOfficialId, officialName: managerName, mandiId: mandiId ?? undefined }] : []);
+// //       } finally {
+// //         setLoadingMeta(false);
+// //       }
 // //     };
 
-// //     setCreating(true);
-// //     try {
-// //       const res = await api.post(
-// //         '/mandiOfficialAuction/mandi/auction/create',
-// //         dto,
-// //       );
-// //       if (!res.status.toString().startsWith('2')) {
-// //         throw new Error(res.data?.message || 'Failed to create auction');
-// //       }
+// //     loadMeta();
+// //     return () => {
+// //       mounted = false;
+// //     };
+// //   }, [mandiId, managerName, managerOfficialId]);
 
-// //       Alert.alert(
-// //         t('success_title') ?? 'Success',
-// //         t('auction_created_success') ?? 'Auction created successfully',
-// //       );
-
-// //       // reset minimal
-// //       setSelectedCropId(null);
-// //       setSelectedOfficerId('');
-// //       setScheduledAt(new Date());
-
-// //       // refresh list if visible
-// //       if (showAuctionList) {
-// //         loadAuctions();
-// //       }
-// //     } catch (err: any) {
-// //       console.log('Create auction error', err?.response?.data ?? err);
-// //       const msg =
-// //         err?.response?.data?.message ??
-// //         t('auction_create_failed') ??
-// //         'Failed to create auction';
-// //       Alert.alert(t('error_title') ?? 'Error', msg);
-// //     } finally {
-// //       setCreating(false);
-// //     }
-// //   };
-
-// //   // ---------------------------------------------------
-// //   // 5) Load auctions for this mandi
-// //   // ---------------------------------------------------
+// //   // ----------------------------------------------------
+// //   // load auctions for mandi
+// //   // ----------------------------------------------------
 // //   const loadAuctions = async () => {
 // //     if (!mandiId) return;
 // //     setLoadingAuctions(true);
 // //     try {
-// //       const res = await api.get(
-// //         '/mandiOfficialAuction/mandi/auction/all',
-// //         {
-// //           params: { mandiId },
-// //         },
-// //       );
-
+// //       const res = await api.get('/mandiOfficialAuction/mandi/auction/all', { params: { mandiId } });
 // //       let payload = res?.data ?? [];
 // //       if (!Array.isArray(payload)) {
 // //         if (Array.isArray(payload.items)) payload = payload.items;
 // //         else if (Array.isArray(payload.data)) payload = payload.data;
 // //         else payload = [payload];
 // //       }
-
-// //       setAuctions(payload);
+// //       // normalize a bit
+// //       const mapped = (payload as any[]).map((a) => ({
+// //         auctionId: a.auctionId ?? a.AuctionId ?? a.auctionId,
+// //         cropId: a.cropId ?? a.CropId ?? a.cropId,
+// //         cropName: a.cropName ?? a.CropName ?? a.cropName,
+// //         assignedOfficerName: a.assignedOfficerName ?? a.AssignedOfficerName ?? a.assignedOfficerName,
+// //         assignedOfficerId: a.assignedOfficerId ?? a.AssignedOfficerId ?? a.assignedOfficerId,
+// //         status: a.status ?? a.Status ?? a.status,
+// //         scheduledAt: a.scheduledAt ?? a.ScheduledAt ?? a.scheduledAt,
+// //         mandiId: a.mandiId ?? a.MandiId ?? mandiId,
+// //         mandiName: a.mandiName ?? a.MandiName ?? a.mandiName,
+// //       }));
+// //       setAuctions(mapped);
 // //     } catch (err: any) {
-// //       console.log('Load auctions error', err?.response?.data ?? err);
-// //       Alert.alert(
-// //         t('error_title') ?? 'Error',
-// //         t('fetch_auctions_failed') ?? 'Failed to fetch auction schedule',
-// //       );
+// //       console.log('loadAuctions error', err?.response?.data ?? err);
+// //       Alert.alert(t('error_title') ?? 'Error', t('fetch_auctions_failed') ?? 'Failed to fetch auction schedule');
 // //     } finally {
 // //       setLoadingAuctions(false);
 // //     }
@@ -1111,340 +989,223 @@
 // //   const toggleShowAuctions = () => {
 // //     const newVal = !showAuctionList;
 // //     setShowAuctionList(newVal);
-// //     if (newVal) {
-// //       loadAuctions();
+// //     if (newVal) loadAuctions();
+// //     else {
+// //       setEditAuctionId(null);
 // //     }
 // //   };
 
-// //   // ---------------------------------------------------
-// //   // RENDER
-// //   // ---------------------------------------------------
+// //   // ----------------------------------------------------
+// //   // open edit for specific auction
+// //   // ----------------------------------------------------
+// //   const openEdit = (auction: AuctionItem) => {
+// //     setEditAuctionId(String(auction.auctionId ?? ''));
+// //     setEditCropId(auction.cropId ?? null);
+// //     setEditAssignedOfficerId(auction.assignedOfficerId ?? '');
+// //     // parse scheduledAt if present
+// //     const schedRaw = auction.scheduledAt ?? auction.ScheduledAt ?? null;
+// //     setEditScheduledAt(schedRaw ? new Date(schedRaw) : null);
+// //   };
+
+// //   // date picker handler for edit (prevents past selection)
+// //   const onEditDateChange = (event: DateTimePickerEvent, selected?: Date) => {
+// //     if (Platform.OS === 'android') setShowEditDatePicker(false);
+// //     if (event.type === 'dismissed') return;
+// //     if (!selected) return;
+
+// //     const now = new Date();
+// //     if (selected.getTime() <= now.getTime()) {
+// //       Alert.alert(t('invalid_schedule_title') ?? 'Invalid date', t('schedule_future_only') ?? 'Please select a future date/time.');
+// //       return;
+// //     }
+// //     setEditScheduledAt(selected);
+// //   };
+
+// //   // perform PATCH edit
+// //   const handleEditSubmit = async () => {
+// //     if (!editAuctionId) return;
+// //     // validate scheduledAt (if provided)
+// //     if (editScheduledAt && editScheduledAt.getTime() <= new Date().getTime()) {
+// //       return Alert.alert(t('error_title') ?? 'Error', t('schedule_future_only') ?? 'Please select a future date/time.');
+// //     }
+// //     if (!editAssignedOfficerId) {
+// //       return Alert.alert(t('error_title') ?? 'Error', t('select_officer_required') ?? 'Please select an officer');
+// //     }
+
+// //     const dto: any = {};
+// //     if (editCropId) dto.CropId = editCropId;
+// //     if (editAssignedOfficerId) dto.AssignedOfficerId = editAssignedOfficerId;
+// //     if (editScheduledAt) dto.ScheduledAt = editScheduledAt.toISOString();
+
+// //     setEditing(true);
+// //     try {
+// //       const res = await api.patch(`/mandiOfficialAuction/mandi/auction/${editAuctionId}/edit`, dto);
+// //       if (!res.status.toString().startsWith('2')) {
+// //         throw new Error(res.data?.message || 'Failed to edit auction');
+// //       }
+// //       Alert.alert(t('success_title') ?? 'Success', t('auction_edit_success') ?? 'Auction updated successfully');
+// //       // refresh list and close edit
+// //       await loadAuctions();
+// //       setEditAuctionId(null);
+// //     } catch (err: any) {
+// //       console.log('edit auction error', err?.response?.data ?? err);
+// //       const msg = err?.response?.data?.message ?? t('auction_edit_failed') ?? 'Failed to update auction';
+// //       Alert.alert(t('error_title') ?? 'Error', msg);
+// //     } finally {
+// //       setEditing(false);
+// //     }
+// //   };
+
+// //   // utility formatting
+// //   const formatDateTime = (d: Date | null) => {
+// //     if (!d) return t('select_date_time') ?? 'Select date & time';
+// //     const dd = String(d.getDate()).padStart(2, '0');
+// //     const mm = String(d.getMonth() + 1).padStart(2, '0');
+// //     const yyyy = d.getFullYear();
+// //     const hh = String(d.getHours()).padStart(2, '0');
+// //     const min = String(d.getMinutes()).padStart(2, '0');
+// //     return `${dd}-${mm}-${yyyy} ${hh}:${min}`;
+// //   };
+
 // //   if (loadingProfile) {
 // //     return (
-// //       <SafeAreaView
-// //         style={[
-// //           styles.container,
-// //           {
-// //             backgroundColor: theme.background,
-// //             justifyContent: 'center',
-// //             alignItems: 'center',
-// //           },
-// //         ]}
-// //       >
+// //       <SafeAreaView style={[styles.container, { backgroundColor: theme.background, justifyContent: 'center', alignItems: 'center' }]}>
 // //         <ActivityIndicator />
-// //         <Text style={{ marginTop: 8, color: theme.text }}>
-// //           {t('loading') ?? 'Loading...'}
-// //         </Text>
+// //         <Text style={{ marginTop: 8, color: theme.text }}>{t('loading') ?? 'Loading...'}</Text>
 // //       </SafeAreaView>
 // //     );
 // //   }
 
 // //   return (
-// //     <SafeAreaView
-// //       style={[styles.container, { backgroundColor: theme.background }]}
-// //     >
+// //     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
 // //       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
-// //         {/* Back button */}
 // //         <TouchableOpacity onPress={goBack} style={styles.backBtn}>
-// //           <Text style={[styles.backText, { color: '#2b6cb0' }]}>
-// //             {t('back')}
-// //           </Text>
+// //           <Text style={[styles.backText, { color: '#2b6cb0' }]}>{t('back')}</Text>
 // //         </TouchableOpacity>
 
-// //         {/* Header */}
-// //         <Text style={[styles.title, { color: theme.text }]}>
-// //           {t('mandi_manager_dashboard') ?? 'Mandi Manager Dashboard'}
-// //         </Text>
-// //         <Text style={[styles.text, { color: theme.text }]}>
-// //           {t('mandi_manager_msg') ??
-// //             'Manage auction schedules for your mandi.'}
-// //         </Text>
+// //         <Text style={[styles.title, { color: theme.text }]}>{t('mandi_manager_dashboard') ?? 'Mandi Manager Dashboard'}</Text>
+// //         <Text style={[styles.text, { color: theme.text }]}>{t('mandi_manager_msg') ?? 'Manage auction schedules for your mandi.'}</Text>
 
-// //         {/* Manager + Mandi info */}
 // //         <View style={{ marginTop: 8, marginBottom: 16 }}>
-// //           {managerName ? (
-// //             <Text style={{ color: theme.text, fontWeight: '700' }}>
-// //               {t('manager_name_label') ?? 'Manager'}: {managerName}
-// //             </Text>
-// //           ) : null}
-// //           {mandiName || mandiId ? (
-// //             <Text style={{ color: theme.text, marginTop: 4 }}>
-// //               {t('mandi_label') ?? 'Mandi'}:{' '}
-// //               {mandiName || `#${mandiId}`}
-// //             </Text>
-// //           ) : null}
+// //           {managerName ? <Text style={{ color: theme.text, fontWeight: '700' }}>{t('manager_name_label') ?? 'Manager'}: {managerName}</Text> : null}
+// //           {mandiName || mandiId ? <Text style={{ color: theme.text, marginTop: 4 }}>{t('mandi_label') ?? 'Mandi'}: {mandiName || (mandiId ? `#${mandiId}` : '')}</Text> : null}
 // //         </View>
 
-// //         {/* Buttons row */}
 // //         <View style={{ flexDirection: 'row', gap: 12, marginBottom: 16 }}>
-// //           <TouchableOpacity
-// //             style={[
-// //               styles.primaryButton,
-// //               showCreateForm && { opacity: 0.8 },
-// //             ]}
-// //             onPress={() => setShowCreateForm(prev => !prev)}
-// //           >
-// //             <Text style={styles.primaryButtonText}>
-// //               {t('schedule_auction_btn') ?? 'Schedule / Create Auction'}
-// //             </Text>
+// //           <TouchableOpacity style={styles.primaryButton} onPress={() => setShowCreateForm(prev => !prev)}>
+// //             <Text style={styles.primaryButtonText}>{t('schedule_auction_btn') ?? 'Schedule / Create Auction'}</Text>
 // //           </TouchableOpacity>
 
-// //           <TouchableOpacity
-// //             style={[
-// //               styles.secondaryButton,
-// //               showAuctionList && { opacity: 0.8 },
-// //             ]}
-// //             onPress={toggleShowAuctions}
-// //           >
-// //             <Text style={styles.secondaryButtonText}>
-// //               {t('view_auction_schedule_btn') ?? 'View Auction Schedule'}
-// //             </Text>
+// //           <TouchableOpacity style={styles.secondaryButton} onPress={toggleShowAuctions}>
+// //             <Text style={styles.secondaryButtonText}>{t('view_auction_schedule_btn') ?? 'View Auction Schedule'}</Text>
 // //           </TouchableOpacity>
 // //         </View>
 
-// //         {/* CREATE AUCTION FORM */}
+// //         {/* CREATE FORM (you can keep existing create logic below or remove if not needed) */}
 // //         {showCreateForm && (
-// //           <View
-// //             style={[
-// //               styles.card,
-// //               { borderColor: theme.text, backgroundColor: theme.background },
-// //             ]}
-// //           >
-// //             <Text style={[styles.sectionTitle, { color: theme.text }]}>
-// //               {t('create_auction_title') ?? 'Create Auction'}
-// //             </Text>
-
-// //             {loadingMeta ? (
-// //               <ActivityIndicator style={{ marginTop: 10 }} />
-// //             ) : (
-// //               <>
-// //                 {/* Crop */}
-// //                 <Text style={[styles.label, { color: theme.text }]}>
-// //                   {t('crop') ?? 'Crop'}
-// //                 </Text>
-// //                 <View
-// //                   style={[
-// //                     styles.pickerWrap,
-// //                     { borderColor: theme.text },
-// //                   ]}
-// //                 >
-// //                   <Picker
-// //                     selectedValue={selectedCropId ?? ''}
-// //                     onValueChange={v =>
-// //                       setSelectedCropId(v ? Number(v) : null)
-// //                     }
-// //                   >
-// //                     <Picker.Item
-// //                       label={t('select_crop') ?? 'Select crop'}
-// //                       value=""
-// //                     />
-// //                     {crops.map((c: any) => {
-// //                       const id =
-// //                         c.cropId ?? c.CropId ?? c.id;
-// //                       const name =
-// //                         c.cropName ?? c.CropName ?? c.name ?? '';
-// //                       if (!id || !name) return null;
-// //                       return (
-// //                         <Picker.Item
-// //                           key={String(id)}
-// //                           label={String(name)}
-// //                           value={Number(id)}
-// //                         />
-// //                       );
-// //                     })}
-// //                   </Picker>
-// //                 </View>
-
-// //                 {/* Assigned Officer */}
-// //                 <Text style={[styles.label, { color: theme.text }]}>
-// //                   {t('assigned_officer_label') ?? 'Assigned Officer'}
-// //                 </Text>
-// //                 <View
-// //                   style={[
-// //                     styles.pickerWrap,
-// //                     { borderColor: theme.text },
-// //                   ]}
-// //                 >
-// //                   <Picker
-// //                     selectedValue={selectedOfficerId}
-// //                     onValueChange={v =>
-// //                       setSelectedOfficerId(String(v))
-// //                     }
-// //                   >
-// //                     <Picker.Item
-// //                       label={
-// //                         t('select_officer') ?? 'Select officer'
-// //                       }
-// //                       value=""
-// //                     />
-// //                     {officers.map((o: any) => {
-// //                       const oid =
-// //                         o.officialId ??
-// //                         o.OfficialId ??
-// //                         o.id;
-// //                       const oname =
-// //                         o.officialName ??
-// //                         o.OfficialName ??
-// //                         '';
-// //                       if (!oid || !oname) return null;
-// //                       return (
-// //                         <Picker.Item
-// //                           key={String(oid)}
-// //                           label={String(oname)}
-// //                           value={String(oid)}
-// //                         />
-// //                       );
-// //                     })}
-// //                   </Picker>
-// //                 </View>
-
-// //                 {/* Created By (readonly manager name) */}
-// //                 <Text style={[styles.label, { color: theme.text }]}>
-// //                   {t('created_by_label') ?? 'Created By'}
-// //                 </Text>
-// //                 <View style={styles.readonlyBox}>
-// //                   <Text style={{ color: theme.text }}>
-// //                     {managerName || '-'}
-// //                   </Text>
-// //                 </View>
-
-// //                 {/* Mandi (readonly) */}
-// //                 <Text style={[styles.label, { color: theme.text }]}>
-// //                   {t('mandi_label') ?? 'Mandi'}
-// //                 </Text>
-// //                 <View style={styles.readonlyBox}>
-// //                   <Text style={{ color: theme.text }}>
-// //                     {mandiName || (mandiId ? `#${mandiId}` : '-')}
-// //                   </Text>
-// //                 </View>
-
-// //                 {/* Scheduled At */}
-// //                 <Text style={[styles.label, { color: theme.text }]}>
-// //                   {t('scheduled_at_label') ?? 'Scheduled At'}
-// //                 </Text>
-// //                 <TouchableOpacity
-// //                   onPress={() => setShowDatePicker(true)}
-// //                   style={[
-// //                     styles.dateBtn,
-// //                     { borderColor: theme.text },
-// //                   ]}
-// //                 >
-// //                   <Text style={{ color: theme.text }}>
-// //                     {formatDateTime(scheduledAt)}
-// //                   </Text>
-// //                   <Text style={styles.calendarIcon}>📅</Text>
-// //                 </TouchableOpacity>
-
-// //                 {showDatePicker && (
-// //                   <DateTimePicker
-// //                     mode="datetime"
-// //                     value={scheduledAt}
-// //                     onChange={onChangeDate}
-// //                   />
-// //                 )}
-
-// //                 {/* Create button */}
-// //                 <TouchableOpacity
-// //                   style={[
-// //                     styles.submitBtn,
-// //                     creating && { opacity: 0.7 },
-// //                   ]}
-// //                   onPress={handleCreateAuction}
-// //                   disabled={creating}
-// //                 >
-// //                   {creating ? (
-// //                     <ActivityIndicator color="#fff" />
-// //                   ) : (
-// //                     <Text style={styles.submitBtnText}>
-// //                       {t('create_auction_btn') ?? 'Create Auction'}
-// //                     </Text>
-// //                   )}
-// //                 </TouchableOpacity>
-// //               </>
-// //             )}
+// //           <View style={[styles.card, { borderColor: theme.text, backgroundColor: theme.background }]}>
+// //             <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('create_auction_title') ?? 'Create Auction'}</Text>
+// //             {/* Reuse the same create UI as earlier (omitted here for brevity) */}
+// //             <Text style={{ color: theme.text, marginTop: 6 }}>{t('create_form_placeholder') ?? 'Create form here...'}</Text>
 // //           </View>
 // //         )}
 
 // //         {/* AUCTION LIST */}
 // //         {showAuctionList && (
-// //           <View
-// //             style={[
-// //               styles.card,
-// //               { borderColor: theme.text, backgroundColor: theme.background },
-// //             ]}
-// //           >
-// //             <Text style={[styles.sectionTitle, { color: theme.text }]}>
-// //               {t('auction_schedule_title') ?? 'Auction Schedule'}
-// //             </Text>
+// //           <View style={[styles.card, { borderColor: theme.text, backgroundColor: theme.background }]}>
+// //             <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('auction_schedule_title') ?? 'Auction Schedule'}</Text>
 
 // //             {loadingAuctions ? (
 // //               <ActivityIndicator style={{ marginTop: 10 }} />
 // //             ) : auctions.length === 0 ? (
 // //               <View style={{ marginTop: 10 }}>
-// //                 <Text style={{ color: theme.text }}>
-// //                   {t('no_auctions') ?? 'No auctions scheduled yet'}
-// //                 </Text>
+// //                 <Text style={{ color: theme.text }}>{t('no_auctions') ?? 'No auctions scheduled yet'}</Text>
 // //               </View>
 // //             ) : (
-// //               auctions.map((a: AuctionItem) => {
-// //                 const id = String(
-// //                   a.auctionId ?? a.AuctionId ?? '',
-// //                 );
-// //                 const cropName =
-// //                   a.cropName ?? a.CropName ?? '-';
-// //                 const officerName =
-// //                   a.assignedOfficerName ??
-// //                   a.AssignedOfficerName ??
-// //                   '-';
-// //                 const status =
-// //                   a.status ?? a.Status ?? '-';
-// //                 const schedRaw =
-// //                   a.scheduledAt ?? a.ScheduledAt ?? '';
-// //                 const sched = schedRaw
-// //                   ? new Date(schedRaw).toLocaleString()
-// //                   : '-';
+// //               auctions.map((a) => {
+// //                 const id = String(a.auctionId ?? a.AuctionId ?? '');
+// //                 const cropName = a.cropName ?? a.CropName ?? '-';
+// //                 const officerName = a.assignedOfficerName ?? a.AssignedOfficerName ?? '-';
+// //                 const status = a.status ?? a.Status ?? '-';
+// //                 const schedRaw = a.scheduledAt ?? a.ScheduledAt ?? null;
+// //                 const sched = schedRaw ? new Date(schedRaw) : null;
 
 // //                 return (
-// //                   <View
-// //                     key={id}
-// //                     style={[
-// //                       styles.auctionItem,
-// //                       { borderColor: theme.text },
-// //                     ]}
-// //                   >
-// //                     <Text
-// //                       style={[
-// //                         styles.auctionTitle,
-// //                         { color: theme.text },
-// //                       ]}
-// //                     >
-// //                       {cropName}
-// //                     </Text>
-// //                     <Text style={{ color: theme.text }}>
-// //                       {t('assigned_officer_label') ??
-// //                         'Assigned Officer'}
-// //                       : {officerName}
-// //                     </Text>
-// //                     <Text style={{ color: theme.text }}>
-// //                       {t('scheduled_at_label') ?? 'Scheduled At'}:{' '}
-// //                       {sched}
-// //                     </Text>
-// //                     <Text
-// //                       style={{
-// //                         color:
-// //                           status === 'scheduled'
-// //                             ? '#2563eb'
-// //                             : status === 'started'
-// //                             ? '#16a34a'
-// //                             : status === 'ended'
-// //                             ? '#6b7280'
-// //                             : theme.text,
-// //                         marginTop: 4,
-// //                         fontWeight: '700',
-// //                       }}
-// //                     >
-// //                       {t('status') ?? 'Status'}: {status}
-// //                     </Text>
+// //                   <View key={id} style={[styles.auctionItem, { borderColor: theme.text }]}>
+// //                     <Text style={[styles.auctionTitle, { color: theme.text }]}>{cropName}</Text>
+// //                     <Text style={{ color: theme.text }}>{t('assigned_officer_label') ?? 'Assigned Officer'}: {officerName}</Text>
+// //                     <Text style={{ color: theme.text }}>{t('scheduled_at_label') ?? 'Scheduled At'}: {sched ? sched.toLocaleString() : '-'}</Text>
+// //                     <Text style={{ marginTop: 6, color: theme.text }}>{t('status') ?? 'Status'}: <Text style={{ fontWeight: '700' }}>{status}</Text></Text>
+
+// //                     <View style={{ flexDirection: 'row', marginTop: 8 }}>
+// //                       {/* Edit button visible for scheduled auctions only */}
+// //                       {status === 'scheduled' && (
+// //                         <TouchableOpacity style={[styles.smallBtn, { marginRight: 8 }]} onPress={() => openEdit(a)}>
+// //                           <Text style={{ color: '#fff', fontWeight: '700' }}>{t('edit') ?? 'Edit'}</Text>
+// //                         </TouchableOpacity>
+// //                       )}
+// //                       <TouchableOpacity style={styles.smallOutlineBtn} onPress={() => navigation.navigate('AuctionDetail', { auctionId: String(id) })}>
+// //                         <Text style={{ color: theme.text, fontWeight: '700' }}>{t('view') ?? 'View'}</Text>
+// //                       </TouchableOpacity>
+// //                     </View>
+
+// //                     {/* Inline Edit Form for this auction */}
+// //                     {editAuctionId === id && (
+// //                       <View style={{ marginTop: 12, paddingTop: 12, borderTopWidth: 1, borderTopColor: '#e5e7eb' }}>
+// //                         {/* Crop (optional edit) */}
+// //                         <Text style={[styles.label, { color: theme.text }]}>{t('crop') ?? 'Crop'}</Text>
+// //                         <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
+// //                           <Picker selectedValue={editCropId ?? ''} onValueChange={(v) => setEditCropId(v ? Number(v) : null)}>
+// //                             <Picker.Item label={t('select_crop') ?? 'Select crop'} value="" />
+// //                             {crops.map((c: any) => {
+// //                               const id = c.cropId ?? c.CropId ?? c.id;
+// //                               const name = c.cropName ?? c.CropName ?? c.name ?? '';
+// //                               if (!id || !name) return null;
+// //                               return <Picker.Item key={String(id)} label={String(name)} value={Number(id)} />;
+// //                             })}
+// //                           </Picker>
+// //                         </View>
+
+// //                         {/* Assigned Officer */}
+// //                         <Text style={[styles.label, { color: theme.text }]}>{t('assigned_officer_label') ?? 'Assigned Officer'}</Text>
+// //                         <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
+// //                           <Picker selectedValue={editAssignedOfficerId} onValueChange={(v) => setEditAssignedOfficerId(String(v))}>
+// //                             <Picker.Item label={t('select_officer') ?? 'Select officer'} value="" />
+// //                             {officers.map((o) => {
+// //                               const oid = o.officialId ?? o.OfficialId ?? o.id;
+// //                               const oname = o.officialName ?? o.OfficialName ?? '';
+// //                               if (!oid || !oname) return null;
+// //                               return <Picker.Item key={String(oid)} label={String(oname)} value={String(oid)} />;
+// //                             })}
+// //                           </Picker>
+// //                         </View>
+
+// //                         {/* Scheduled at */}
+// //                         <Text style={[styles.label, { color: theme.text }]}>{t('scheduled_at_label') ?? 'Scheduled At'}</Text>
+// //                         <TouchableOpacity onPress={() => setShowEditDatePicker(true)} style={[styles.dateBtn, { borderColor: theme.text }]}>
+// //                           <Text style={{ color: editScheduledAt ? theme.text : '#9ca3af' }}>{formatDateTime(editScheduledAt)}</Text>
+// //                           <Text style={styles.calendarIcon}>📅</Text>
+// //                         </TouchableOpacity>
+// //                         {showEditDatePicker && (
+// //                           <DateTimePicker
+// //                             mode="datetime"
+// //                             value={editScheduledAt ?? new Date(Date.now() + 1000 * 60 * 60)}
+// //                             minimumDate={new Date()}
+// //                             onChange={onEditDateChange}
+// //                             display={Platform.OS === 'android' ? 'default' : 'spinner'}
+// //                           />
+// //                         )}
+
+// //                         <View style={{ flexDirection: 'row', marginTop: 10 }}>
+// //                           <TouchableOpacity style={[styles.submitBtn, { flex: 1, marginRight: 8 }]} onPress={handleEditSubmit} disabled={editing}>
+// //                             {editing ? <ActivityIndicator color="#fff" /> : <Text style={styles.submitBtnText}>{t('save_changes') ?? 'Save'}</Text>}
+// //                           </TouchableOpacity>
+// //                           <TouchableOpacity style={[styles.smallOutlineBtn, { flex: 0.45 }]} onPress={() => setEditAuctionId(null)}>
+// //                             <Text style={{ color: theme.text, fontWeight: '700' }}>{t('cancel') ?? 'Cancel'}</Text>
+// //                           </TouchableOpacity>
+// //                         </View>
+// //                       </View>
+// //                     )}
 // //                   </View>
 // //                 );
 // //               })
@@ -1538,7 +1299,6 @@
 // //     paddingHorizontal: 16,
 // //     borderRadius: 8,
 // //     alignItems: 'center',
-// //     marginTop: 16,
 // //   },
 // //   submitBtnText: { color: '#fff', fontWeight: '700' },
 
@@ -1553,6 +1313,19 @@
 // //     fontWeight: '700',
 // //     marginBottom: 4,
 // //   },
+// //   smallBtn: {
+// //     backgroundColor: '#2563eb',
+// //     paddingVertical: 8,
+// //     paddingHorizontal: 12,
+// //     borderRadius: 8,
+// //   },
+// //   smallOutlineBtn: {
+// //     borderWidth: 1,
+// //     borderColor: '#d1d5db',
+// //     paddingVertical: 8,
+// //     paddingHorizontal: 12,
+// //     borderRadius: 8,
+// //   },
 // // });
 
 // import React, { useEffect, useState } from 'react';
@@ -1564,6 +1337,7 @@
 //   ActivityIndicator,
 //   Alert,
 //   ScrollView,
+//   Platform,
 // } from 'react-native';
 // import { SafeAreaView } from 'react-native-safe-area-context';
 // import { useNavigation } from '@react-navigation/native';
@@ -1608,6 +1382,8 @@
 //   CropId?: number;
 //   cropName?: string;
 //   CropName?: string;
+//   assignedOfficerId?: string;
+//   AssignedOfficerId?: string;
 //   assignedOfficerName?: string;
 //   AssignedOfficerName?: string;
 //   status?: string;
@@ -1625,7 +1401,7 @@
 
 //   const goBack = () => navigation.navigate('Dashboard');
 
-//   // Profile data (manager = mandi official with MANAGER role)
+//   // Profile data
 //   const [loadingProfile, setLoadingProfile] = useState(true);
 //   const [managerName, setManagerName] = useState<string>('');
 //   const [managerOfficialId, setManagerOfficialId] = useState<string>('');
@@ -1637,14 +1413,14 @@
 //   const [officers, setOfficers] = useState<OfficerItem[]>([]);
 //   const [loadingMeta, setLoadingMeta] = useState(false);
 
-//   // Create auction form
+//   // Create / Edit auction form
 //   const [showCreateForm, setShowCreateForm] = useState(false);
 //   const [creating, setCreating] = useState(false);
 
 //   const [selectedCropId, setSelectedCropId] = useState<number | null>(null);
 //   const [selectedOfficerId, setSelectedOfficerId] = useState<string>('');
 
-//   // ⏰ Scheduled at: manager must explicitly choose a FUTURE datetime
+//   // Scheduled at (future date only, picked by manager)
 //   const [scheduledAt, setScheduledAt] = useState<Date | null>(null);
 //   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -1652,6 +1428,9 @@
 //   const [showAuctionList, setShowAuctionList] = useState(false);
 //   const [auctions, setAuctions] = useState<AuctionItem[]>([]);
 //   const [loadingAuctions, setLoadingAuctions] = useState(false);
+
+//   // EDIT MODE
+//   const [editingAuctionId, setEditingAuctionId] = useState<string | null>(null);
 
 //   // ---------------------------------------------------
 //   // 1) Load manager profile → mandiId + managerName + officialId
@@ -1661,9 +1440,7 @@
 //       try {
 //         const res = await api.get('/mandi-official/profile');
 //         const data = res?.data ?? null;
-//         if (!data) {
-//           throw new Error('Profile not found');
-//         }
+//         if (!data) throw new Error('Profile not found');
 
 //         const name = data.officialName ?? data.OfficialName ?? '';
 //         const mId = data.mandiId ?? data.MandiId ?? null;
@@ -1697,18 +1474,17 @@
 //   }, [t]);
 
 //   // ---------------------------------------------------
-//   // 2) Load crops + officers for this mandi
-//   //    officers API failure is NON-FATAL (fallback to manager)
+//   // 2) Load crops + officers for this mandi (officers are best-effort)
 //   // ---------------------------------------------------
 //   const loadMeta = async (mId: number) => {
 //     setLoadingMeta(true);
 //     try {
-//       // 2.1 CROPS (required)
+//       // CROPS
 //       const cropsRes = await api.get('/crops');
 //       const cropData = Array.isArray(cropsRes.data) ? cropsRes.data : [];
 //       setCrops(cropData);
 
-//       // 2.2 OFFICERS (best-effort)
+//       // OFFICERS – non-fatal if fails
 //       try {
 //         const officersRes = await api.get('/mandi-official/officers', {
 //           params: { mandiId: mId },
@@ -1755,23 +1531,31 @@
 //   }, [mandiId, managerOfficialId, managerName]);
 
 //   // ---------------------------------------------------
-//   // 3) Date picker handlers (future date only)
+//   // 3) Date picker handlers (future date only, prevents crash)
 //   // ---------------------------------------------------
-//   const onChangeDate = (_event: DateTimePickerEvent, selected?: Date) => {
-//     setShowDatePicker(false);
-//     if (!selected) return;
+//   const onChangeDate = (event: DateTimePickerEvent, date?: Date) => {
+//     // On Android we must hide the picker manually
+//     if (Platform.OS === 'android') {
+//       setShowDatePicker(false);
+//     }
+
+//     // If user cancelled / dismissed, do nothing
+//     if (event.type === 'dismissed') {
+//       return;
+//     }
+
+//     if (!date) return;
 
 //     const now = new Date();
-//     if (selected.getTime() <= now.getTime()) {
+//     if (date.getTime() <= now.getTime()) {
 //       Alert.alert(
 //         t('invalid_schedule_title') ?? 'Invalid date',
-//         t('schedule_future_only') ??
-//           'Please select a date & time in the future.',
+//         t('schedule_future_only') ?? 'Please select a date & time in the future.',
 //       );
 //       return;
 //     }
 
-//     setScheduledAt(selected);
+//     setScheduledAt(date);
 //   };
 
 //   const formatDateTime = (d: Date | null) => {
@@ -1779,16 +1563,21 @@
 //     const dd = String(d.getDate()).padStart(2, '0');
 //     const mm = String(d.getMonth() + 1).padStart(2, '0');
 //     const yyyy = d.getFullYear();
-
 //     const hh = String(d.getHours()).padStart(2, '0');
 //     const min = String(d.getMinutes()).padStart(2, '0');
-
 //     return `${dd}-${mm}-${yyyy} ${hh}:${min}`;
 //   };
 
 //   // ---------------------------------------------------
 //   // 4) Create auction
 //   // ---------------------------------------------------
+//   const clearForm = () => {
+//     setSelectedCropId(null);
+//     setSelectedOfficerId('');
+//     setScheduledAt(null);
+//     setEditingAuctionId(null);
+//   };
+
 //   const handleCreateAuction = async () => {
 //     if (!mandiId) {
 //       return Alert.alert(
@@ -1812,7 +1601,7 @@
 //     if (!scheduledAt) {
 //       return Alert.alert(
 //         t('error_title') ?? 'Error',
-//         t('schedule_required') ?? 'Please select schedule date & time',
+//         t('schedule_required') ?? 'Please select schedule date',
 //       );
 //     }
 
@@ -1820,8 +1609,7 @@
 //     if (scheduledAt.getTime() <= now.getTime()) {
 //       return Alert.alert(
 //         t('invalid_schedule_title') ?? 'Invalid date',
-//         t('schedule_future_only') ??
-//           'Please select a date & time in the future.',
+//         t('schedule_future_only') ?? 'Please select a date & time in the future.',
 //       );
 //     }
 
@@ -1830,7 +1618,7 @@
 //       CropId: selectedCropId,
 //       AssignedOfficerId: selectedOfficerId,
 //       ScheduledAt: scheduledAt.toISOString(),
-//       // CreatedByOfficialId is auto set on backend from JWT (User.GetOfficialId())
+//       // CreatedByOfficialId set in backend from JWT
 //     };
 
 //     setCreating(true);
@@ -1848,13 +1636,11 @@
 //         t('auction_created_success') ?? 'Auction created successfully',
 //       );
 
-//       // reset only form fields
-//       setSelectedCropId(null);
-//       setSelectedOfficerId('');
-//       setScheduledAt(null);
+//       clearForm();
 
+//       // refresh list if visible
 //       if (showAuctionList) {
-//         loadAuctions();
+//         await loadAuctions();
 //       }
 //     } catch (err: any) {
 //       console.log('Create auction error', err?.response?.data ?? err);
@@ -1907,6 +1693,75 @@
 //   };
 
 //   // ---------------------------------------------------
+//   // 6) EDIT auction flow
+//   // ---------------------------------------------------
+//   const startEditAuction = (a: AuctionItem) => {
+//     // prefill form
+//     clearForm();
+//     setEditingAuctionId(String(a.auctionId ?? a.AuctionId ?? ''));
+//     const cropId = a.cropId ?? a.CropId ?? null;
+//     const officerId = a.assignedOfficerId ?? a.AssignedOfficerId ?? '';
+//     const schedRaw = a.scheduledAt ?? a.ScheduledAt ?? null;
+//     setSelectedCropId(cropId ? Number(cropId) : null);
+//     setSelectedOfficerId(officerId ? String(officerId) : '');
+//     setScheduledAt(schedRaw ? new Date(schedRaw) : null);
+//     // show the form
+//     if (!showCreateForm) setShowCreateForm(true);
+//     // scroll to top implicitly by toggling UI; (consumer can scroll)
+//   };
+
+//   const handleSaveEdit = async () => {
+//     if (!editingAuctionId) return;
+//     if (!selectedOfficerId) {
+//       return Alert.alert(t('error_title') ?? 'Error', t('select_officer_required') ?? 'Please select an officer');
+//     }
+//     if (!scheduledAt) {
+//       return Alert.alert(t('error_title') ?? 'Error', t('schedule_required') ?? 'Please select schedule date');
+//     }
+//     const now = new Date();
+//     if (scheduledAt.getTime() <= now.getTime()) {
+//       return Alert.alert(t('invalid_schedule_title') ?? 'Invalid date', t('schedule_future_only') ?? 'Please select a date & time in the future.');
+//     }
+
+//     const dto: any = {
+//       AssignedOfficerId: selectedOfficerId,
+//       ScheduledAt: scheduledAt.toISOString(),
+//     };
+//     // optional crop update
+//     if (selectedCropId) dto.CropId = selectedCropId;
+
+//     setCreating(true);
+//     try {
+//       const res = await api.patch(
+//         `/mandiOfficialAuction/mandi/auction/${editingAuctionId}/edit`,
+//         dto,
+//       );
+//       if (!res.status.toString().startsWith('2')) {
+//         throw new Error(res.data?.message || 'Failed to edit auction');
+//       }
+
+//       Alert.alert(
+//         t('success_title') ?? 'Success',
+//         t('auction_edit_success') ?? 'Auction updated successfully',
+//       );
+
+//       clearForm();
+//       setShowCreateForm(false);
+//       // refresh list
+//       await loadAuctions();
+//     } catch (err: any) {
+//       console.log('Edit auction error', err?.response?.data ?? err);
+//       const msg =
+//         err?.response?.data?.message ??
+//         t('auction_edit_failed') ??
+//         'Failed to update auction';
+//       Alert.alert(t('error_title') ?? 'Error', msg);
+//     } finally {
+//       setCreating(false);
+//     }
+//   };
+
+//   // ---------------------------------------------------
 //   // RENDER
 //   // ---------------------------------------------------
 //   if (loadingProfile) {
@@ -1946,8 +1801,7 @@
 //           {t('mandi_manager_dashboard') ?? 'Mandi Manager Dashboard'}
 //         </Text>
 //         <Text style={[styles.text, { color: theme.text }]}>
-//           {t('mandi_manager_msg') ??
-//             'Manage auction schedules for your mandi.'}
+//           {t('mandi_manager_msg') ?? 'Manage auction schedules for your mandi.'}
 //         </Text>
 
 //         {/* Manager + Mandi info */}
@@ -1960,7 +1814,7 @@
 //           {mandiName || mandiId ? (
 //             <Text style={{ color: theme.text, marginTop: 4 }}>
 //               {t('mandi_label') ?? 'Mandi'}:{' '}
-//               {mandiName || `#${mandiId}`}
+//               {mandiName || (mandiId ? `#${mandiId}` : '')}
 //             </Text>
 //           ) : null}
 //         </View>
@@ -1972,10 +1826,18 @@
 //               styles.primaryButton,
 //               showCreateForm && { opacity: 0.8 },
 //             ]}
-//             onPress={() => setShowCreateForm(prev => !prev)}
+//             onPress={() => {
+//               // toggling create resets edit mode
+//               if (editingAuctionId) {
+//                 clearForm();
+//               }
+//               setShowCreateForm(prev => !prev);
+//             }}
 //           >
 //             <Text style={styles.primaryButtonText}>
-//               {t('schedule_auction_btn') ?? 'Schedule / Create Auction'}
+//               {editingAuctionId
+//                 ? t('editing_auction_btn') ?? 'Editing Auction'
+//                 : t('schedule_auction_btn') ?? 'Schedule / Create Auction'}
 //             </Text>
 //           </TouchableOpacity>
 
@@ -1992,7 +1854,7 @@
 //           </TouchableOpacity>
 //         </View>
 
-//         {/* CREATE AUCTION FORM */}
+//         {/* CREATE / EDIT AUCTION FORM */}
 //         {showCreateForm && (
 //           <View
 //             style={[
@@ -2001,7 +1863,9 @@
 //             ]}
 //           >
 //             <Text style={[styles.sectionTitle, { color: theme.text }]}>
-//               {t('create_auction_title') ?? 'Create Auction'}
+//               {editingAuctionId
+//                 ? t('edit_auction_title') ?? 'Edit Auction'
+//                 : t('create_auction_title') ?? 'Create Auction'}
 //             </Text>
 
 //             {loadingMeta ? (
@@ -2061,9 +1925,7 @@
 //                     }
 //                   >
 //                     <Picker.Item
-//                       label={
-//                         t('select_officer') ?? 'Select officer'
-//                       }
+//                       label={t('select_officer') ?? 'Select officer'}
 //                       value=""
 //                     />
 //                     {officers.map((o: any) => {
@@ -2087,7 +1949,7 @@
 //                   </Picker>
 //                 </View>
 
-//                 {/* Created By (readonly manager name) */}
+//                 {/* Created By */}
 //                 <Text style={[styles.label, { color: theme.text }]}>
 //                   {t('created_by_label') ?? 'Created By'}
 //                 </Text>
@@ -2097,7 +1959,7 @@
 //                   </Text>
 //                 </View>
 
-//                 {/* Mandi (readonly) */}
+//                 {/* Mandi */}
 //                 <Text style={[styles.label, { color: theme.text }]}>
 //                   {t('mandi_label') ?? 'Mandi'}
 //                 </Text>
@@ -2120,9 +1982,7 @@
 //                 >
 //                   <Text
 //                     style={{
-//                       color: scheduledAt
-//                         ? theme.text
-//                         : '#9ca3af',
+//                       color: scheduledAt ? theme.text : '#9ca3af',
 //                     }}
 //                   >
 //                     {formatDateTime(scheduledAt)}
@@ -2134,25 +1994,29 @@
 //                   <DateTimePicker
 //                     mode="datetime"
 //                     value={scheduledAt ?? new Date()}
-//                     minimumDate={new Date()} // 🚫 cannot pick past dates
+//                     minimumDate={new Date()} // cannot pick past dates
 //                     onChange={onChangeDate}
 //                   />
 //                 )}
 
-//                 {/* Create button */}
+//                 {/* Create / Save button */}
 //                 <TouchableOpacity
 //                   style={[
 //                     styles.submitBtn,
 //                     creating && { opacity: 0.7 },
 //                   ]}
-//                   onPress={handleCreateAuction}
+//                   onPress={
+//                     editingAuctionId ? handleSaveEdit : handleCreateAuction
+//                   }
 //                   disabled={creating}
 //                 >
 //                   {creating ? (
 //                     <ActivityIndicator color="#fff" />
 //                   ) : (
 //                     <Text style={styles.submitBtnText}>
-//                       {t('create_auction_btn') ?? 'Create Auction'}
+//                       {editingAuctionId
+//                         ? t('save_changes') ?? 'Save Changes'
+//                         : t('create_auction_btn') ?? 'Create Auction'}
 //                     </Text>
 //                   )}
 //                 </TouchableOpacity>
@@ -2183,9 +2047,7 @@
 //               </View>
 //             ) : (
 //               auctions.map((a: AuctionItem) => {
-//                 const id = String(
-//                   a.auctionId ?? a.AuctionId ?? '',
-//                 );
+//                 const id = String(a.auctionId ?? a.AuctionId ?? '');
 //                 const cropName =
 //                   a.cropName ?? a.CropName ?? '-';
 //                 const officerName =
@@ -2217,8 +2079,7 @@
 //                       {cropName}
 //                     </Text>
 //                     <Text style={{ color: theme.text }}>
-//                       {t('assigned_officer_label') ??
-//                         'Assigned Officer'}
+//                       {t('assigned_officer_label') ?? 'Assigned Officer'}
 //                       : {officerName}
 //                     </Text>
 //                     <Text style={{ color: theme.text }}>
@@ -2241,6 +2102,20 @@
 //                     >
 //                       {t('status') ?? 'Status'}: {status}
 //                     </Text>
+
+//                     <View style={{ flexDirection: 'row', marginTop: 8 }}>
+//                       {/* Edit button - only managers should see it, but front-end shows it; backend will authorize */}
+//                       <TouchableOpacity
+//                         style={[styles.smallEditBtn]}
+//                         onPress={() => startEditAuction(a)}
+//                       >
+//                         <Text style={styles.smallEditBtnText}>
+//                           {t('edit') ?? 'Edit'}
+//                         </Text>
+//                       </TouchableOpacity>
+
+//                       {/* Optionally you may add View Details or other actions */}
+//                     </View>
 //                   </View>
 //                 );
 //               })
@@ -2349,8 +2224,18 @@
 //     fontWeight: '700',
 //     marginBottom: 4,
 //   },
+
+//   smallEditBtn: {
+//     backgroundColor: '#4B9CFD',
+//     paddingVertical: 8,
+//     paddingHorizontal: 12,
+//     borderRadius: 8,
+//     marginRight: 8,
+//   },
+//   smallEditBtnText: { color: '#fff', fontWeight: '700' },
 // });
 
+// src/screens/MandiManagerDashboard.tsx
 import React, { useEffect, useState } from 'react';
 import {
   Text,
@@ -2377,42 +2262,13 @@ import api from '../services/api';
 
 type PropsNav = NativeStackNavigationProp<RootStackParamList>;
 
-type CropItem = {
-  cropId?: number;
-  CropId?: number;
-  id?: number;
-  cropName?: string;
-  CropName?: string;
-  name?: string;
-};
-
-type OfficerItem = {
-  officialId?: string;
-  OfficialId?: string;
-  id?: string;
-  officialName?: string;
-  OfficialName?: string;
-};
-
+type CropItem = { cropId?: number; CropId?: number; id?: number; cropName?: string; CropName?: string; name?: string; };
+type OfficerItem = { officialId?: string; OfficialId?: string; id?: string; officialName?: string; OfficialName?: string; };
 type AuctionItem = {
-  auctionId?: string;
-  AuctionId?: string;
-  mandiId?: number;
-  MandiId?: number;
-  mandiName?: string;
-  MandiName?: string;
-  cropId?: number;
-  CropId?: number;
-  cropName?: string;
-  CropName?: string;
-  assignedOfficerName?: string;
-  AssignedOfficerName?: string;
-  status?: string;
-  Status?: string;
-  scheduledAt?: string;
-  ScheduledAt?: string;
-  createdAt?: string;
-  CreatedAt?: string;
+  auctionId?: string; AuctionId?: string; mandiId?: number; MandiId?: number; mandiName?: string; MandiName?: string;
+  cropId?: number; CropId?: number; cropName?: string; CropName?: string;
+  assignedOfficerId?: string; AssignedOfficerId?: string; assignedOfficerName?: string; AssignedOfficerName?: string;
+  status?: string; Status?: string; scheduledAt?: string; ScheduledAt?: string; createdAt?: string; CreatedAt?: string;
 };
 
 export default function MandiManagerDashboard() {
@@ -2434,7 +2290,7 @@ export default function MandiManagerDashboard() {
   const [officers, setOfficers] = useState<OfficerItem[]>([]);
   const [loadingMeta, setLoadingMeta] = useState(false);
 
-  // Create auction form
+  // Create / Edit auction form
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [creating, setCreating] = useState(false);
 
@@ -2444,11 +2300,15 @@ export default function MandiManagerDashboard() {
   // Scheduled at (future date only, picked by manager)
   const [scheduledAt, setScheduledAt] = useState<Date | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false); // Android: separate time picker
 
   // Auction list
   const [showAuctionList, setShowAuctionList] = useState(false);
   const [auctions, setAuctions] = useState<AuctionItem[]>([]);
   const [loadingAuctions, setLoadingAuctions] = useState(false);
+
+  // EDIT MODE
+  const [editingAuctionId, setEditingAuctionId] = useState<string | null>(null);
 
   // ---------------------------------------------------
   // 1) Load manager profile → mandiId + managerName + officialId
@@ -2468,8 +2328,7 @@ export default function MandiManagerDashboard() {
         if (!mId) {
           Alert.alert(
             t('error_title') ?? 'Error',
-            t('mandi_not_found_profile') ??
-              'No mandi is linked to this manager profile.',
+            t('mandi_not_found_profile') ?? 'No mandi is linked to this manager profile.',
           );
         }
 
@@ -2504,38 +2363,27 @@ export default function MandiManagerDashboard() {
 
       // OFFICERS – non-fatal if fails
       try {
-        const officersRes = await api.get('/mandi-official/officers', {
-          params: { mandiId: mId },
-        });
-        const officerData = Array.isArray(officersRes.data)
-          ? officersRes.data
-          : [];
+        const officersRes = await api.get('/mandi-official/officers', { params: { mandiId: mId } });
+        const officerData = Array.isArray(officersRes.data) ? officersRes.data : [];
 
         if (officerData.length > 0) {
           setOfficers(officerData);
         } else if (managerOfficialId && managerName) {
-          setOfficers([
-            { officialId: managerOfficialId, officialName: managerName },
-          ]);
+          setOfficers([{ officialId: managerOfficialId, officialName: managerName }]);
         } else {
           setOfficers([]);
         }
       } catch (err) {
         console.log('Officer list load error (non-fatal):', err);
         if (managerOfficialId && managerName) {
-          setOfficers([
-            { officialId: managerOfficialId, officialName: managerName },
-          ]);
+          setOfficers([{ officialId: managerOfficialId, officialName: managerName }]);
         } else {
           setOfficers([]);
         }
       }
     } catch (err: any) {
       console.log('Manager meta load error', err?.response?.data ?? err);
-      Alert.alert(
-        t('error_title') ?? 'Error',
-        t('fetch_meta_failed') ?? 'Failed to load dropdown data.',
-      );
+      Alert.alert(t('error_title') ?? 'Error', t('fetch_meta_failed') ?? 'Failed to load dropdown data.');
     } finally {
       setLoadingMeta(false);
     }
@@ -2549,34 +2397,84 @@ export default function MandiManagerDashboard() {
   }, [mandiId, managerOfficialId, managerName]);
 
   // ---------------------------------------------------
-  // 3) Date picker handlers (future date only, prevents crash)
+  // Date/time picking
   // ---------------------------------------------------
-  const onChangeDate = (event: DateTimePickerEvent, date?: Date) => {
-    // On Android we must hide the picker manually
+  // iOS: single datetime picker OK
+  // Android: show date then time picker to form a datetime
+
+  const openDateTimePicker = () => {
     if (Platform.OS === 'android') {
-      setShowDatePicker(false);
+      setShowDatePicker(true);
+    } else {
+      // iOS uses unified datetime mode
+      setShowDatePicker(true);
     }
+  };
 
-    // If user cancelled / dismissed, do nothing
-    if (event.type === 'dismissed') {
-      return;
+  const onChangeDate = (event: DateTimePickerEvent, date?: Date) => {
+    try {
+      const evType = (event as any)?.type; // 'set' | 'dismissed' on Android
+      if (Platform.OS === 'android') {
+        // hide the date picker since Android shows native dialog
+        setShowDatePicker(false);
+      }
+
+      if (evType === 'dismissed') {
+        // user cancelled → do nothing
+        return;
+      }
+      if (!date) return;
+
+      if (Platform.OS === 'android') {
+        // after selecting date on Android, open time picker
+        // preserve selected date's year/month/day and keep time placeholders
+        setScheduledAt(prev => {
+          const base = prev ?? new Date();
+          const newDate = new Date(date);
+          // keep hours/minutes from previous or 00:00
+          newDate.setHours(base.getHours(), base.getMinutes(), 0, 0);
+          return newDate;
+        });
+
+        // open time picker
+        setShowTimePicker(true);
+        return;
+      }
+
+      // iOS (datetime) - full datetime provided
+      if (date.getTime() <= Date.now()) {
+        Alert.alert(t('invalid_schedule_title') ?? 'Invalid date', t('schedule_future_only') ?? 'Please select a date & time in the future.');
+        return;
+      }
+      setScheduledAt(date);
+    } catch (err) {
+      console.log('onChangeDate error', err);
     }
+  };
 
-    if (!date) return;
+  const onChangeTimeAndroid = (event: DateTimePickerEvent, time?: Date) => {
+    try {
+      const evType = (event as any)?.type;
+      setShowTimePicker(false);
 
-    // Compare only by date (not time) or use full timestamp as you like
-    const now = new Date();
-    // We want strictly future date (cannot schedule for now or past)
-    if (date.getTime() <= now.getTime()) {
-      Alert.alert(
-        t('invalid_schedule_title') ?? 'Invalid date',
-        t('schedule_future_only') ??
-          'Please select a date & time in the future.',
-      );
-      return;
+      if (evType === 'dismissed') return;
+      if (!time) return;
+
+      // merge selected time into scheduledAt date (which was set by date picker)
+      setScheduledAt(prev => {
+        const base = prev ?? new Date();
+        const merged = new Date(base);
+        merged.setHours(time.getHours(), time.getMinutes(), 0, 0);
+        // validate future
+        if (merged.getTime() <= Date.now()) {
+          Alert.alert(t('invalid_schedule_title') ?? 'Invalid date', t('schedule_future_only') ?? 'Please select a date & time in the future.');
+          return prev ?? null;
+        }
+        return merged;
+      });
+    } catch (err) {
+      console.log('onChangeTimeAndroid error', err);
     }
-
-    setScheduledAt(date);
   };
 
   const formatDateTime = (d: Date | null) => {
@@ -2584,46 +2482,31 @@ export default function MandiManagerDashboard() {
     const dd = String(d.getDate()).padStart(2, '0');
     const mm = String(d.getMonth() + 1).padStart(2, '0');
     const yyyy = d.getFullYear();
-    return `${dd}-${mm}-${yyyy}`;
+    const hh = String(d.getHours()).padStart(2, '0');
+    const min = String(d.getMinutes()).padStart(2, '0');
+    return `${dd}-${mm}-${yyyy} ${hh}:${min}`;
   };
 
   // ---------------------------------------------------
-  // 4) Create auction
+  // Create / Edit auction flows (unchanged)
   // ---------------------------------------------------
+  const clearForm = () => {
+    setSelectedCropId(null);
+    setSelectedOfficerId('');
+    setScheduledAt(null);
+    setEditingAuctionId(null);
+  };
+
   const handleCreateAuction = async () => {
     if (!mandiId) {
-      return Alert.alert(
-        t('error_title') ?? 'Error',
-        t('mandi_not_found_profile') ??
-          'No mandi is linked to this manager profile.',
-      );
+      return Alert.alert(t('error_title') ?? 'Error', t('mandi_not_found_profile') ?? 'No mandi is linked to this manager profile.');
     }
-    if (!selectedCropId) {
-      return Alert.alert(
-        t('error_title') ?? 'Error',
-        t('fill_crop') ?? 'Please select crop',
-      );
-    }
-    if (!selectedOfficerId) {
-      return Alert.alert(
-        t('error_title') ?? 'Error',
-        t('select_officer_required') ?? 'Please select an officer',
-      );
-    }
-    if (!scheduledAt) {
-      return Alert.alert(
-        t('error_title') ?? 'Error',
-        t('schedule_required') ?? 'Please select schedule date',
-      );
-    }
+    if (!selectedCropId) return Alert.alert(t('error_title') ?? 'Error', t('fill_crop') ?? 'Please select crop');
+    if (!selectedOfficerId) return Alert.alert(t('error_title') ?? 'Error', t('select_officer_required') ?? 'Please select an officer');
+    if (!scheduledAt) return Alert.alert(t('error_title') ?? 'Error', t('schedule_required') ?? 'Please select schedule date');
 
-    const now = new Date();
-    if (scheduledAt.getTime() <= now.getTime()) {
-      return Alert.alert(
-        t('invalid_schedule_title') ?? 'Invalid date',
-        t('schedule_future_only') ??
-          'Please select a date & time in the future.',
-      );
+    if (scheduledAt.getTime() <= Date.now()) {
+      return Alert.alert(t('invalid_schedule_title') ?? 'Invalid date', t('schedule_future_only') ?? 'Please select a date & time in the future.');
     }
 
     const dto = {
@@ -2631,68 +2514,40 @@ export default function MandiManagerDashboard() {
       CropId: selectedCropId,
       AssignedOfficerId: selectedOfficerId,
       ScheduledAt: scheduledAt.toISOString(),
-      // CreatedByOfficialId is set in backend from JWT
     };
 
     setCreating(true);
     try {
-      const res = await api.post(
-        '/mandiOfficialAuction/mandi/auction/create',
-        dto,
-      );
-      if (!res.status.toString().startsWith('2')) {
-        throw new Error(res.data?.message || 'Failed to create auction');
-      }
+      const res = await api.post('/mandiOfficialAuction/mandi/auction/create', dto);
+      if (!res.status.toString().startsWith('2')) throw new Error(res.data?.message || 'Failed to create auction');
 
-      Alert.alert(
-        t('success_title') ?? 'Success',
-        t('auction_created_success') ?? 'Auction created successfully',
-      );
-
-      setSelectedCropId(null);
-      setSelectedOfficerId('');
-      setScheduledAt(null);
-
-      if (showAuctionList) {
-        loadAuctions();
-      }
+      Alert.alert(t('success_title') ?? 'Success', t('auction_created_success') ?? 'Auction created successfully');
+      clearForm();
+      if (showAuctionList) await loadAuctions();
     } catch (err: any) {
       console.log('Create auction error', err?.response?.data ?? err);
-      const msg =
-        err?.response?.data?.message ??
-        t('auction_create_failed') ??
-        'Failed to create auction';
+      const msg = err?.response?.data?.message ?? t('auction_create_failed') ?? 'Failed to create auction';
       Alert.alert(t('error_title') ?? 'Error', msg);
     } finally {
       setCreating(false);
     }
   };
 
-  // ---------------------------------------------------
-  // 5) Load auctions for this mandi
-  // ---------------------------------------------------
   const loadAuctions = async () => {
     if (!mandiId) return;
     setLoadingAuctions(true);
     try {
-      const res = await api.get('/mandiOfficialAuction/mandi/auction/all', {
-        params: { mandiId },
-      });
-
+      const res = await api.get('/mandiOfficialAuction/mandi/auction/all', { params: { mandiId } });
       let payload = res?.data ?? [];
       if (!Array.isArray(payload)) {
         if (Array.isArray(payload.items)) payload = payload.items;
         else if (Array.isArray(payload.data)) payload = payload.data;
         else payload = [payload];
       }
-
       setAuctions(payload);
     } catch (err: any) {
       console.log('Load auctions error', err?.response?.data ?? err);
-      Alert.alert(
-        t('error_title') ?? 'Error',
-        t('fetch_auctions_failed') ?? 'Failed to fetch auction schedule',
-      );
+      Alert.alert(t('error_title') ?? 'Error', t('fetch_auctions_failed') ?? 'Failed to fetch auction schedule');
     } finally {
       setLoadingAuctions(false);
     }
@@ -2701,344 +2556,176 @@ export default function MandiManagerDashboard() {
   const toggleShowAuctions = () => {
     const newVal = !showAuctionList;
     setShowAuctionList(newVal);
-    if (newVal) {
-      loadAuctions();
+    if (newVal) loadAuctions();
+  };
+
+  // EDIT flows
+  const startEditAuction = (a: AuctionItem) => {
+    clearForm();
+    setEditingAuctionId(String(a.auctionId ?? a.AuctionId ?? ''));
+    const cropId = a.cropId ?? a.CropId ?? null;
+    const officerId = a.assignedOfficerId ?? a.AssignedOfficerId ?? '';
+    const schedRaw = a.scheduledAt ?? a.ScheduledAt ?? null;
+    setSelectedCropId(cropId ? Number(cropId) : null);
+    setSelectedOfficerId(officerId ? String(officerId) : '');
+    setScheduledAt(schedRaw ? new Date(schedRaw) : null);
+    if (!showCreateForm) setShowCreateForm(true);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingAuctionId) return;
+    if (!selectedOfficerId) return Alert.alert(t('error_title') ?? 'Error', t('select_officer_required') ?? 'Please select an officer');
+    if (!scheduledAt) return Alert.alert(t('error_title') ?? 'Error', t('schedule_required') ?? 'Please select schedule date');
+    if (scheduledAt.getTime() <= Date.now()) return Alert.alert(t('invalid_schedule_title') ?? 'Invalid date', t('schedule_future_only') ?? 'Please select a date & time in the future.');
+
+    const dto: any = { AssignedOfficerId: selectedOfficerId, ScheduledAt: scheduledAt.toISOString() };
+    if (selectedCropId) dto.CropId = selectedCropId;
+
+    setCreating(true);
+    try {
+      const res = await api.patch(`/mandiOfficialAuction/mandi/auction/${editingAuctionId}/edit`, dto);
+      if (!res.status.toString().startsWith('2')) throw new Error(res.data?.message || 'Failed to edit auction');
+
+      Alert.alert(t('success_title') ?? 'Success', t('auction_edit_success') ?? 'Auction updated successfully');
+      clearForm();
+      setShowCreateForm(false);
+      await loadAuctions();
+    } catch (err: any) {
+      console.log('Edit auction error', err?.response?.data ?? err);
+      const msg = err?.response?.data?.message ?? t('auction_edit_failed') ?? 'Failed to update auction';
+      Alert.alert(t('error_title') ?? 'Error', msg);
+    } finally {
+      setCreating(false);
     }
   };
 
-  // ---------------------------------------------------
   // RENDER
-  // ---------------------------------------------------
   if (loadingProfile) {
     return (
-      <SafeAreaView
-        style={[
-          styles.container,
-          {
-            backgroundColor: theme.background,
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
-        ]}
-      >
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.background, justifyContent: 'center', alignItems: 'center' }]}>
         <ActivityIndicator />
-        <Text style={{ marginTop: 8, color: theme.text }}>
-          {t('loading') ?? 'Loading...'}
-        </Text>
+        <Text style={{ marginTop: 8, color: theme.text }}>{t('loading') ?? 'Loading...'}</Text>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: theme.background }]}
-    >
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
-        {/* Back button */}
         <TouchableOpacity onPress={goBack} style={styles.backBtn}>
-          <Text style={[styles.backText, { color: '#2b6cb0' }]}>
-            {t('back')}
-          </Text>
+          <Text style={[styles.backText, { color: '#2b6cb0' }]}>{t('back')}</Text>
         </TouchableOpacity>
 
-        {/* Header */}
-        <Text style={[styles.title, { color: theme.text }]}>
-          {t('mandi_manager_dashboard') ?? 'Mandi Manager Dashboard'}
-        </Text>
-        <Text style={[styles.text, { color: theme.text }]}>
-          {t('mandi_manager_msg') ??
-            'Manage auction schedules for your mandi.'}
-        </Text>
+        <Text style={[styles.title, { color: theme.text }]}>{t('mandi_manager_dashboard') ?? 'Mandi Manager Dashboard'}</Text>
+        <Text style={[styles.text, { color: theme.text }]}>{t('mandi_manager_msg') ?? 'Manage auction schedules for your mandi.'}</Text>
 
-        {/* Manager + Mandi info */}
         <View style={{ marginTop: 8, marginBottom: 16 }}>
-          {managerName ? (
-            <Text style={{ color: theme.text, fontWeight: '700' }}>
-              {t('manager_name_label') ?? 'Manager'}: {managerName}
-            </Text>
-          ) : null}
-          {mandiName || mandiId ? (
-            <Text style={{ color: theme.text, marginTop: 4 }}>
-              {t('mandi_label') ?? 'Mandi'}:{' '}
-              {mandiName || (mandiId ? `#${mandiId}` : '')}
-            </Text>
-          ) : null}
+          {managerName ? <Text style={{ color: theme.text, fontWeight: '700' }}>{t('manager_name_label') ?? 'Manager'}: {managerName}</Text> : null}
+          {mandiName || mandiId ? <Text style={{ color: theme.text, marginTop: 4 }}>{t('mandi_label') ?? 'Mandi'}: {mandiName || (mandiId ? `#${mandiId}` : '')}</Text> : null}
         </View>
 
-        {/* Buttons row */}
         <View style={{ flexDirection: 'row', gap: 12, marginBottom: 16 }}>
-          <TouchableOpacity
-            style={[
-              styles.primaryButton,
-              showCreateForm && { opacity: 0.8 },
-            ]}
-            onPress={() => setShowCreateForm(prev => !prev)}
-          >
-            <Text style={styles.primaryButtonText}>
-              {t('schedule_auction_btn') ?? 'Schedule / Create Auction'}
-            </Text>
+          <TouchableOpacity style={[styles.primaryButton, showCreateForm && { opacity: 0.8 }]} onPress={() => { if (editingAuctionId) clearForm(); setShowCreateForm(prev => !prev); }}>
+            <Text style={styles.primaryButtonText}>{editingAuctionId ? (t('editing_auction_btn') ?? 'Editing Auction') : (t('schedule_auction_btn') ?? 'Schedule / Create Auction')}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[
-              styles.secondaryButton,
-              showAuctionList && { opacity: 0.8 },
-            ]}
-            onPress={toggleShowAuctions}
-          >
-            <Text style={styles.secondaryButtonText}>
-              {t('view_auction_schedule_btn') ?? 'View Auction Schedule'}
-            </Text>
+          <TouchableOpacity style={[styles.secondaryButton, showAuctionList && { opacity: 0.8 }]} onPress={toggleShowAuctions}>
+            <Text style={styles.secondaryButtonText}>{t('view_auction_schedule_btn') ?? 'View Auction Schedule'}</Text>
           </TouchableOpacity>
         </View>
 
-        {/* CREATE AUCTION FORM */}
         {showCreateForm && (
-          <View
-            style={[
-              styles.card,
-              { borderColor: theme.text, backgroundColor: theme.background },
-            ]}
-          >
-            <Text style={[styles.sectionTitle, { color: theme.text }]}>
-              {t('create_auction_title') ?? 'Create Auction'}
-            </Text>
+          <View style={[styles.card, { borderColor: theme.text, backgroundColor: theme.background }]}>
+            <Text style={[styles.sectionTitle, { color: theme.text }]}>{editingAuctionId ? (t('edit_auction_title') ?? 'Edit Auction') : (t('create_auction_title') ?? 'Create Auction')}</Text>
 
-            {loadingMeta ? (
-              <ActivityIndicator style={{ marginTop: 10 }} />
-            ) : (
+            {loadingMeta ? <ActivityIndicator style={{ marginTop: 10 }} /> : (
               <>
-                {/* Crop */}
-                <Text style={[styles.label, { color: theme.text }]}>
-                  {t('crop') ?? 'Crop'}
-                </Text>
-                <View
-                  style={[
-                    styles.pickerWrap,
-                    { borderColor: theme.text },
-                  ]}
-                >
-                  <Picker
-                    selectedValue={selectedCropId ?? ''}
-                    onValueChange={v =>
-                      setSelectedCropId(v ? Number(v) : null)
-                    }
-                  >
-                    <Picker.Item
-                      label={t('select_crop') ?? 'Select crop'}
-                      value=""
-                    />
+                <Text style={[styles.label, { color: theme.text }]}>{t('crop') ?? 'Crop'}</Text>
+                <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
+                  <Picker selectedValue={selectedCropId ?? ''} onValueChange={v => setSelectedCropId(v ? Number(v) : null)}>
+                    <Picker.Item label={t('select_crop') ?? 'Select crop'} value="" />
                     {crops.map((c: any) => {
                       const id = c.cropId ?? c.CropId ?? c.id;
-                      const name =
-                        c.cropName ?? c.CropName ?? c.name ?? '';
+                      const name = c.cropName ?? c.CropName ?? c.name ?? '';
                       if (!id || !name) return null;
-                      return (
-                        <Picker.Item
-                          key={String(id)}
-                          label={String(name)}
-                          value={Number(id)}
-                        />
-                      );
+                      return <Picker.Item key={String(id)} label={String(name)} value={Number(id)} />;
                     })}
                   </Picker>
                 </View>
 
-                {/* Assigned Officer */}
-                <Text style={[styles.label, { color: theme.text }]}>
-                  {t('assigned_officer_label') ?? 'Assigned Officer'}
-                </Text>
-                <View
-                  style={[
-                    styles.pickerWrap,
-                    { borderColor: theme.text },
-                  ]}
-                >
-                  <Picker
-                    selectedValue={selectedOfficerId}
-                    onValueChange={v =>
-                      setSelectedOfficerId(String(v))
-                    }
-                  >
-                    <Picker.Item
-                      label={
-                        t('select_officer') ?? 'Select officer'
-                      }
-                      value=""
-                    />
+                <Text style={[styles.label, { color: theme.text }]}>{t('assigned_officer_label') ?? 'Assigned Officer'}</Text>
+                <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
+                  <Picker selectedValue={selectedOfficerId} onValueChange={v => setSelectedOfficerId(String(v))}>
+                    <Picker.Item label={t('select_officer') ?? 'Select officer'} value="" />
                     {officers.map((o: any) => {
-                      const oid =
-                        o.officialId ??
-                        o.OfficialId ??
-                        o.id;
-                      const oname =
-                        o.officialName ??
-                        o.OfficialName ??
-                        '';
+                      const oid = o.officialId ?? o.OfficialId ?? o.id;
+                      const oname = o.officialName ?? o.OfficialName ?? '';
                       if (!oid || !oname) return null;
-                      return (
-                        <Picker.Item
-                          key={String(oid)}
-                          label={String(oname)}
-                          value={String(oid)}
-                        />
-                      );
+                      return <Picker.Item key={String(oid)} label={String(oname)} value={String(oid)} />;
                     })}
                   </Picker>
                 </View>
 
-                {/* Created By */}
-                <Text style={[styles.label, { color: theme.text }]}>
-                  {t('created_by_label') ?? 'Created By'}
-                </Text>
-                <View style={styles.readonlyBox}>
-                  <Text style={{ color: theme.text }}>
-                    {managerName || '-'}
-                  </Text>
-                </View>
+                <Text style={[styles.label, { color: theme.text }]}>{t('created_by_label') ?? 'Created By'}</Text>
+                <View style={styles.readonlyBox}><Text style={{ color: theme.text }}>{managerName || '-'}</Text></View>
 
-                {/* Mandi */}
-                <Text style={[styles.label, { color: theme.text }]}>
-                  {t('mandi_label') ?? 'Mandi'}
-                </Text>
-                <View style={styles.readonlyBox}>
-                  <Text style={{ color: theme.text }}>
-                    {mandiName || (mandiId ? `#${mandiId}` : '-')}
-                  </Text>
-                </View>
+                <Text style={[styles.label, { color: theme.text }]}>{t('mandi_label') ?? 'Mandi'}</Text>
+                <View style={styles.readonlyBox}><Text style={{ color: theme.text }}>{mandiName || (mandiId ? `#${mandiId}` : '-')}</Text></View>
 
-                {/* Scheduled At */}
-                <Text style={[styles.label, { color: theme.text }]}>
-                  {t('scheduled_at_label') ?? 'Scheduled At'}
-                </Text>
-                <TouchableOpacity
-                  onPress={() => setShowDatePicker(true)}
-                  style={[
-                    styles.dateBtn,
-                    { borderColor: theme.text },
-                  ]}
-                >
-                  <Text
-                    style={{
-                      color: scheduledAt
-                        ? theme.text
-                        : '#9ca3af',
-                    }}
-                  >
-                    {formatDateTime(scheduledAt)}
-                  </Text>
+                <Text style={[styles.label, { color: theme.text }]}>{t('scheduled_at_label') ?? 'Scheduled At'}</Text>
+                <TouchableOpacity onPress={openDateTimePicker} style={[styles.dateBtn, { borderColor: theme.text }]}>
+                  <Text style={{ color: scheduledAt ? theme.text : '#9ca3af' }}>{formatDateTime(scheduledAt)}</Text>
                   <Text style={styles.calendarIcon}>📅</Text>
                 </TouchableOpacity>
 
-                {showDatePicker && (
-                  <DateTimePicker
-                    mode="date"
-                    value={scheduledAt ?? new Date()}
-                    minimumDate={new Date()} // cannot pick past dates
-                    onChange={onChangeDate}
-                  />
+                {/* iOS unified datetime picker */}
+                {showDatePicker && Platform.OS !== 'android' && (
+                  <DateTimePicker mode="datetime" value={scheduledAt ?? new Date(Date.now() + 60000)} minimumDate={new Date()} onChange={onChangeDate} />
                 )}
 
-                {/* Create button */}
-                <TouchableOpacity
-                  style={[
-                    styles.submitBtn,
-                    creating && { opacity: 0.7 },
-                  ]}
-                  onPress={handleCreateAuction}
-                  disabled={creating}
-                >
-                  {creating ? (
-                    <ActivityIndicator color="#fff" />
-                  ) : (
-                    <Text style={styles.submitBtnText}>
-                      {t('create_auction_btn') ?? 'Create Auction'}
-                    </Text>
-                  )}
+                {/* Android: date picker */}
+                {showDatePicker && Platform.OS === 'android' && (
+                  <DateTimePicker mode="date" value={scheduledAt ?? new Date()} minimumDate={new Date()} onChange={onChangeDate} />
+                )}
+
+                {/* Android: time picker (shown after date selection) */}
+                {showTimePicker && Platform.OS === 'android' && (
+                  <DateTimePicker mode="time" value={scheduledAt ?? new Date()} onChange={onChangeTimeAndroid} />
+                )}
+
+                <TouchableOpacity style={[styles.submitBtn, creating && { opacity: 0.7 }]} onPress={editingAuctionId ? handleSaveEdit : handleCreateAuction} disabled={creating}>
+                  {creating ? <ActivityIndicator color="#fff" /> : <Text style={styles.submitBtnText}>{editingAuctionId ? (t('save_changes') ?? 'Save Changes') : (t('create_auction_btn') ?? 'Create Auction')}</Text>}
                 </TouchableOpacity>
               </>
             )}
           </View>
         )}
 
-        {/* AUCTION LIST */}
         {showAuctionList && (
-          <View
-            style={[
-              styles.card,
-              { borderColor: theme.text, backgroundColor: theme.background },
-            ]}
-          >
-            <Text style={[styles.sectionTitle, { color: theme.text }]}>
-              {t('auction_schedule_title') ?? 'Auction Schedule'}
-            </Text>
+          <View style={[styles.card, { borderColor: theme.text, backgroundColor: theme.background }]}>
+            <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('auction_schedule_title') ?? 'Auction Schedule'}</Text>
 
-            {loadingAuctions ? (
-              <ActivityIndicator style={{ marginTop: 10 }} />
-            ) : auctions.length === 0 ? (
-              <View style={{ marginTop: 10 }}>
-                <Text style={{ color: theme.text }}>
-                  {t('no_auctions') ?? 'No auctions scheduled yet'}
-                </Text>
-              </View>
+            {loadingAuctions ? <ActivityIndicator style={{ marginTop: 10 }} /> : auctions.length === 0 ? (
+              <View style={{ marginTop: 10 }}><Text style={{ color: theme.text }}>{t('no_auctions') ?? 'No auctions scheduled yet'}</Text></View>
             ) : (
               auctions.map((a: AuctionItem) => {
                 const id = String(a.auctionId ?? a.AuctionId ?? '');
-                const cropName =
-                  a.cropName ?? a.CropName ?? '-';
-                const officerName =
-                  a.assignedOfficerName ??
-                  a.AssignedOfficerName ??
-                  '-';
-                const status =
-                  a.status ?? a.Status ?? '-';
-                const schedRaw =
-                  a.scheduledAt ?? a.ScheduledAt ?? '';
-                const sched = schedRaw
-                  ? new Date(schedRaw).toLocaleDateString()
-                  : '-';
+                const cropName = a.cropName ?? a.CropName ?? '-';
+                const officerName = a.assignedOfficerName ?? a.AssignedOfficerName ?? '-';
+                const status = a.status ?? a.Status ?? '-';
+                const schedRaw = a.scheduledAt ?? a.ScheduledAt ?? '';
+                const sched = schedRaw ? new Date(schedRaw).toLocaleString() : '-';
 
                 return (
-                  <View
-                    key={id}
-                    style={[
-                      styles.auctionItem,
-                      { borderColor: theme.text },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.auctionTitle,
-                        { color: theme.text },
-                      ]}
-                    >
-                      {cropName}
-                    </Text>
-                    <Text style={{ color: theme.text }}>
-                      {t('assigned_officer_label') ??
-                        'Assigned Officer'}
-                      : {officerName}
-                    </Text>
-                    <Text style={{ color: theme.text }}>
-                      {t('scheduled_at_label') ?? 'Scheduled At'}:{' '}
-                      {sched}
-                    </Text>
-                    <Text
-                      style={{
-                        color:
-                          status === 'scheduled'
-                            ? '#2563eb'
-                            : status === 'started'
-                            ? '#16a34a'
-                            : status === 'ended'
-                            ? '#6b7280'
-                            : theme.text,
-                        marginTop: 4,
-                        fontWeight: '700',
-                      }}
-                    >
-                      {t('status') ?? 'Status'}: {status}
-                    </Text>
+                  <View key={id} style={[styles.auctionItem, { borderColor: theme.text }]}>
+                    <Text style={[styles.auctionTitle, { color: theme.text }]}>{cropName}</Text>
+                    <Text style={{ color: theme.text }}>{t('assigned_officer_label') ?? 'Assigned Officer'}: {officerName}</Text>
+                    <Text style={{ color: theme.text }}>{t('scheduled_at_label') ?? 'Scheduled At'}: {sched}</Text>
+                    <Text style={{ color: status === 'scheduled' ? '#2563eb' : status === 'started' ? '#16a34a' : status === 'ended' ? '#6b7280' : theme.text, marginTop: 4, fontWeight: '700' }}>{t('status') ?? 'Status'}: {status}</Text>
+
+                    <View style={{ flexDirection: 'row', marginTop: 8 }}>
+                      <TouchableOpacity style={[styles.smallEditBtn]} onPress={() => startEditAuction(a)}><Text style={styles.smallEditBtnText}>{t('edit') ?? 'Edit'}</Text></TouchableOpacity>
+                    </View>
                   </View>
                 );
               })
@@ -3055,96 +2742,27 @@ const styles = StyleSheet.create({
   title: { fontSize: 26, fontWeight: '700', marginBottom: 6 },
   text: { fontSize: 16 },
   backText: { fontWeight: '700', fontSize: 16 },
-  backBtn: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#edf2f7',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
-    marginBottom: 10,
-  },
+  backBtn: { alignSelf: 'flex-start', backgroundColor: '#edf2f7', paddingVertical: 6, paddingHorizontal: 12, borderRadius: 6, marginBottom: 10 },
 
-  primaryButton: {
-    flex: 1,
-    backgroundColor: '#10b981',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
+  primaryButton: { flex: 1, backgroundColor: '#10b981', paddingVertical: 12, paddingHorizontal: 16, borderRadius: 8, alignItems: 'center' },
   primaryButtonText: { color: '#fff', fontWeight: '700', fontSize: 14 },
 
-  secondaryButton: {
-    flex: 1,
-    backgroundColor: '#1d4ed8',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
+  secondaryButton: { flex: 1, backgroundColor: '#1d4ed8', paddingVertical: 12, paddingHorizontal: 16, borderRadius: 8, alignItems: 'center' },
   secondaryButtonText: { color: '#fff', fontWeight: '700', fontSize: 14 },
 
-  card: {
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: 8,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '700',
-    marginTop: 10,
-    marginBottom: 4,
-  },
-  pickerWrap: {
-    borderWidth: 1,
-    borderRadius: 8,
-    overflow: 'hidden',
-  },
-  readonlyBox: {
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 10,
-    marginTop: 4,
-    borderColor: '#d1d5db',
-  },
-  dateBtn: {
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 10,
-    marginTop: 4,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  calendarIcon: {
-    fontSize: 20,
-    marginLeft: 6,
-  },
-  submitBtn: {
-    backgroundColor: '#10b981',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 16,
-  },
+  card: { borderWidth: 1, borderRadius: 10, padding: 12, marginBottom: 16 },
+  sectionTitle: { fontSize: 18, fontWeight: '700', marginBottom: 8 },
+  label: { fontSize: 14, fontWeight: '700', marginTop: 10, marginBottom: 4 },
+  pickerWrap: { borderWidth: 1, borderRadius: 8, overflow: 'hidden' },
+  readonlyBox: { borderWidth: 1, borderRadius: 8, padding: 10, marginTop: 4, borderColor: '#d1d5db' },
+  dateBtn: { borderWidth: 1, borderRadius: 8, padding: 10, marginTop: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  calendarIcon: { fontSize: 20, marginLeft: 6 },
+  submitBtn: { backgroundColor: '#10b981', paddingVertical: 12, paddingHorizontal: 16, borderRadius: 8, alignItems: 'center', marginTop: 16 },
   submitBtnText: { color: '#fff', fontWeight: '700' },
 
-  auctionItem: {
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 10,
-    marginTop: 10,
-  },
-  auctionTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 4,
-  },
+  auctionItem: { borderWidth: 1, borderRadius: 8, padding: 10, marginTop: 10 },
+  auctionTitle: { fontSize: 16, fontWeight: '700', marginBottom: 4 },
+
+  smallEditBtn: { backgroundColor: '#4B9CFD', paddingVertical: 8, paddingHorizontal: 12, borderRadius: 8, marginRight: 8 },
+  smallEditBtnText: { color: '#fff', fontWeight: '700' },
 });

@@ -36,6 +36,11 @@ import RegisterLot from './src/screens/RegisterLot';
 
 import ArrivedLotDetails from './src/screens/ArrivedLotDetails';
 import ArrivedLotsList from './src/screens/ArrivedLotsList';
+import AuctionDetailScreen from './src/screens/AuctionDetail';
+import AuctionsList from './src/screens/AuctionsList';
+import ApproverArrivedLotList from './src/screens/ApproverArrivedLotList';
+import ArrivedLotsApprover from './src/screens/ArrivedLotsApprover';
+import EditArrivedLot from './src/screens/EditArrivedLotsScreen';
 
 export type RootStackParamList = {
   Landing: undefined;
@@ -67,6 +72,11 @@ export type RootStackParamList = {
 
   ArrivedLotsList: { mandiId: number };
   ArrivedLotDetails: { arrivedLotId: Number };
+  AuctionDetail:{auctionId:String};
+  AuctionsList:{mandiId:number};
+  ApproverArrivedLotList:{ mandiId: number };
+  EditArrivedLot:{ arrivedLotId: number } | undefined; 
+  ArrivedLotsApprover:{ mandiId?: number } | undefined;
 
 };
 
@@ -165,6 +175,11 @@ export default function App() {
 
             <Stack.Screen name="ArrivedLotDetails" component={ArrivedLotDetails} />
             <Stack.Screen name="ArrivedLotsList" component={ArrivedLotsList} />
+            <Stack.Screen name="AuctionDetail" component={AuctionDetailScreen} />
+            <Stack.Screen name="AuctionsList"component={AuctionsList} />
+            <Stack.Screen name="ApproverArrivedLotList" component={ApproverArrivedLotList} />
+            <Stack.Screen name="ArrivedLotsApprover" component={ArrivedLotsApprover} />
+            <Stack.Screen name="EditArrivedLot" component={EditArrivedLot} />
 
           </Stack.Navigator>
         </NavigationContainer>

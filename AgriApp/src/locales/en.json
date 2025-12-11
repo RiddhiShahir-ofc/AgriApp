@@ -357,10 +357,10 @@
 "select_officer_required":"Please select an officer",
 "auction_created_success":"Auction created successfully",
 "scheduled_at_label":"Scheduled For",
-"assigned_officer_label":"Assigned Officer",
+"assigned_officer_label":"Assign Officer",
 "no_auctions":"No auctions scheduled yet",
 "schedule_auction_btn":"Schedule / Create Auction",
-"view_auction_schedule_btn":"View Auction Schedule",
+"view_auction_schedule_btn":"View Scheduled Auctions",
 "profile_fetch_failed":"Failed to load manager profile.",
 "select_officer":"Select officer",
 "create_auction_title":"Create Auction",
@@ -371,9 +371,44 @@
 "manager_name_label":"Manager",
 "fetch_auctions_failed":"Failed to fetch auction schedule",
 
+
+
+
+
 "invalid_schedule_title":"Invalid date",
 "schedule_future_only":"Please select a date & time in the future.",
 "select_date_time":"Select date & time",
-"schedule_required":"Please select schedule date & time"
+"schedule_required":"Please select schedule date & time",
+"auction_edit_failed":"Failed to update auction",
+"create_form_placeholder":"Create form here...",
+"auction_edit_success":"Auction updated successfully",
+"save_changes":"Save",
+"cancel":"Cancel",
+"no_data":"No Auction found",
+"fetch_auction_failed":"Failed to fetch auction details.",
+"edit_auction_title":"Edit Auction",
+"editing_auction_btn":"Edit",
+"auction_start_failed":"Failed to start auction",
+"end_auction":"End",
+"start_auction":"Start",
+"auction_ended":"Auction Ended",
+"auction_end_failed":"Failed to end auction",
+"auction_started":"Auction Started",
+"mandi_required":"Mandi ID is required to fetch auctions",
+"auctions":"Auctions",
+"approver_name_label":"Approver",
+"not_linked":"Not Linked",
+"fetch_lots_failed":"Failed to load arrived lots",
+"approve_success":"Lot verified successfully",
+"approve_failed":"Failed to verify lot",
+"arrived_lots_title":"Arrived Lots",
+"verify":"Verify",
+"lot_details_failed":"Failed to load lot details",
+"update_success":"Updated successfully",
+"update_failed":"Failed to update",
+"edit_lot_title":"Edit Arrived Lot",
+"save_verify":"Save & Verify",
+"approver_name":"Approver Name",
+"image_url":"Image URL"
 
 }
