@@ -346,7 +346,7 @@
 "missing_id":"Missing arrived lot id",
 "no_details":"No details available",
 "arrived_lot_details":"Arrived Lot Details",
-"lot_id":"Lot ID",
+"lot_id":"Lot ID :",
 "fetch_arrived_lot_failed":"Failed to fetch arrived lot details",
 "fetch_mandis_failed":"Failed to load mandis",
 "created_by":"Created By",
@@ -423,6 +423,15 @@
 "verified'":"Verified",
 "ready_for_auction_success":"Lot moved to Ready For Auction",
 "map_to_auction":"Map Lot to Auction",
-"select_auction":"Select Auction"
+"select_auction":"Select Auction",
+"assigned":"Assigned :",
+"scheduled":"Scheduled :",
+"fetch_live_lots_failed":"Failed to fetch live auction lots",
+"live_lots":"Live Auction Lots",
+"no_live_lots":"No lots mapped to this auction yet.",
+"view_lots":"View Lots",
+"no_lots_found":"No lots mapped to this auction",
+"live_auction_lots":"Live Auction Lots",
+"no_officer_profile":"Officer profile not found"
 
 }

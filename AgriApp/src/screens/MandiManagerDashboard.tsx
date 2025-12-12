@@ -2363,7 +2363,7 @@ export default function MandiManagerDashboard() {
 
       // OFFICERS – non-fatal if fails
       try {
-        const officersRes = await api.get('/mandi-official/officers', { params: { mandiId: mId } });
+        const officersRes = await api.get('/mandiOfficialAuction/mandi/mandiOfficersList', { params: { mandiId: mId } });
         const officerData = Array.isArray(officersRes.data) ? officersRes.data : [];
 
         if (officerData.length > 0) {
