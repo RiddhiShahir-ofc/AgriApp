@@ -402,6 +402,9 @@ export default function MandiApproverDashboard() {
   const navigation = useNavigation<NavProp>();
   const { theme } = useTheme();
   const { t } = useLanguage();
+   const goBack = () => {
+    navigation.navigate('Dashboard');
+  };
 
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [mandiId, setMandiId] = useState<number | null>(null);
@@ -429,6 +432,10 @@ export default function MandiApproverDashboard() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+
+      <TouchableOpacity onPress={goBack} style={styles.backBtn}>
+              <Text style={[styles.backText, { color: '#2b6cb0' }]}>{t('back')}</Text>
+            </TouchableOpacity>
 
       <Text style={[styles.title, { color: theme.text }]}>
         {t('mandi_approver_dashboard') ?? 'Mandi Approver Dashboard'}
@@ -469,6 +476,15 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
+  },
+   backText: { fontWeight: '700', fontSize: 16 },
+   backBtn: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#edf2f7',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    marginBottom: 10,
   },
   primaryButtonText: { fontWeight: '700', fontSize: 16 },
 });
