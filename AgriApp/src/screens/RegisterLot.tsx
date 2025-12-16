@@ -1908,7 +1908,6 @@
 //   prelotBox: { marginHorizontal: 16, marginTop: 10, padding: 12, borderRadius: 8, borderWidth: 1, backgroundColor: '#f8fafc' },
 // });
 
-// src/screens/RegisterLot.tsx
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   View,
@@ -1961,7 +1960,7 @@ export default function RegisterLot() {
 
   // ---------- Endpoints (adjust if your backend differs) ----------
   // We try Farmer / Seller prelot GET endpoints (as you mentioned these exist).
-  const PRELOT_ENDPOINTS = ['/farmer/lots/{id}', '/seller/lots/{id}'];
+  const PRELOT_ENDPOINTS = ['/mandi/preRegisteredLots/{id}'];
   // ----------------------------------------------------------------
 
   // meta
@@ -2238,7 +2237,12 @@ export default function RegisterLot() {
         if (token) axiosConfig.headers = { Authorization: `Bearer ${token}` };
 
         // call your from-prelot endpoint (controller uses [FromQuery] preLotId)
-        const res = await api.post('/mandi-official/lots/arrived/from-prelot', null, axiosConfig);
+        const res = await api.post('/mandi-officialAuction/mandi/preRegisteredLots/{preLotId}');
+
+        //const res = await api.post('/mandi-official/lots/arrived/from-prelot', null,
+//    axiosConfig
+// );
+
 
         if (res && String(res.status).startsWith('2')) {
           Alert.alert(

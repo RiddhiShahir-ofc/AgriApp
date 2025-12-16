@@ -3167,7 +3167,7 @@ export default function SellerDashboard() {
                   'Enter Expected Amount'
                 }
                 placeholderTextColor={theme.text ?? '#999'}
-                value={prQuantity}
+                value={prSellingAmount}
                 onChangeText={setPrSellingAmount}
                keyboardType="numeric"
                 style={[
@@ -3584,11 +3584,12 @@ export default function SellerDashboard() {
           {item.expectedArrival}
         </Text>
       </View>
+      
       <TouchableOpacity
         style={styles.removeBtn}
         onPress={() => removeLot(item.id)}
       >
-        <Text style={styles.removeBtnText}>×</Text>
+        <Text style={styles.removeBtnText}>Delete</Text>
       </TouchableOpacity>
     </View>
   );
@@ -3780,4 +3781,11 @@ const styles = StyleSheet.create({
     fontSize: 22,
     marginLeft: 8,
   },
+   smallEditBtn: {
+    backgroundColor: '#4B9CFD',
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+  },
+  smallEditBtnText: { color: '#fff', fontWeight: '700', fontSize: 12 },
 });

@@ -16,7 +16,8 @@ type Translations = typeof en;
 
 interface LanguageContextType {
   locale: Locale;
-  t: (key: keyof Translations) => string;
+  // accept a plain string so components using generic string keys are compatible
+  t: (key: string) => string;
   setLocale: (l: Locale) => void;
 }
 
@@ -42,8 +43,8 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
     await AsyncStorage.setItem('locale', l);
   };
 
-  const t = (key: keyof Translations): string => {
-    return translations[locale][key] ?? key;
+  const t = (key: string): string => {
+    return (translations[locale] as any)[key] ?? key;
   };
 
   return (

@@ -418,7 +418,18 @@
     "verified'":"सत्यापित",
     "ready_for_auction_success":"लिलावासाठी तयार आहे असे चिन्हांकित केले आहे",
     "map_to_auction":"लिलावासाठी तयार आहे असे चिन्हांकित केले आहे",
-    "select_auction":"लिलाव निवडा"
+    "select_auction":"लिलाव निवडा",
+
+    "assigned":"नियुक्त :",
+    "scheduled":"",
+    "fetch_live_lots_failed":"",
+    "live_lots":"",
+    "no_live_lots":"",
+    "view_lots":"",
+    "no_lots_found":"",
+    "live_auction_lots":"",
+    "no_officer_profile":"",
+    "checking_status" :""
 
 }
 
