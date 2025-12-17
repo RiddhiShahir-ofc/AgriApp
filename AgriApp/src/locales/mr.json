@@ -107,7 +107,7 @@
     "name":"एंकर/संस्था/कंपनी नाव",
     "company_reg_number":"कंपनी नोंदणी क्रमांक/जीएसटी नंबर",
     "company_address":"कंपनी पत्ता",
-    "estimated_users":"अंदाजे वापरकर्त्यांची संख्या",
+    "estimated_users":"अंदाजे शेतकरी संख्या",
     "contact_number":"संपर्क व्यक्ती नंबर",
     "email":"ईमेल आयडी",
     "contact_person":"संपर्क व्यक्ती नाव",
@@ -421,15 +421,15 @@
     "select_auction":"लिलाव निवडा",
 
     "assigned":"नियुक्त :",
-    "scheduled":"",
-    "fetch_live_lots_failed":"",
-    "live_lots":"",
-    "no_live_lots":"",
-    "view_lots":"",
-    "no_lots_found":"",
-    "live_auction_lots":"",
-    "no_officer_profile":"",
-    "checking_status" :""
+    "scheduled":"अनुसूचित",
+    "fetch_live_lots_failed":"लाइव्ह लिलाव लॉट मिळवण्यात अयशस्वी",
+    "live_lots":"लाइव्ह लिलाव लॉट",
+    "no_live_lots":"या लिलावात अद्याप कोणतेही लॉट मॅप केलेले नाहीत.",
+    "view_lots":"लॉट्स पहा",
+    "no_lots_found":"या लिलावात कोणतेही लॉट मॅप केलेले नाहीत",
+    "live_auction_lots":"लाइव्ह लिलाव लॉट",
+    "no_officer_profile":"अधिकाऱ्याची प्रोफाइल सापडली नाही",
+    "checking_status" :"नोंदणी स्थिती तपासत आहे..."
 
 }
 

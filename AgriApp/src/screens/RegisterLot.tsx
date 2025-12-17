@@ -1960,7 +1960,7 @@ export default function RegisterLot() {
 
   // ---------- Endpoints (adjust if your backend differs) ----------
   // We try Farmer / Seller prelot GET endpoints (as you mentioned these exist).
-  const PRELOT_ENDPOINTS = ['/mandi/preRegisteredLots/{id}'];
+  const PRELOT_ENDPOINTS = ['mandiOfficialAuction/mandi/preRegisteredLots/{preLotId}'];
   // ----------------------------------------------------------------
 
   // meta
@@ -2140,7 +2140,7 @@ export default function RegisterLot() {
     try {
       let found = false;
       for (const epTemplate of PRELOT_ENDPOINTS) {
-        const ep = epTemplate.replace('{id}', encodeURIComponent(id));
+        const ep = epTemplate.replace('{preLotId}', encodeURIComponent(id));
         try {
           const res = await api.get(ep);
           if (res.status >= 200 && res.status < 300) {

@@ -107,7 +107,7 @@
     "name":"एंकर / संगठन / कंपनी का नाम",
     "company_reg_number":"कंपनी पंजीकरण संख्या / जीएसटी नंबर",    
     "company_address":"कंपनी का पता",
-    "estimated_users":"अनुमानित उपयोगकर्ताओं की संख्या",
+    "estimated_users":"अनुमानित किसान की संख्या",
     "contact_number":"संपर्क व्यक्ति का नंबर",
     "email":"ईमेल आईडी",
     "contact_person":"संपर्क व्यक्ति का नाम",
@@ -420,15 +420,15 @@
     "map_to_auction":"लॉट को नीलामी से जोड़ें",
     "select_auction":"नीलामी चुनें",
 
-    "assigned":"",
-    "scheduled":"",
-    "fetch_live_lots_failed":"",
-    "live_lots":"",
-    "no_live_lots":"",
-    "view_lots":"",
-    "no_lots_found":"",
-    "live_auction_lots":"",
-    "no_officer_profile":"",
-    "checking_status" :""
+    "assigned":"असाइन किया गया :",
+    "scheduled":"निर्धारित किया गया :",
+    "fetch_live_lots_failed":"लाइव नीलामी लॉट लाने में विफल",
+    "live_lots":"लाइव नीलामी लॉट",
+    "no_live_lots":"स नीलामी से अभी तक कोई लॉट मैप नहीं किया गया है।",
+    "view_lots":"लॉट देखें",
+    "no_lots_found":"स नीलामी से कोई लॉट मैप नहीं किया गया है",
+    "live_auction_lots":"लाइव नीलामी लॉट",
+    "no_officer_profile":"अधिकारी प्रोफ़ाइल नहीं मिली",
+    "checking_status" :"पंजीकरण स्थिति की जाँच की जा रही है..."
 
 }

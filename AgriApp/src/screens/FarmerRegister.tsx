@@ -1388,7 +1388,7 @@ const FarmerRegister: React.FC = () => {
     loadCrops();
   }, []);
 
-  // 🔵 NEW: use backend /farmer/status to decide where to go
+  //  use backend /farmer/status to decide where to go
   useEffect(() => {
     const checkFarmerStatus = async () => {
       try {
