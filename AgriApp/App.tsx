@@ -43,6 +43,7 @@ import ArrivedLotsApprover from './src/screens/ArrivedLotsApprover';
 import EditArrivedLot from './src/screens/EditArrivedLotsScreen';
 import ReadyForAuctionMap from './src/screens/ReadyForAuctionMap';
 import LiveAuctionLotsScreen from './src/screens/LiveAuctionLotsScreen';
+import SellLotScreen from './src/screens/SellLotScreen';
 
 export type RootStackParamList = {
   Landing: undefined;
@@ -80,7 +81,8 @@ export type RootStackParamList = {
   EditArrivedLot:{ arrivedLotId: number } | undefined; 
   ArrivedLotsApprover:{ mandiId?: number } | undefined;
   ReadyForAuctionMap:{ arrivedLotId: number; mandiId: number } |undefined;
-  LiveAuctionLots: {};
+  LiveAuctionLots: { auctionId: string};
+  SellLotScreen:undefined;
 
 };
 
@@ -186,7 +188,7 @@ export default function App() {
             <Stack.Screen name="EditArrivedLot" component={EditArrivedLot} />
             <Stack.Screen name="ReadyForAuctionMap" component={ReadyForAuctionMap} />
             <Stack.Screen name="LiveAuctionLots" component={LiveAuctionLotsScreen} />
-
+            <Stack.Screen name="SellLotScreen" component={SellLotScreen} />
 
           </Stack.Navigator>
         </NavigationContainer>
