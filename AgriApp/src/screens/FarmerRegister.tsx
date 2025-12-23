@@ -1197,6 +1197,7 @@ import {
   Platform,
   View,
   ScrollView,
+  Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -1237,6 +1238,12 @@ const FarmerRegister: React.FC = () => {
   const [farmCrop, setFarmCrop] = useState('');
   const [farmLandSize, setFarmLandSize] = useState('');
   const [farms, setFarms] = useState<FarmDetail[]>([]);
+
+  const [showConverter, setShowConverter] = useState(false);
+  const [convertValue, setConvertValue] = useState('');
+  const [convertUnit, setConvertUnit] = useState<'bigha' | 'kanal'>('bigha');
+  const [convertedAcres, setConvertedAcres] = useState<number | null>(null);
+
 
   // crop multi-select
   const [open, setOpen] = useState(false);
@@ -1417,6 +1424,7 @@ const FarmerRegister: React.FC = () => {
   }, [navigation]);
 
   // ---- Helper: upload profile image to backend ----
+  
   const uploadProfileImage = async (imageUri: string): Promise<string> => {
     const formData = new FormData();
 
@@ -1467,11 +1475,6 @@ const FarmerRegister: React.FC = () => {
       cropIds,
       farmDetails: farmDetailsPayload,
     };
-
-    const res = await api.post('/farmer/register', payload);
-    if (!res.status.toString().startsWith('2')) {
-      throw new Error(res.data?.message || 'Farmer registration failed');
-    }
   };
 
   // ---- Register button handler ----
@@ -1559,6 +1562,26 @@ const FarmerRegister: React.FC = () => {
     }
   };
 
+  const convertToAcres = () => {
+  const val = parseFloat(convertValue);
+  if (Number.isNaN(val)) {
+    Alert.alert(
+      t('error_title') ?? 'Error',
+      'Please enter a valid number'
+    );
+    return;
+  }
+
+  // Average Indian conversions
+  const acres =
+    convertUnit === 'bigha'
+      ? val * 0.25   // 1 Bigha ≈ 0.25 acres
+      : val * 0.05;  // 1 Kanal ≈ 0.05 acres
+
+  setConvertedAcres(Number(acres.toFixed(3)));
+};
+
+
   //  NEW: while we are checking /farmer/status, show a simple loading screen
   if (checkingStatus) {
     return (
@@ -1595,12 +1618,12 @@ const FarmerRegister: React.FC = () => {
 
           <View style={styles.row}>
             <TouchableOpacity style={styles.smallBtn} onPress={openCamera}>
-              <Text style={[styles.btnText, { color: '#fff' }]}>
+              <Text style={[styles.btnText, { color: theme.text }]}>
                 📸 {t('take_photo')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.smallBtn} onPress={openGallery}>
-              <Text style={[styles.btnText, { color: '#fff' }]}>
+              <Text style={[styles.btnText, { color: theme.text }]}>
                 🖼️ {t('gallery')}
               </Text>
             </TouchableOpacity>
@@ -1691,12 +1714,17 @@ const FarmerRegister: React.FC = () => {
             value={farmLandSize}
             onChangeText={setFarmLandSize}
           />
+          <TouchableOpacity onPress={() => setShowConverter(true)}>
+  <Text style={styles.convertLink}>
+    {t('convert_land_unit') ?? 'Convert Bigha / Kanal to Acres'}
+  </Text>
+</TouchableOpacity>
         </View>
 
         {/* List of farms */}
         {farms.length > 0 && (
           <View style={styles.farmList}>
-            <Text style={[styles.sectionLabel, { color: theme.text }]}>
+            <Text style={[styles.farmTitle, { color: theme.text }]}>
               {t('list_of_farms') ??
                 'List of Farm Details displayed after clicking on add'}
             </Text>
@@ -1738,7 +1766,7 @@ const FarmerRegister: React.FC = () => {
                   style={styles.removeBtn}
                   onPress={() => removeFarm(f.id)}
                 >
-                  <Text style={styles.removeBtnText}>✕</Text>
+                  <Text style={styles.removeBtnText}>{t('delete')}</Text>
                 </TouchableOpacity>
               </View>
             ))}
@@ -1750,12 +1778,85 @@ const FarmerRegister: React.FC = () => {
           onPress={onRegister}
           disabled={submitting}
         >
-          <Text style={[styles.btnText, { color: '#fff' }]}>
+          <Text style={[styles.btnText, { color: theme.text }]}>
             {submitting
               ? t('loading') ?? 'Submitting...'
               : t('register')}
           </Text>
         </TouchableOpacity>
+        
+        {/* -------- Land Unit Converter Modal -------- */}
+<Modal transparent visible={showConverter} animationType="slide">
+  <View style={styles.modalBackdrop}>
+    <View style={[styles.modalCard, { backgroundColor: theme.background }]}>
+
+      <Text style={[styles.modalTitle, { color: theme.text }]}>
+        {t('land_unit_converter') ?? 'Land Unit Converter'}
+      </Text>
+
+      <TextInput
+        placeholder="Enter value"
+        keyboardType="numeric"
+        value={convertValue}
+        onChangeText={setConvertValue}
+        style={[styles.input, { color: theme.text, borderColor: theme.text }]}
+      />
+
+      <View style={styles.unitRow}>
+        <TouchableOpacity
+          style={[
+            styles.unitBtn,
+            convertUnit === 'bigha' && styles.unitActive,
+          ]}
+          onPress={() => setConvertUnit('bigha')}
+        >
+          <Text style={[styles.unitText,{color:theme.text}]}>Bigha</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.unitBtn,
+            convertUnit === 'kanal' && styles.unitActive,
+          ]}
+          onPress={() => setConvertUnit('kanal')}
+        >
+          <Text style={[styles.unitText,{color:theme.text}]}>Kanal</Text>
+        </TouchableOpacity>
+      </View>
+
+      <TouchableOpacity style={styles.calcBtn} onPress={convertToAcres}>
+        <Text style={styles.calcText}>Convert</Text>
+      </TouchableOpacity>
+
+      {convertedAcres !== null && (
+        <>
+          <Text style={[styles.resultText, { color: theme.text }]}>
+            ≈ {convertedAcres} Acres
+          </Text>
+
+          <TouchableOpacity
+            style={styles.applyBtn}
+            onPress={() => {
+              setFarmLandSize(String(convertedAcres));
+              setShowConverter(false);
+            }}
+          >
+            <Text style={styles.applyText}>Use this value</Text>
+          </TouchableOpacity>
+        </>
+      )}
+
+      <TouchableOpacity
+        style={styles.closeBtn}
+        onPress={() => setShowConverter(false)}
+      >
+        <Text style={{ color: 'red' }}>Close</Text>
+      </TouchableOpacity>
+
+    </View>
+  </View>
+</Modal>
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -1771,7 +1872,7 @@ const styles = StyleSheet.create({
   imageLabel: { marginBottom: 10 },
   row: { flexDirection: 'row', justifyContent: 'center' },
   smallBtn: {
-    backgroundColor: '#4A90E2',
+    backgroundColor: '#15f048ff',
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 8,
@@ -1779,7 +1880,7 @@ const styles = StyleSheet.create({
   },
   input: { borderWidth: 1, borderRadius: 8, padding: 10, marginBottom: 10 },
   btn: {
-    backgroundColor: '#2b6cb0',
+    backgroundColor: '#15f048ff',
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -1821,5 +1922,93 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   removeBtnText: { color: '#fff', fontWeight: '700' },
+  convertLink: {
+  color: '#2563eb',
+  fontSize: 16,
+  marginBottom: 10,
+  marginLeft: 4,
+},
+
+modalBackdrop: {
+  flex: 1,
+  backgroundColor: 'rgba(0,0,0,0.4)',
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+
+modalCard: {
+  width: '85%',
+  padding: 20,
+  borderRadius: 12,
+},
+
+modalTitle: {
+  fontSize: 18,
+  fontWeight: '700',
+  marginBottom: 12,
+},
+
+unitRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginVertical: 10,
+},
+
+unitBtn: {
+  flex: 1,
+  padding: 10,
+  borderRadius: 8,
+  borderWidth: 1,
+  borderColor: '#ccc',
+  marginHorizontal: 5,
+  alignItems: 'center',
+},
+
+unitActive: {
+  backgroundColor: '#39bd69ff',
+},
+
+unitText: {
+  color: '#fff',
+  fontWeight: '700',
+},
+
+calcBtn: {
+  backgroundColor: '#2563eb',
+  padding: 12,
+  borderRadius: 8,
+  alignItems: 'center',
+  marginTop: 10,
+},
+
+calcText: {
+  color: '#fff',
+  fontWeight: '700',
+},
+
+resultText: {
+  textAlign: 'center',
+  fontSize: 16,
+  marginVertical: 10,
+  fontWeight: '600',
+},
+
+applyBtn: {
+  backgroundColor: '#22c55e',
+  padding: 12,
+  borderRadius: 8,
+  alignItems: 'center',
+},
+
+applyText: {
+  color: '#fff',
+  fontWeight: '700',
+},
+
+closeBtn: {
+  alignItems: 'center',
+  marginTop: 10,
+},
+
 });
 

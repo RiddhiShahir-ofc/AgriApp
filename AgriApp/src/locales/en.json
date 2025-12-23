@@ -61,7 +61,7 @@
     "gallery":"Choose from Gallery",
     "farmer_name":"Farmer Name",
     "village":"Village Location",
-    "intrested_crop":"Intrested Crop",
+    "intrested_crop":"Intrested Crops",
     "register":"Register",
 
     "missing_some_fields":"Missing Fields", 
@@ -438,7 +438,10 @@
 "no_officer_profile":"Officer profile not found",
 "aboutUs":"About Us : Here you can connect farmers, buyers, and mandis on one platform. Track real-time market prices, predict trends, and grow your agricultural business.",
 "privacy_note": "Your number is safe with us. We do not share your data with third parties.",
-"terms_note": "By clicking Send OTP, you agree to our Terms of Service and Privacy Policy."
+"terms_note": "By clicking Send OTP, you agree to our Terms of Service and Privacy Policy.",
+"enter_name":"Enter your name",
+"edit_name":"Edit Name",
+"convert_land_unit":"Convert Land Unit"
 
 
 }
