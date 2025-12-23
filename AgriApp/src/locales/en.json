@@ -1,14 +1,14 @@
 {
     "title": "Welcome to Farm Bazaar",
-    "selectLanguage": "Select preferred Language",
+    "selectLanguage": "Select Language",
     "dailyMarketWatch": "Daily Market Watch",
     "loginRegister": "Login / Register",
     "english": "English",
     "hindi": "हिंदी",
     "marathi": "मराठी",
-    "modedark": "Dark Mode",
-    "modelight": "Light Mode",
-    "selectTheme": "Select Preffered Theme",
+    "modedark": "Dark Theme",
+    "modelight": "Light Theme",
+    "selectTheme": "Select Theme",
 
     "enter_mobile_number": "Enter Mobile Number",
     "enter_valid_phone_alert": "Enter a valid 10 digit phone number",
@@ -154,7 +154,7 @@
     "select_crop": "Select Crop",
     "select_grade": "Select Grade",
   
-    "enter_quantity": "Enter Quantity (quintal)",
+    "enter_quantity": "Enter Quantity (Quintal)",
     "mandi_label": "Mandi Location",
     
     "arrival_label": "Expected Arrival Date",
@@ -164,7 +164,7 @@
     "no_lots": "No lots registered yet",
     "lot_added_success": "Lot added successfully",
     "fill_crop": "Please select crop",
-    "fill_quantity": "Please enter quantity",
+    "fill_quantity": "Please enter quantity (Quintal)",
     "fill_mandi": "Please Select Mandi",
 
   "pre_bidding_title": "Available Lots for Pre-Bidding",
@@ -174,7 +174,7 @@
   "fill_bid_value": "Please enter a bid value",
   "invalid_bid": "Please enter a valid number",
   "bid_placed": "Your bid has been placed",
-  "lot_quantity": "Quantity",
+  "lot_quantity": "Quantity (Quintal)",
   "lot_date": "Auction Date",
   "lot_owner": "Owner",
   "pre_bidding": "Pre Bidding",
@@ -187,7 +187,7 @@
   "mandiDashboard": "Mandi Dashboard",
   "delhiAzadpurMandi": "Azadpur Mandi, Delhi",
   "totalFarmers": "Total Farmers",
-  "quantity": "Quantity Of Crops",
+  "quantity": "Quantity Of Crops (Quintal)",
   "todaysPrice": "Today's Price",
   "buyers": "Buyers",
   "analytics": "Analytics of Crops",
@@ -306,8 +306,8 @@
 "owner_mobile_placeholder": "Mobile Number",
 "owner_role_label": "Owner Role",
 "grade_label": "Grade",
-"quantity_label": "Quantity",
-"quantity_placeholder": "Enter quantity (e.g. 100)",
+"quantity_label": "Quantity (Quintal)",
+"quantity_placeholder": "Enter quantity (e.g. 100 quintal)",
 
 "select_mandi": "Select mandi",
 "create_arrived_lot_btn": "Create Arrived Lot",
@@ -435,6 +435,10 @@
 "view_lots":"View Lots",
 "no_lots_found":"No lots mapped to this auction",
 "live_auction_lots":"Live Auction Lots",
-"no_officer_profile":"Officer profile not found"
+"no_officer_profile":"Officer profile not found",
+"aboutUs":"About Us : Here you can connect farmers, buyers, and mandis on one platform. Track real-time market prices, predict trends, and grow your agricultural business.",
+"privacy_note": "Your number is safe with us. We do not share your data with third parties.",
+"terms_note": "By clicking Send OTP, you agree to our Terms of Service and Privacy Policy."
+
 
 }

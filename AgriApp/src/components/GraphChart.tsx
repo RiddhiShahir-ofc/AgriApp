@@ -166,8 +166,8 @@ export default function GraphChart({ filters }: GraphChartProps) {
           backgroundGradientFrom: '#fff',
           backgroundGradientTo: '#fff',
           decimalPlaces: 0,
-          color: (opacity = 1) => `rgba(43,108,176, ${opacity})`,
-          labelColor: () => '#666',
+          color: (opacity = 1) => `rgba(21, 240, 72, 1)`,
+          labelColor: () => '#666666ff',
         }}
         bezier
         withInnerLines={false}

@@ -3894,14 +3894,24 @@ type Lot = {
   createdAt: number;
 };
 
+// type Bid = {
+//   lotId: string;
+//   lotOwner: string;
+//   bidder: string;
+//   bidValue: string;
+//   createdAt: number;
+//   status?: 'pending' | 'accepted' | 'rejected';
+// };
+
 type Bid = {
+  buyerInterestLotId: number;   // ✅ ADD THIS
   lotId: string;
-  lotOwner: string;
   bidder: string;
   bidValue: string;
   createdAt: number;
   status?: 'pending' | 'accepted' | 'rejected';
 };
+
 
 type LotWithBids = Lot & {
   bids: Bid[];
@@ -4123,11 +4133,17 @@ export default function FarmerDashboard() {
   }, []);
 
   // Load received bids when tab changes to "received"
+  // useEffect(() => {
+  //   if (selectedTab === 'received' && phone) {
+  //     loadReceivedBids(phone);
+  //   }
+  // }, [selectedTab, phone]);
   useEffect(() => {
-    if (selectedTab === 'received' && phone) {
-      loadReceivedBids(phone);
-    }
-  }, [selectedTab, phone]);
+  if (selectedTab === 'received') {
+    loadReceivedBids();
+  }
+}, [selectedTab]);
+
 
   const onSelectTab = (
     tab: 'daily' | 'short' | 'preregister' | 'received',
@@ -4518,75 +4534,150 @@ export default function FarmerDashboard() {
     }
   };
 
-  const loadReceivedBids = async (ownerPhone: string) => {
-    setLoadingBids(true);
-    try {
-      const lotJson = await AsyncStorage.getItem(
-        `${STORAGE_KEY_PREFIX}${ownerPhone}`,
-      );
-      const ownerLots: Lot[] = lotJson ? JSON.parse(lotJson) : [];
+  // const loadReceivedBids = async (ownerPhone: string) => {
+  //   setLoadingBids(true);
+  //   try {
+  //     const lotJson = await AsyncStorage.getItem(
+  //       `${STORAGE_KEY_PREFIX}${ownerPhone}`,
+  //     );
+  //     const ownerLots: Lot[] = lotJson ? JSON.parse(lotJson) : [];
 
-      const result: LotWithBids[] = [];
+  //     const result: LotWithBids[] = [];
 
-      for (const lot of ownerLots) {
-        const bidKey = `BIDS_LOT_${lot.id}`;
-        const bidJson = await AsyncStorage.getItem(bidKey);
-        if (!bidJson) continue;
+  //     for (const lot of ownerLots) {
+  //       const bidKey = `BIDS_LOT_${lot.id}`;
+  //       const bidJson = await AsyncStorage.getItem(bidKey);
+  //       if (!bidJson) continue;
 
-        let bids: Bid[] = [];
-        try {
-          bids = JSON.parse(bidJson);
-        } catch (e) {
-          console.warn('Failed parse bids for lot', lot.id, e);
-          continue;
-        }
+  //       let bids: Bid[] = [];
+  //       try {
+  //         bids = JSON.parse(bidJson);
+  //       } catch (e) {
+  //         console.warn('Failed parse bids for lot', lot.id, e);
+  //         continue;
+  //       }
 
-        const filtered = bids.filter(b => b.lotOwner === ownerPhone);
-        if (filtered.length > 0) {
-          result.push({ ...lot, bids: filtered });
-        }
-      }
+  //       const filtered = bids.filter(b => b.lotOwner === ownerPhone);
+  //       if (filtered.length > 0) {
+  //         result.push({ ...lot, bids: filtered });
+  //       }
+  //     }
 
-      setLotsWithBids(result);
-    } catch (err) {
-      console.warn(err);
-    } finally {
-      setLoadingBids(false);
-    }
-  };
+  //     setLotsWithBids(result);
+  //   } catch (err) {
+  //     console.warn(err);
+  //   } finally {
+  //     setLoadingBids(false);
+  //   }
+  // };
 
-  const updateBidStatus = async (
-    lotId: string,
-    bidCreatedAt: number,
-    status: 'accepted' | 'rejected',
-  ) => {
-    try {
-      const bidKey = `BIDS_LOT_${lotId}`;
-      const bidJson = await AsyncStorage.getItem(bidKey);
-      if (!bidJson) return;
+  const loadReceivedBids = async () => {
+  setLoadingBids(true);
+  try {
+    const res = await api.get('/farmer/lots/bids');
 
-      let bids: Bid[] = JSON.parse(bidJson);
-      bids = bids.map(b =>
-        b.createdAt === bidCreatedAt ? { ...b, status } : b,
-      );
+    const data = Array.isArray(res.data) ? res.data : [];
 
-      await AsyncStorage.setItem(bidKey, JSON.stringify(bids));
+    const mapped: LotWithBids[] = data.map((item: any) => ({
+      id: item.preLotId,
+      crop: item.cropName,
+      mandi: item.mandiName,
+      grade: '-',
+      quantity: item.quantity,
+      sellingamount: '',
+      expectedArrival: '',
+      createdAt: Date.now(),
+      bids: item.bids.map((b: any) => ({
+        lotId: item.preLotId,
+        bidder: `${b.buyerName} (${b.buyerMobile})`,
+        bidValue: String(b.bidAmount),
+        createdAt: new Date(b.createdAt).getTime(),
+        status: b.status,
+        buyerInterestLotId: b.buyerInterestLotId,
+      })),
+    }));
 
-      if (phone) {
-        await loadReceivedBids(phone);
-      }
-    } catch (e) {
-      console.warn('Failed to update bid status', e);
-    }
-  };
+    setLotsWithBids(mapped);
+  } catch (err) {
+    console.warn('Failed to load received bids', err);
+  } finally {
+    setLoadingBids(false);
+  }
+};
 
-  const handleAcceptBid = (lotId: string, createdAt: number) => {
-    updateBidStatus(lotId, createdAt, 'accepted');
-  };
 
-  const handleRejectBid = (lotId: string, createdAt: number) => {
-    updateBidStatus(lotId, createdAt, 'rejected');
-  };
+  // const updateBidStatus = async (
+  //   lotId: string,
+  //   bidCreatedAt: number,
+  //   status: 'accepted' | 'rejected',
+  // ) => {
+  //   try {
+  //     const bidKey = `BIDS_LOT_${lotId}`;
+  //     const bidJson = await AsyncStorage.getItem(bidKey);
+  //     if (!bidJson) return;
+
+  //     let bids: Bid[] = JSON.parse(bidJson);
+  //     bids = bids.map(b =>
+  //       b.createdAt === bidCreatedAt ? { ...b, status } : b,
+  //     );
+
+  //     await AsyncStorage.setItem(bidKey, JSON.stringify(bids));
+
+  //     if (phone) {
+  //       await loadReceivedBids(phone);
+  //     }
+  //   } catch (e) {
+  //     console.warn('Failed to update bid status', e);
+  //   }
+  // };
+
+  // const handleAcceptBid = (lotId: string, createdAt: number) => {
+  //   updateBidStatus(lotId, createdAt, 'accepted');
+  // };
+
+  // const handleRejectBid = (lotId: string, createdAt: number) => {
+  //   updateBidStatus(lotId, createdAt, 'rejected');
+  // };
+  const handleAcceptBid = async (lotId: string, buyerInterestLotId: number) => {
+  try {
+    await api.post(
+      `/farmer/lots/${lotId}/bids/${buyerInterestLotId}/accept`
+    );
+
+    Alert.alert(
+      t('success_title') ?? 'Success',
+      t('bid_accepted') ?? 'Bid accepted successfully'
+    );
+
+    loadReceivedBids();
+  } catch (err) {
+    Alert.alert(
+      t('error_title') ?? 'Error',
+      t('accept_failed') ?? 'Failed to accept bid'
+    );
+  }
+};
+
+const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
+  try {
+    await api.post(
+      `/farmer/lots/${lotId}/bids/${buyerInterestLotId}/reject`
+    );
+
+    Alert.alert(
+      t('success_title') ?? 'Success',
+      t('bid_rejected') ?? 'Bid rejected successfully'
+    );
+
+    loadReceivedBids();
+  } catch (err) {
+    Alert.alert(
+      t('error_title') ?? 'Error',
+      t('reject_failed') ?? 'Failed to reject bid'
+    );
+  }
+};
+
 
   // 🔹 HANDLERS FOR HAMBURGER MENU
   const handleLogout = async () => {
@@ -5540,12 +5631,19 @@ export default function FarmerDashboard() {
                                   backgroundColor: '#16a34a',
                                 },
                               ]}
+                              // onPress={() =>
+                              //   handleAcceptBid(
+                              //     lotWithBids.id,
+                              //     bid.createdAt,
+                              //   )
+                              // }
                               onPress={() =>
-                                handleAcceptBid(
-                                  lotWithBids.id,
-                                  bid.createdAt,
-                                )
-                              }
+  handleAcceptBid(
+    lotWithBids.id,
+    bid.buyerInterestLotId,
+  )
+}
+
                             >
                               <Text
                                 style={[
@@ -5565,12 +5663,19 @@ export default function FarmerDashboard() {
                                   backgroundColor: '#b91c1c',
                                 },
                               ]}
+                              // onPress={() =>
+                              //   handleRejectBid(
+                              //     lotWithBids.id,
+                              //     bid.createdAt,
+                              //   )
+                              // }
                               onPress={() =>
-                                handleRejectBid(
-                                  lotWithBids.id,
-                                  bid.createdAt,
-                                )
-                              }
+  handleAcceptBid(
+    lotWithBids.id,
+    bid.buyerInterestLotId,
+  )
+}
+
                             >
                               <Text
                                 style={[

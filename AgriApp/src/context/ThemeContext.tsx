@@ -41,23 +41,26 @@ interface Theme {
   placeholder: string;
 }
 
+
 // Define two themes: light and dark
-const lightTheme: Theme = {
+const lightPreview: Theme = {
   background: '#FFFFFF', // White background
   text: '#000000',      // Black text
-  primary: '#9365d4ff',   // Purple for buttons
+  primary: '#15f048ff',   // green for buton
   secondary: '#03DAC6', // Teal for buttons
   input: '#8e8b8b82',
   placeholder: '#0c050582',
+
 };
 
-const darkTheme: Theme = {
+const darkPreview: Theme = {
   background: '#121212', // Dark background
   text: '#FFFFFF',      // White text
-  primary: '#BB86FC',   // Light purple for buttons
+  primary: '#15f048ff',   // Light green for buttons
   secondary: '#03DAC6', // Teal for buttons
   input :'white',
   placeholder: '#efebebff',
+
 };
 
 // Define the context (like a box that holds the theme)
@@ -72,7 +75,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 // ThemeProvider wraps the app to share the theme
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isDark, setIsDark] = useState(true); // Start with dark theme
-  const [theme, setTheme] = useState(darkTheme);
+  const [theme, setTheme] = useState(darkPreview);
 
   // Load saved theme when app starts
   useEffect(() => {
@@ -82,7 +85,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (savedTheme) {
           const isDarkMode = savedTheme === 'dark';
           setIsDark(isDarkMode);
-          setTheme(isDarkMode ? darkTheme : lightTheme);
+          setTheme(isDarkMode ? darkPreview : lightPreview);
         }
       } catch (error) {
         console.log('Could not load theme:', error);
@@ -96,7 +99,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       const newIsDark = !isDark;
       setIsDark(newIsDark);
-      setTheme(newIsDark ? darkTheme : lightTheme);
+      setTheme(newIsDark ? darkPreview : lightPreview);
       await AsyncStorage.setItem('theme', newIsDark ? 'dark' : 'light');
     } catch (error) {
       console.log('Could not save theme:', error);
