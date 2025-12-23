@@ -4762,7 +4762,7 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
             style={[
               styles.tab,
               selectedTab === 'short'
-                ? { backgroundColor: theme.primary ?? '#3182ce' }
+                ? { backgroundColor: theme.primary ?? '#15f048ff' }
                 : { backgroundColor: theme.background ?? '#f0f0f0' },
             ]}
             onPress={() => onSelectTab('short')}
@@ -4782,7 +4782,7 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
             style={[
               styles.tab,
               selectedTab === 'preregister'
-                ? { backgroundColor: theme.primary ?? '#3182ce' }
+                ? { backgroundColor: theme.primary ?? '#15f048ff' }
                 : { backgroundColor: theme.background ?? '#f0f0f0' },
             ]}
             onPress={() => onSelectTab('preregister')}
@@ -5144,7 +5144,7 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
               <TouchableOpacity
                 style={[
                   styles.searchBtn,
-                  { backgroundColor: theme.primary ?? '#2b6cb0' },
+                  { backgroundColor: theme.primary ?? '#15f048ff' },
                 ]}
                 onPress={getShortTermForecastInline}
               >
@@ -5869,7 +5869,7 @@ const styles = StyleSheet.create({
   },
   searchBtn: {
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 30,
     alignItems: 'center',
     marginTop: 6,
   },
@@ -5901,7 +5901,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     minWidth: 44,
   },
-  horizonBtnActive: { backgroundColor: '#2b6cb0' },
+  horizonBtnActive: { backgroundColor: '#15f048ff' },
   horizonText: { color: '#333', fontWeight: '600' },
   horizonTextActive: { color: '#fff', fontWeight: '700' },
 

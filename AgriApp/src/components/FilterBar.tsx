@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
 
   searchBtn: {
     marginTop: 10,
-    backgroundColor: '#2b6cb0',
-    borderRadius: 8,
+    backgroundColor: '#15f048ff',
+    borderRadius: 30,
     paddingVertical: 10,
     alignItems: 'center',
   },
