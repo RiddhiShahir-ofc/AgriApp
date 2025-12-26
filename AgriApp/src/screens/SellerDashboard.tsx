@@ -2514,18 +2514,18 @@ export default function SellerDashboard() {
   const loadReceivedBids = async () => {
   setLoadingBids(true);
   try {
-    const res = await api.get('/seller/bids');
+    const res = await api.get('/seller/lots/bids');
 
     const data = Array.isArray(res.data) ? res.data : [];
 
     const mapped: LotWithBids[] = data.map((lot: any) => ({
       id: lot.preLotId,
       crop: lot.cropName,
-      grade: '-',
-      quantity: '-',
-      sellingamount: '-',
+      grade: lot.grade,
+      quantity: lot.quantity,
+      sellingamount: lot.expectedAmount,
       mandi: lot.mandiName,
-      expectedArrival: '-',
+      expectedArrival: lot.expectedArrivalDate,
       createdAt: Date.now(),
       bids: lot.bids.map((b: any) => ({
         buyerInterestLotId: b.buyerInterestLotId,
@@ -2585,7 +2585,7 @@ export default function SellerDashboard() {
 ) => {
   try {
     await api.post(
-      `/seller/${preLotId}/bids/${buyerInterestLotId}/${action}`,
+      `/seller/lots/${preLotId}/bids/${buyerInterestLotId}/${action}`,
     );
 
     await loadReceivedBids();
@@ -3873,7 +3873,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
    smallEditBtn: {
-    backgroundColor: '#4B9CFD',
+    backgroundColor: '#0daa3cff',
     paddingVertical: 6,
     paddingHorizontal: 10,
     borderRadius: 6,

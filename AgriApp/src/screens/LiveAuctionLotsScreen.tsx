@@ -170,6 +170,10 @@ export default function LiveAuctionLotsScreen() {
   const [loading, setLoading] = useState(false);
   const [lots, setLots] = useState<any[]>([]);
 
+  const [viewingLot, setViewingLot] = useState<any | null>(null);
+  const [viewLoading, setViewLoading] = useState(false);
+
+
   // ---------------- LOAD LOTS ----------------
   const loadLots = async () => {
     setLoading(true);
@@ -201,6 +205,24 @@ export default function LiveAuctionLotsScreen() {
       loadLots();
     }, [])
   );
+
+  const viewLotDetails = async (liveAuctionLotId: number) => {
+  setViewLoading(true);
+  try {
+    const res = await api.get(
+      `mandiOfficialAuction/mandi/auction/liveLot/${liveAuctionLotId}`
+    );
+    setViewingLot(res.data);
+  } catch (err) {
+    Alert.alert(
+      t("error_title") ?? "Error",
+      "Failed to load lot details"
+    );
+  } finally {
+    setViewLoading(false);
+  }
+};
+
 
   // ---------------- RENDER ITEM ----------------
   const renderItem = ({ item }: { item: any }) => {
@@ -264,7 +286,20 @@ export default function LiveAuctionLotsScreen() {
             </Text>
           </TouchableOpacity>
         )}
+        <TouchableOpacity
+  style={[
+    styles.viewBtn,
+    { borderColor: theme.primary },
+  ]}
+  onPress={() => viewLotDetails(item.liveAuctionLotId)}
+>
+  <Text style={[styles.viewText, { color: theme.primary }]}>
+    {t("view") ?? "View"}
+  </Text>
+</TouchableOpacity>
+
       </View>
+    
     );
   };
 
@@ -307,6 +342,87 @@ export default function LiveAuctionLotsScreen() {
           contentContainerStyle={{ padding: 16 }}
         />
       )}
+      {/* ================= VIEW LOT MODAL ================= */}
+{viewingLot && (
+  <View style={styles.modalOverlay}>
+    <View
+      style={[
+        styles.modalCard,
+        { backgroundColor: theme.background },
+      ]}
+    >
+      <Text style={[styles.modalTitle, { color: theme.text }]}>
+        Live Lot Details
+      </Text>
+
+      {viewLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+          <Text style={{ color: theme.text }}>
+            Lot ID: {viewingLot.liveAuctionLotId}
+          </Text>
+          <Text style={{ color: theme.text }}>
+            Auction ID: {viewingLot.auctionId}
+          </Text>
+          <Text style={{ color: theme.text }}>
+            Arrived Lot ID: {viewingLot.arrivedLotId}
+          </Text>
+
+          <Text style={{ color: theme.text, marginTop: 8 }}>
+            Owner: {viewingLot.lotOwnerName}
+          </Text>
+          <Text style={{ color: theme.text }}>
+            Mobile: {viewingLot.mobileNum}
+          </Text>
+
+          <Text style={{ color: theme.text, marginTop: 8 }}>
+            Crop: {viewingLot.cropName}
+          </Text>
+          <Text style={{ color: theme.text }}>
+            Grade: {viewingLot.grade}
+          </Text>
+          <Text style={{ color: theme.text }}>
+            Quantity: {viewingLot.quantity}
+          </Text>
+          <Text style={{ color: theme.text }}>
+            Final Price: {viewingLot.finalPrice ?? "—"}
+          </Text>
+
+          <Text style={{ color: theme.text, marginTop: 8 }}>
+            Buyer: {viewingLot.buyerName ?? "—"}
+          </Text>
+          <Text style={{ color: theme.text }}>
+            Buyer Mobile: {viewingLot.buyerMobile ?? "—"}
+          </Text>
+
+          <Text
+            style={{
+              color: theme.text,
+              fontWeight: "700",
+              marginTop: 8,
+            }}
+          >
+            Status: {viewingLot.auctionStatus}
+          </Text>
+
+          <TouchableOpacity
+            style={[
+              styles.closeBtn,
+              { backgroundColor: theme.primary },
+            ]}
+            onPress={() => setViewingLot(null)}
+          >
+            <Text style={{ color: "#fff", fontWeight: "700" }}>
+              Close
+            </Text>
+          </TouchableOpacity>
+        </>
+      )}
+    </View>
+  </View>
+)}
+
     </SafeAreaView>
   );
 }
@@ -333,11 +449,53 @@ const styles = StyleSheet.create({
   sellBtn: {
     marginTop: 10,
     paddingVertical: 10,
-    borderRadius: 8,
+    borderRadius: 30,
     alignItems: "center",
   },
   sellText: {
     color: "#fff",
     fontWeight: "700",
   },
+  viewBtn: {
+  marginTop: 8,
+  paddingVertical: 8,
+  borderRadius: 30,
+  borderWidth: 1,
+  alignItems: "center",
+},
+
+viewText: {
+  fontWeight: "700",
+},
+
+modalOverlay: {
+  position: "absolute",
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+  backgroundColor: "rgba(0,0,0,0.4)",
+  justifyContent: "center",
+  alignItems: "center",
+},
+
+modalCard: {
+  width: "90%",
+  padding: 20,
+  borderRadius: 12,
+},
+
+modalTitle: {
+  fontSize: 18,
+  fontWeight: "700",
+  marginBottom: 12,
+},
+
+closeBtn: {
+  marginTop: 16,
+  paddingVertical: 12,
+  borderRadius: 30,
+  alignItems: "center",
+},
+
 });

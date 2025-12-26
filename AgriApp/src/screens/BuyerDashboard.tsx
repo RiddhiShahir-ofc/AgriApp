@@ -1266,6 +1266,9 @@ export default function BuyerDashboard() {
   const isPredefined = (value: string, options: string[]) =>
   value === '' || options.includes(value) || value === 'Other';
 
+  const isValidPickerValue = (value: string, options: string[]) =>
+    value === '' || options.includes(value) || value === 'Other';
+
   /* ================= LOAD AVAILABLE LOTS ================= */
   const loadAvailableLots = async () => {
     setLoadingLots(true);
@@ -1487,11 +1490,11 @@ export default function BuyerDashboard() {
 
          {/* DAILY TAB */}
 
-        {selectedTab === 'daily' && (
+        {/* {selectedTab === 'daily' && (
 
           <View style={[styles.searchBox, { borderColor: theme.text }]}>
 
-            <Text style={[styles.searchTitle, { color: theme.text }]}>Mandi</Text>
+            <Text style={[styles.searchTitle, { color: theme.text }]}>{t('mandi')}</Text>
 
             <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
 
@@ -1515,7 +1518,7 @@ export default function BuyerDashboard() {
 
 
 
-            <Text style={[styles.searchTitle, { color: theme.text }]}>Crop</Text>
+            <Text style={[styles.searchTitle, { color: theme.text }]}>{t('crop')}</Text>
 
             <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
 
@@ -1541,7 +1544,7 @@ export default function BuyerDashboard() {
 
             <TouchableOpacity style={[styles.searchBtn, { backgroundColor: theme.primary }]} onPress={onSearchDaily}>
 
-              <Text style={styles.searchBtnText}>Search</Text>
+              <Text style={[styles.searchBtnText,{color: theme.text}]}>{t('search')}</Text>
 
             </TouchableOpacity>
 
@@ -1561,9 +1564,153 @@ export default function BuyerDashboard() {
 
           </View>
 
+        )} */}
+
+           {/* DAILY */}
+        {selectedTab === 'daily' && (
+          <>
+            <View
+              style={[
+                styles.searchBox,
+                {
+                  backgroundColor: theme.background,
+                  borderColor: theme.text,
+                },
+              ]}
+            >
+              <Text
+                style={[styles.searchTitle, { color: theme.text }]}
+              >
+                {t('mandi') ?? 'Mandi'}
+              </Text>
+              <View
+                style={[
+                  styles.pickerWrap,
+                  { borderColor: theme.text },
+                ]}
+              >
+                <Picker
+                  selectedValue={
+                    isValidPickerValue(mandiName, mandiOptions)
+                      ? mandiName
+                      : ''
+                  }
+                  onValueChange={v => setMandiName(v)}
+                >
+                  <Picker.Item
+                    label={t('select_mandi') ?? 'Select mandi'}
+                    value=""
+                  />
+                  {mandiOptions.map(m => (
+                    <Picker.Item key={m} label={m} value={m} />
+                  ))}
+                  <Picker.Item label="Other" value="Other" />
+                </Picker>
+              </View>
+              {mandiName &&
+                !isValidPickerValue(mandiName, mandiOptions) &&
+                mandiName !== 'Other' && (
+                  <TextInput
+                    placeholder={t('type_mandi') ?? 'Type mandi'}
+                    placeholderTextColor={theme.text ?? '#999'}
+                    value={mandiName}
+                    onChangeText={setMandiName}
+                    style={[
+                      styles.input,
+                      {
+                        color: theme.text,
+                        borderColor: theme.text,
+                      },
+                    ]}
+                  />
+                )}
+
+              <Text
+                style={[styles.searchTitle, { color: theme.text }]}
+              >
+                {t('crop') ?? 'Crop'}
+              </Text>
+              <View
+                style={[
+                  styles.pickerWrap,
+                  { borderColor: theme.text },
+                ]}
+              >
+                <Picker
+                  selectedValue={
+                    isValidPickerValue(cropName, cropOptions)
+                      ? cropName
+                      : ''
+                  }
+                  onValueChange={v => setCropName(v)}
+                >
+                  <Picker.Item
+                    label={t('select_crop') ?? 'Select crop'}
+                    value=""
+                  />
+                  {cropOptions.map(c => (
+                    <Picker.Item key={c} label={c} value={c} />
+                  ))}
+                  <Picker.Item label="Other" value="Other" />
+                </Picker>
+              </View>
+              {cropName &&
+                !isValidPickerValue(cropName, cropOptions) &&
+                cropName !== 'Other' && (
+                  <TextInput
+                    placeholder={t('type_crop') ?? 'Type crop'}
+                    placeholderTextColor={theme.text ?? '#999'}
+                    value={cropName}
+                    onChangeText={setCropName}
+                    style={[
+                      styles.input,
+                      {
+                        color: theme.text,
+                        borderColor: theme.text,
+                      },
+                    ]}
+                  />
+                )}
+
+              <TouchableOpacity
+                style={[
+                  styles.searchBtn,
+                  { backgroundColor: theme.primary ?? '#2b6cb0' },
+                ]}
+                onPress={onSearchDaily}
+              >
+                <Text
+                  style={[styles.searchBtnText, { color: '#fff' }]}
+                >
+                  {t('search')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View
+              style={[
+                styles.chartBox,
+                {
+                  borderColor: theme.text,
+                  backgroundColor: theme.background,
+                },
+              ]}
+            >
+              <Text
+                style={[styles.chartTitle, { color: theme.text }]}
+              >
+                {t('daily_market_price_chart_title')}
+              </Text>
+              <View
+                style={[
+                  styles.chartPlaceholder,
+                  { borderColor: theme.text },
+                ]}
+              >
+              </View>
+            </View>
+          </>
         )}
-
-
 
         {/* SHORT TERM TAB */}
 
@@ -1573,7 +1720,7 @@ export default function BuyerDashboard() {
 
             <View style={[styles.searchBox, { borderColor: theme.text }]}>
 
-              <Text style={[styles.searchTitle, { color: theme.text }]}>Mandi</Text>
+              <Text style={[styles.searchTitle, { color: theme.text }]}>{t('mandi')}</Text>
 
               <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
 
@@ -1597,7 +1744,7 @@ export default function BuyerDashboard() {
 
 
 
-              <Text style={[styles.searchTitle, { color: theme.text }]}>Crop</Text>
+              <Text style={[styles.searchTitle, { color: theme.text }]}>{t('crop')}</Text>
 
               <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
 
@@ -1749,14 +1896,14 @@ const styles = StyleSheet.create({
   searchTitle: { fontWeight: '700', marginTop: 12, marginBottom: 6 },
   pickerWrap: { borderWidth: 1, borderRadius: 8, marginBottom: 10, overflow: 'hidden' },
   input: { borderWidth: 1, borderRadius: 8, padding: 12, marginBottom: 12 },
-  searchBtn: { padding: 14, borderRadius: 10, alignItems: 'center', marginTop: 8 },
-  searchBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  searchBtn: { padding: 14, borderRadius: 30, alignItems: 'center', marginTop: 8 },
+  searchBtnText: { fontWeight: 'bold', fontSize: 16 },
   chartBox: { borderWidth: 1, borderRadius: 12, padding: 16 },
   chartTitle: { fontWeight: '700', marginBottom: 12 },
   chartPlaceholder: { height: 180, borderWidth: 1, borderRadius: 8, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f9f9f9' },
   horizonRow: { flexDirection: 'row', justifyContent: 'space-around', marginVertical: 16 },
   horizonBtn: { paddingVertical: 12, paddingHorizontal: 24, borderRadius: 8, backgroundColor: '#eee' },
-  horizonBtnActive: { backgroundColor: '#2b6cb0' },
+  horizonBtnActive: { backgroundColor: '#18d44eff' },
   horizonText: { fontWeight: 'bold', color: '#333' },
   horizonTextActive: { color: '#fff', fontWeight: 'bold' },
   sectionTitle: { fontSize: 18, fontWeight: '700', marginVertical: 12, color: '#333' },

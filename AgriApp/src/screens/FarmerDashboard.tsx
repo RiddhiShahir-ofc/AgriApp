@@ -3894,17 +3894,9 @@ type Lot = {
   createdAt: number;
 };
 
-// type Bid = {
-//   lotId: string;
-//   lotOwner: string;
-//   bidder: string;
-//   bidValue: string;
-//   createdAt: number;
-//   status?: 'pending' | 'accepted' | 'rejected';
-// };
-
 type Bid = {
-  buyerInterestLotId: number;   // ✅ ADD THIS
+  buyerInterestLotId: number;   
+  lotOwner: string;
   lotId: string;
   bidder: string;
   bidValue: string;
@@ -4582,10 +4574,10 @@ export default function FarmerDashboard() {
       id: item.preLotId,
       crop: item.cropName,
       mandi: item.mandiName,
-      grade: '-',
+      grade: item.grade,
       quantity: item.quantity,
-      sellingamount: '',
-      expectedArrival: '',
+      sellingamount: item.expectedAmount,
+      expectedArrival: item.expectedArrivalDate,
       createdAt: Date.now(),
       bids: item.bids.map((b: any) => ({
         lotId: item.preLotId,
@@ -4962,7 +4954,7 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
                   { borderColor: theme.text },
                 ]}
               >
-                <GraphChart filters={appliedFilters} />
+               
               </View>
             </View>
           </>
@@ -5638,12 +5630,11 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
                               //   )
                               // }
                               onPress={() =>
-  handleAcceptBid(
-    lotWithBids.id,
-    bid.buyerInterestLotId,
-  )
-}
-
+                             handleAcceptBid(
+                              lotWithBids.id,
+                                 bid.buyerInterestLotId,
+                                )
+                              }    
                             >
                               <Text
                                 style={[
@@ -5670,11 +5661,11 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
                               //   )
                               // }
                               onPress={() =>
-  handleAcceptBid(
-    lotWithBids.id,
-    bid.buyerInterestLotId,
-  )
-}
+                             handleAcceptBid(
+                              lotWithBids.id,
+                             bid.buyerInterestLotId,
+                                )
+                              }
 
                             >
                               <Text
@@ -5878,7 +5869,7 @@ const styles = StyleSheet.create({
   chartBox: {
     borderWidth: 1,
     borderRadius: 8,
-    padding: 12,
+    padding: 15,
     marginTop: 8,
   },
   chartTitle: { fontWeight: '700', marginBottom: 10 },

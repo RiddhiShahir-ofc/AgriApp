@@ -1026,10 +1026,10 @@ const styles = StyleSheet.create({
   },
   itemTitle: { fontWeight: '700', marginBottom: 6 },
   viewBtn: {
-    backgroundColor: '#3b82f6',
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 6,
+    backgroundColor: '#1ad057ff',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 20,
   },
   viewBtnText: { color: '#fff', fontWeight: '700' },
 });
