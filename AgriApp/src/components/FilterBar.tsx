@@ -46,6 +46,8 @@ const { theme } = useTheme();
           selectedValue={filters.mandi}
           onValueChange={(t) => setFilters({ ...filters, mandi: t })}
           mode="dropdown"
+          style={[styles.picker, { color: theme.text }]}
+          dropdownIconColor={theme.text}
         >
           {defaultMandiOptions.map((opt) => (
             <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
@@ -66,6 +68,8 @@ const { theme } = useTheme();
           selectedValue={filters.crop}
           onValueChange={(value) => setFilters({ ...filters, crop: value })}
           mode="dropdown"
+          style={[styles.picker, { color: theme.text }]}
+          dropdownIconColor={theme.text}
         >
           {defaultCropOptions.map((opt) => (
             <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
@@ -74,7 +78,7 @@ const { theme } = useTheme();
       </View>
 
       <TouchableOpacity style={styles.searchBtn} onPress={onSearch}>
-        <Text style={styles.searchText}>{t('search')}</Text>
+        <Text style={[styles.searchText,{color:theme.text}]}>{t('search')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -119,6 +123,7 @@ const styles = StyleSheet.create({
     color: 'theme.text',
     fontWeight: '700',
   },
+  picker:{},
 });
 
 // import React, { useEffect, useState } from 'react';

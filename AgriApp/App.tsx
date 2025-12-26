@@ -45,6 +45,9 @@ import ReadyForAuctionMap from './src/screens/ReadyForAuctionMap';
 import LiveAuctionLotsScreen from './src/screens/LiveAuctionLotsScreen';
 import SellLotScreen from './src/screens/SellLotScreen';
 
+import FarmerProfile from './src/screens/FarmerProfile';
+import SettingsScreen from './src/screens/SettingsScreen';
+
 export type RootStackParamList = {
   Landing: undefined;
   Register: { fromGraph?: boolean } | undefined;
@@ -83,6 +86,9 @@ export type RootStackParamList = {
   ReadyForAuctionMap:{ arrivedLotId: number; mandiId: number } |undefined;
   LiveAuctionLots: { auctionId: string};
   SellLotScreen:undefined;
+
+  FarmerProfile: undefined;
+  Settings: undefined;
 
 };
 
@@ -189,6 +195,9 @@ export default function App() {
             <Stack.Screen name="ReadyForAuctionMap" component={ReadyForAuctionMap} />
             <Stack.Screen name="LiveAuctionLots" component={LiveAuctionLotsScreen} />
             <Stack.Screen name="SellLotScreen" component={SellLotScreen} />
+
+            <Stack.Screen name="FarmerProfile" component={FarmerProfile} />
+            <Stack.Screen name="Settings" component={SettingsScreen} />
 
           </Stack.Navigator>
         </NavigationContainer>

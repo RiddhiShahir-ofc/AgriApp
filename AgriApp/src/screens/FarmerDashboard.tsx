@@ -1870,7 +1870,7 @@
 // //   smallEditBtnText: { color: '#fff', fontWeight: '700', fontSize: 12 },
 // // });
 
-// import DashboardMenu from '../components/DashboardMenu'
+
 // import React, { useEffect, useState, useMemo } from 'react';
 // import {
 //   Text,
@@ -3878,7 +3878,7 @@ import DateTimePicker, { DateTimePickerEvent,
 import { Picker } from '@react-native-picker/picker';
 
 import GraphChart from '../components/GraphChart';
-import DashboardMenu from '../components/DashboardMenu';
+import AppHamburgerMenu from '../components/AppHamburgerMenu';
 import api from '../services/api';
 
 type PropsNav = NativeStackNavigationProp<RootStackParamList>;
@@ -4670,26 +4670,6 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
   }
 };
 
-
-  // 🔹 HANDLERS FOR HAMBURGER MENU
-  const handleLogout = async () => {
-    try {
-      await AsyncStorage.multiRemove([
-        'ACCESS_TOKEN',
-        'LOGGED_IN_USER',
-        'LOGGED_IN_ROLE',
-      ]);
-    } catch (e) {
-      console.warn('Failed to clear auth data on logout', e);
-    }
-    navigation.navigate('Dashboard');
-  };
-
-  const handleOpenProfile = () => {
-    // Change 'Dashboard' to your actual profile route when ready
-    navigation.navigate('Dashboard');
-  };
-
   // Actual Display Screen
   const ListHeaderElement = useMemo(() => {
     return (
@@ -4722,10 +4702,8 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
             </Text>
           </View>
 
-          <DashboardMenu
-            onOpenProfile={handleOpenProfile}
-            onLogout={handleLogout}
-          />
+          <AppHamburgerMenu role="farmer" />
+
         </View>
 
         {/* Tabs row */}
@@ -4843,6 +4821,8 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
                       : ''
                   }
                   onValueChange={v => setMandiName(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_mandi') ?? 'Select mandi'}
@@ -4890,6 +4870,8 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
                       : ''
                   }
                   onValueChange={v => setCropName(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_crop') ?? 'Select crop'}
@@ -4990,6 +4972,8 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
                       : ''
                   }
                   onValueChange={v => setStfMandi(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_mandi') ?? 'Select mandi'}
@@ -5038,6 +5022,8 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
                       : ''
                   }
                   onValueChange={v => setStfCrop(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_crop') ?? 'Select crop'}
@@ -5222,10 +5208,13 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
                       : ''
                   }
                   onValueChange={v => setPrCrop(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_crop') ?? 'Select crop'}
                     value=""
+                  
                   />
                   {cropOptions.map(c => (
                     <Picker.Item key={c} label={c} value={c} />
@@ -5265,6 +5254,8 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
                 <Picker
                   selectedValue={prGrade}
                   onValueChange={v => setPrGrade(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_grade') ?? 'Select grade'}
@@ -5358,6 +5349,8 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
                       : ''
                   }
                   onValueChange={v => setPrMandi(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_mandi') ?? 'Select mandi'}
@@ -5802,7 +5795,7 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
         data={listData}
         keyExtractor={item => item.id}
         renderItem={renderLotItem}
-        ListHeaderComponent={ListHeaderElement}
+        ListHeaderComponent={ListHeaderElement} 
         ListEmptyComponent={renderEmpty}
         contentContainerStyle={{ paddingBottom: 30 }}
         keyboardShouldPersistTaps="always"
@@ -5911,7 +5904,7 @@ const styles = StyleSheet.create({
   formTitle: { fontSize: 16, fontWeight: '700', marginTop: 12 },
   addBtn: {
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 30,
     alignItems: 'center',
     marginTop: 12,
   },
@@ -5977,4 +5970,15 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   smallEditBtnText: { color: '#fff', fontWeight: '700', fontSize: 12 },
+
+    pickerWrapper: {
+   // backgroundColor: '#fff',   // ✅ white background
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 12,
+  },
+  picker: {
+          
+  },
 });

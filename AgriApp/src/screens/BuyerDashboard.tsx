@@ -1194,6 +1194,7 @@ import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/dat
 import { Picker } from '@react-native-picker/picker';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../services/api';
+import AppHamburgerMenu from '../components/AppHamburgerMenu';
 
 type Lot = {
   id: string;              // PreLotId
@@ -1455,12 +1456,21 @@ export default function BuyerDashboard() {
   return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
+        <View style={styles.topBarRow}>
         <TouchableOpacity onPress={goBack} style={[styles.backBtn, { backgroundColor: theme.background ?? '#edf2f7' }]}>
           <Text style={[styles.backText, { color: theme.primary ?? '#2b6cb0' }]}>{t('back') || 'Back'}</Text>
         </TouchableOpacity>
+        <View style={styles.titleWrap}>
         <Text style={[styles.title, { color: theme.text }]}>{t('buyer_dashboard') || 'Buyer Dashboard'}</Text>
         <Text style={[styles.text, { color: theme.text }]}>{t('buyer_msg') || 'Find and bid on crop lots'}</Text>
-      
+        </View>
+
+          {/* ☰ Hamburger on extreme right */}
+  <View style={styles.menuWrap}>
+    <AppHamburgerMenu role="buyer" />
+  </View>
+</View>
+
         <View style={styles.tabsRow}>
           {(['daily', 'short', 'pre', 'placed'] as const).map(tab => (
             <TouchableOpacity
@@ -1596,6 +1606,8 @@ export default function BuyerDashboard() {
                       : ''
                   }
                   onValueChange={v => setMandiName(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_mandi') ?? 'Select mandi'}
@@ -1643,6 +1655,8 @@ export default function BuyerDashboard() {
                       : ''
                   }
                   onValueChange={v => setCropName(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_crop') ?? 'Select crop'}
@@ -1724,7 +1738,9 @@ export default function BuyerDashboard() {
 
               <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
 
-                <Picker selectedValue={isPredefined(stfMandi, mandiOptions) ? stfMandi : 'Other'} onValueChange={v => v !== 'Other' && setStfMandi(v)}>
+                <Picker selectedValue={isPredefined(stfMandi, mandiOptions) ? stfMandi : 'Other'} onValueChange={v => v !== 'Other' && setStfMandi(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}>
 
                   <Picker.Item label="Select mandi" value="" />
 
@@ -1748,7 +1764,9 @@ export default function BuyerDashboard() {
 
               <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
 
-                <Picker selectedValue={isPredefined(stfCrop, cropOptions) ? stfCrop : 'Other'} onValueChange={v => v !== 'Other' && setStfCrop(v)}>
+                <Picker selectedValue={isPredefined(stfCrop, cropOptions) ? stfCrop : 'Other'} onValueChange={v => v !== 'Other' && setStfCrop(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}>
 
                   <Picker.Item label="Select crop" value="" />
 
@@ -1804,7 +1822,6 @@ export default function BuyerDashboard() {
           </View>
 
         )}
-
 
 
         {/* PRE BIDDING TAB */}
@@ -1911,5 +1928,21 @@ const styles = StyleSheet.create({
   emptyBox: { padding: 30, alignItems: 'center', borderWidth: 1, borderRadius: 12, borderColor: '#ddd' },
   
   lotDetail: { fontSize: 14, marginBottom: 4 },
+  picker: { },
+  topBarRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between', // 🔑 pushes left & right
+  marginBottom: 12,
+},
+
+titleWrap: {
+  flex: 1,
+  marginLeft: 12,
+},
+
+menuWrap: {
+  marginLeft: 12,
+},
   
 });

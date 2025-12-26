@@ -296,7 +296,7 @@
 
 "register_lot_btn": "Register Lot",
 "search_owner_label": "Search Owner (existing farmer/seller)",
-"search_owner_placeholder": "Enter owner name or mobile and press search",
+"search_owner_placeholder": "Enter owner name or mobile number",
 "search_btn": "Search",
 "search_results": "Search Results",
 "selected_owner": "Selected Owner",

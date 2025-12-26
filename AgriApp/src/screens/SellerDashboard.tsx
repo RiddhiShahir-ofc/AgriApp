@@ -1958,6 +1958,7 @@ import { Picker } from '@react-native-picker/picker';
 
 import GraphChart from '../components/GraphChart';
 import api from '../services/api';
+import AppHamburgerMenu from '../components/AppHamburgerMenu';
 
 type PropsNav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -2622,7 +2623,7 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
   const ListHeaderElement = useMemo(() => {
     return (
       <View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={goBack}
           style={[
             styles.backBtn,
@@ -2644,7 +2645,33 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
         </Text>
         <Text style={[styles.text, { color: theme.text }]}>
           {t('seller_msg') || 'Welcome Seller!'}
-        </Text>
+        </Text> */}
+
+            <View style={styles.headerContainer}>
+
+        {/* Row 1: Back + Hamburger */}
+        <View style={styles.headerTopRow}>
+          <TouchableOpacity onPress={goBack} style={styles.backBtn}>
+            <Text style={[styles.backText, { color: theme.primary }]}>
+              {t('back') || 'Back'}
+            </Text>
+          </TouchableOpacity>
+
+          <AppHamburgerMenu role="seller" />
+        </View>
+
+        {/* Row 2: Title + subtitle */}
+        <View style={styles.headerTextBlock}>
+          <Text style={[styles.title, { color: theme.text }]}>
+            {t('seller_dashboard') || 'Seller Dashboard'}
+          </Text>
+          <Text style={[styles.text, { color: theme.text }]}>
+            {t('seller_msg') ||
+              'Manage your listed items, bids, and completed sales'}
+          </Text>
+        </View>
+
+      </View>
 
         <View style={styles.tabsRow}>
           <TouchableOpacity
@@ -2775,6 +2802,8 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                       : ''
                   }
                   onValueChange={v => setMandiName(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_mandi') ?? 'Select mandi'}
@@ -2822,6 +2851,8 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                       : ''
                   }
                   onValueChange={v => setCropName(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_crop') ?? 'Select crop'}
@@ -2922,6 +2953,8 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                       : ''
                   }
                   onValueChange={v => setStfMandi(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_mandi') ?? 'Select mandi'}
@@ -2970,6 +3003,8 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                       : ''
                   }
                   onValueChange={v => setStfCrop(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_crop') ?? 'Select crop'}
@@ -3154,6 +3189,8 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                       : ''
                   }
                   onValueChange={v => setPrCrop(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_crop') ?? 'Select crop'}
@@ -3196,6 +3233,8 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                 <Picker
                   selectedValue={prGrade}
                   onValueChange={v => setPrGrade(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_grade') ?? 'Select grade'}
@@ -3286,6 +3325,8 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                       : ''
                   }
                   onValueChange={v => setPrMandi(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_mandi') ?? 'Select mandi'}
@@ -3879,4 +3920,20 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   smallEditBtnText: { color: '#fff', fontWeight: '700', fontSize: 12 },
+  picker:{},
+
+  headerContainer: {
+  marginBottom: 12,
+},
+
+headerTopRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+},
+
+headerTextBlock: {
+  marginTop: 8,
+},
+
 });

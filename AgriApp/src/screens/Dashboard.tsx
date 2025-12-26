@@ -648,7 +648,7 @@ const goBack = () => navigation.navigate('Dashboard');
           </TouchableOpacity>
         </View>
 
-        {/* ---------------- SELECT ROLE (RESTORED) ---------------- */}
+        {/* ---------------- SELECT ROLE ---------------- */}
         <Text style={[styles.sectionTitle, { color: theme.text }]}>
           {t('select_role')}
         </Text>
@@ -673,7 +673,7 @@ const goBack = () => navigation.navigate('Dashboard');
                     <Icon size={26} color="#fff" />
                   </View>
 
-                  <Text style={[styles.roleText, { color: theme.text }]}>
+                  <Text style={[styles.roleText]}>
                     {r.name}
                   </Text>
                 </TouchableOpacity>
@@ -766,12 +766,12 @@ const goBack = () => navigation.navigate('Dashboard');
           <View style={[styles.profileMenu, { backgroundColor: theme.background }]}>
             <TouchableOpacity style={styles.menuItem}>
               <Settings size={18} />
-              <Text style={styles.menuText}>Settings</Text>
+              <Text style={[styles.menuText,{color:theme.text}]}>Settings</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.menuItem} onPress={logout}>
               <LogOut size={18} color="red" />
-              <Text style={[styles.menuText, { color: 'red' }]}>Logout</Text>
+              <Text style={[styles.menuText, { color: 'red' }]}>{t('logout') ?? 'Logout'}</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -833,6 +833,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     textAlign: 'center',
+    color: '#000',
   },
 
   modalBackdrop: {
