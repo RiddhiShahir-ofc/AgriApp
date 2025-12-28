@@ -138,7 +138,7 @@
     "short_term_forecast":"लघु अवधि पूर्वानुमान ",
     "chart_placeholder_text":"बाजार मूल्य चार्ट यहां प्रदर्शित किया जाएगा।",
     "pre_register_lot":"लॉट पूर्व-पंजीकरण",
-    "fill_mandi_search":"कृपया मंडी और फसल भरें ताकि खोजा जा सके।",
+    "fill_mandi_search":"कृपया मंडी और फसल चुनिये ताकि खोजा जा सके।",
     "daily_market_price":"दैनिक बाजार मूल्य",
 
     "forecast_results":"पूर्वानुमान परिणाम",
@@ -239,8 +239,8 @@
     "anchor_stats_active_transactions_value": "48",
     "anchor_stats_total_land_value": "1,458",
 
-    "anchor_action_register_single_farmer": "+ एक किसान पंजीकृत करें",
-    "anchor_action_bulk_import_farmers": "⬆ किसान बल्क इम्पोर्ट",
+    "anchor_action_register_single_farmer": " एक किसान पंजीकृत करें",
+    "anchor_action_bulk_register_farmers": " किसान बल्क पंजीकृत करें",
 
     "anchor_section_registered_farmers": "पंजीकृत किसान",
     "anchor_search_placeholder": "किसान को नाम या स्थान से खोजें...",

@@ -1984,7 +1984,7 @@ type Lot = {
 //   status?: 'pending' | 'accepted' | 'rejected';
 // };
 type Bid = {
-  buyerInterestLotId: number;   // 🔴 REQUIRED FOR API
+  buyerInterestLotId: number;   //  REQUIRED FOR API
   bidder: string;
   bidValue: string;
   createdAt: number;

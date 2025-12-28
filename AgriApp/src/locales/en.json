@@ -137,7 +137,7 @@
     "chart_placeholder_text":"Market price chart will be displayed here.",
     "pre_register_lot":"Pre-Register Lot",
     "short_term_forecast":"Short Term Forecast",
-    "fill_mandi_search":"Please fill in mandi and crop to search.",
+    "fill_mandi_search":"Please select mandi and crop to search.",
     "daily_market_price":"Daily Market Price",
 
     "info":"Info",
@@ -234,13 +234,11 @@
   "anchor_stats_total_land": "Total Land (Acres)",
   "anchor_stats_total_crop_volume_value": "1,980 Q",
   "anchor_stats_registered_farmers_value": "274",
-  "anchor_stats_active_transactions_value": "48",
-  "anchor_stats_total_land_value": "1,458",
 
-  "anchor_action_register_single_farmer": " + Register Single Farmer",
-  "anchor_action_bulk_import_farmers": "⬆ Bulk Import Farmers",
+  "anchor_action_register_single_farmer": " Register Single Farmer",
+  "anchor_action_bulk_register_farmers": " Bulk Register Farmers",
 
-  "anchor_section_registered_farmers": "Registered Farmers",
+  "anchor_section_registered_farmers": "Anchor Registered Farmers",
   "anchor_search_placeholder": "Search farmers by name or location...",
   "anchor_btn_view_farmer": "View Details",
 
@@ -254,7 +252,7 @@
   "anchor_label_location": "Location *",
   "anchor_label_primary_crop": "Primary Crop *",
   "anchor_label_land_size": "Land Size (acres) *",
-  "anchor_placeholder_farmer_name": "'Enter farmer name",
+  "anchor_placeholder_farmer_name": "Enter farmer name",
   "anchor_placeholder_phone_number": "10-digit number",
   "anchor_placeholder_location": "Village, District, State",
   "anchor_placeholder_primary_crop": "Onion / Potato / Tomato / Wheat / Rice",
