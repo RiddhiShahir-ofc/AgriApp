@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
-  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -18,32 +17,29 @@ import { useLanguage } from '../context/LanguageContext';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
-type AnchorProfile = {
-  anchorId: string;
-  userId: string;
-
-  companyName: string;
-  registrationNumber: string;
-  companyAddress: string;
-
-  contactPersonName: string;
-  contactPersonNum: string;
+type MandiOfficialProfile = {
+  officialId: string;
+  officialName: string;
+  employeeId: string;
   email: string;
 
-  gstNumber: string;
-  estimatedFarmersNum: number;
-  businessDescription: string;
+  mandiId: number;
+  mandiName?: string;
+  mandiLocation?: string;
+
+  officialRoleId: string;
+  officialRoleName?: string;
 
   createdAt: string;
   updatedAt?: string;
 };
 
-export default function AnchorProfile() {
+export default function MandiOfficialProfileScreen() {
   const navigation = useNavigation<Nav>();
   const { theme } = useTheme();
   const { t } = useLanguage();
 
-  const [profile, setProfile] = useState<AnchorProfile | null>(null);
+  const [profile, setProfile] = useState<MandiOfficialProfile | null>(null);
   const [loading, setLoading] = useState(false);
 
   const goBack = () => navigation.goBack();
@@ -52,12 +48,12 @@ export default function AnchorProfile() {
   const loadProfile = async () => {
     try {
       setLoading(true);
-      const res = await api.get('/anchor/profile');
+      const res = await api.get('/mandi-official/profile');
       setProfile(res.data);
     } catch (err: any) {
       Alert.alert(
         t('error_title') ?? 'Error',
-        err?.response?.data?.message ?? 'Failed to load anchor profile',
+        err?.response?.data?.message ?? 'Failed to load profile',
       );
     } finally {
       setLoading(false);
@@ -105,115 +101,87 @@ export default function AnchorProfile() {
       </View>
 
       <Text style={[styles.title, { color: theme.text }]}>
-        {t('profile') ?? 'Anchor Profile'}
+        {t('profile') ?? 'Mandi Official Profile'}
       </Text>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={[
-            styles.card,
-            { borderColor: theme.text + '30' },
-          ]}
-        >
+      {/* Profile Card */}
+      <View
+        style={[
+          styles.card,
+          { borderColor: theme.text + '30', backgroundColor: theme.background },
+        ]}
+      >
+        <ProfileRow
+          label={t('official_name') ?? 'Name'}
+          value={profile.officialName}
+          theme={theme}
+        />
+
+        <ProfileRow
+          label={t('employee_id') ?? 'Employee ID'}
+          value={profile.employeeId}
+          theme={theme}
+        />
+
+        <ProfileRow
+          label={t('email') ?? 'Email'}
+          value={profile.email}
+          theme={theme}
+        />
+
+        <ProfileRow
+          label={t('role') ?? 'Role'}
+          value={profile.officialRoleName ?? '-'}
+          theme={theme}
+        />
+
+        <ProfileRow
+          label={t('mandi') ?? 'Mandi'}
+          value={profile.mandiName ?? '-'}
+          theme={theme}
+        />
+
+        <ProfileRow
+          label={t('location') ?? 'Location'}
+          value={profile.mandiLocation ?? '-'}
+          theme={theme}
+        />
+
+        <ProfileRow
+          label={t('created_at') ?? 'Created At'}
+          value={new Date(profile.createdAt).toLocaleDateString()}
+          theme={theme}
+        />
+
+        {profile.updatedAt && (
           <ProfileRow
-            label={t('name') ?? 'Company Name'}
-            value={profile.companyName}
+            label={t('updated_at') ?? 'Updated At'}
+            value={new Date(profile.updatedAt).toLocaleDateString()}
             theme={theme}
           />
-
-          <ProfileRow
-            label={t('company_reg_number') ?? 'Registration Number'}
-            value={profile.registrationNumber}
-            theme={theme}
-          />
-
-          <ProfileRow
-            label={t('company_address') ?? 'Company Address'}
-            value={profile.companyAddress}
-            theme={theme}
-          />
-
-          <ProfileRow
-            label={t('contact_person') ?? 'Contact Person'}
-            value={profile.contactPersonName}
-            theme={theme}
-          />
-
-          <ProfileRow
-            label={t('contact_number') ?? 'Contact Number'}
-            value={profile.contactPersonNum}
-            theme={theme}
-          />
-
-          <ProfileRow
-            label={t('email') ?? 'Email'}
-            value={profile.email}
-            theme={theme}
-          />
-
-          {/* <ProfileRow
-            label={t('gst_number') ?? 'GST Number'}
-            value={profile.gstNumber}
-            theme={theme}
-          /> */}
-
-          <ProfileRow
-            label={t('estimated_farmers') ?? 'Estimated Farmers'}
-            value={String(profile.estimatedFarmersNum)}
-            theme={theme}
-          />
-
-          {/* <ProfileRow
-            label={t('business_description') ?? 'Business Description'}
-            value={profile.businessDescription || '-'}
-            theme={theme}
-            multiline
-          /> */}
-
-          <ProfileRow
-            label={t('created_at') ?? 'Created At'}
-            value={new Date(profile.createdAt).toLocaleDateString()}
-            theme={theme}
-          />
-
-          {profile.updatedAt && (
-            <ProfileRow
-              label={t('updated_at') ?? 'Updated At'}
-              value={new Date(profile.updatedAt).toLocaleDateString()}
-              theme={theme}
-            />
-          )}
-        </View>
-      </ScrollView>
+        )}
+      </View>
     </SafeAreaView>
   );
 }
 
-/* ---------------- REUSABLE ROW ---------------- */
+/* ---------------- SMALL REUSABLE ROW ---------------- */
 
 function ProfileRow({
   label,
   value,
   theme,
-  multiline,
 }: {
   label: string;
   value: string;
   theme: any;
-  multiline?: boolean;
 }) {
   return (
     <View style={styles.row}>
       <Text style={[styles.label, { color: theme.text }]}>
         {label}
       </Text>
-      <Text
-        style={[
-          styles.value,
-          { color: theme.text },
-          multiline && { lineHeight: 20 },
-        ]}
-      >
+      <Text style={[styles.value, { color: theme.text }]}>
         {value}
       </Text>
     </View>

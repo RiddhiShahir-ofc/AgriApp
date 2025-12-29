@@ -222,6 +222,7 @@ import { RootStackParamList } from '../../App';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import api from '../services/api';
+import AppHamburgerMenu from '../components/AppHamburgerMenu';
 
 type NavProp = NativeStackNavigationProp<RootStackParamList, any>;
 
@@ -256,10 +257,20 @@ export default function MandiOfficerDashboard() {
   const goBack = () => navigation.navigate('Dashboard');
 
   return (
+    // <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+    //   <TouchableOpacity onPress={goBack} style={styles.backBtn}>
+    //     <Text style={[styles.backText, { color: '#2b6cb0' }]}>{t('back')}</Text>
+    //   </TouchableOpacity>
+
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
-      <TouchableOpacity onPress={goBack} style={styles.backBtn}>
-        <Text style={[styles.backText, { color: '#2b6cb0' }]}>{t('back')}</Text>
-      </TouchableOpacity>
+  <TouchableOpacity onPress={goBack} style={styles.backBtn}>
+    <Text style={[styles.backText, { color: theme.primary }]}>
+      {t('back')}
+    </Text>
+  </TouchableOpacity>
+
+  <AppHamburgerMenu role="mandiofficial" />
+
 
       <Text style={[styles.title, { color: theme.text }]}>{t('mandi_officer_dashboard')}</Text>
       <Text style={[styles.text, { color: theme.text }]}>{t('mandi_officer_msg')}</Text>

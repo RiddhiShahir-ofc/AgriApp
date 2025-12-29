@@ -385,7 +385,7 @@ const SellerRegister: React.FC = () => {
         </Text> */}
 
         <TouchableOpacity
-          style={[styles.btn, submitting && { opacity: 0.6 }]}
+          style={[styles.btn, {backgroundColor: theme.primary} ,submitting && { opacity: 0.6 }]}
           onPress={handleSubmit}
           disabled={submitting}
         >
@@ -407,9 +407,8 @@ const styles = StyleSheet.create({
   title: { fontSize: 24, fontWeight: '700', marginBottom: 12 },
   input: { borderWidth: 1, borderRadius: 8, padding: 10, marginBottom: 10 },
   btn: {
-    backgroundColor: '#2b6cb0',
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 30,
     alignItems: 'center',
     marginTop: 10,
   },

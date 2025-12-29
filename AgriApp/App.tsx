@@ -48,6 +48,8 @@ import SellLotScreen from './src/screens/SellLotScreen';
 import FarmerProfile from './src/screens/FarmerProfile';
 import BuyerProfile from './src/screens/BuyerProfile';
 import SellerProfile from './src/screens/SellerProfile';
+import AnchorProfile from './src/screens/AnchorProfile';
+import MandiOfficialProfile from './src/screens/MandiOfficialProfile';
 import SettingsScreen from './src/screens/SettingsScreen';
 
 export type RootStackParamList = {
@@ -92,6 +94,8 @@ export type RootStackParamList = {
   FarmerProfile: undefined;
   BuyerProfile: undefined;
   SellerProfile: undefined;
+  AnchorProfile: undefined;
+  MandiOfficialProfile: undefined;
   Settings: undefined;
 
 };
@@ -203,6 +207,8 @@ export default function App() {
             <Stack.Screen name="FarmerProfile" component={FarmerProfile} />
             <Stack.Screen name="BuyerProfile" component={BuyerProfile} />
             <Stack.Screen name="SellerProfile" component={SellerProfile} />
+            <Stack.Screen name="AnchorProfile" component={AnchorProfile} />
+            <Stack.Screen name="MandiOfficialProfile" component={MandiOfficialProfile} />
             <Stack.Screen name="Settings" component={SettingsScreen} />
 
           </Stack.Navigator>
