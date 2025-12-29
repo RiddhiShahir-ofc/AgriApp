@@ -46,6 +46,8 @@ import LiveAuctionLotsScreen from './src/screens/LiveAuctionLotsScreen';
 import SellLotScreen from './src/screens/SellLotScreen';
 
 import FarmerProfile from './src/screens/FarmerProfile';
+import BuyerProfile from './src/screens/BuyerProfile';
+import SellerProfile from './src/screens/SellerProfile';
 import SettingsScreen from './src/screens/SettingsScreen';
 
 export type RootStackParamList = {
@@ -88,6 +90,8 @@ export type RootStackParamList = {
   SellLotScreen:undefined;
 
   FarmerProfile: undefined;
+  BuyerProfile: undefined;
+  SellerProfile: undefined;
   Settings: undefined;
 
 };
@@ -197,6 +201,8 @@ export default function App() {
             <Stack.Screen name="SellLotScreen" component={SellLotScreen} />
 
             <Stack.Screen name="FarmerProfile" component={FarmerProfile} />
+            <Stack.Screen name="BuyerProfile" component={BuyerProfile} />
+            <Stack.Screen name="SellerProfile" component={SellerProfile} />
             <Stack.Screen name="Settings" component={SettingsScreen} />
 
           </Stack.Navigator>

@@ -4673,38 +4673,67 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
   // Actual Display Screen
   const ListHeaderElement = useMemo(() => {
     return (
+      // <View>
+      //   {/* 🔹 Top bar with Back + Title + Hamburger */}
+      //   <View style={styles.topBarRow}>
+      //     <TouchableOpacity
+      //       onPress={goBack}
+      //       style={[
+      //         styles.backBtn,
+      //         { backgroundColor: theme.background ?? '#edf2f7' },
+      //       ]}
+      //     >
+      //       <Text
+      //         style={[
+      //           styles.backText,
+      //           { color: theme.primary ?? '#2b6cb0' },
+      //         ]}
+      //       >
+      //         {t('back')}
+      //       </Text>
+      //     </TouchableOpacity>
+
+      //     <View style={{ flex: 1, marginLeft: 8 }}>
+      //       <Text style={[styles.title, { color: theme.text }]}>
+      //         {t('farmer_dashboard')}
+      //       </Text>
+      //       <Text style={[styles.text, { color: theme.text }]}>
+      //         {t('farmer_message')}
+      //       </Text>
+      //     </View>
+
+      //     <AppHamburgerMenu role="farmer" />
+
+      //   </View>
+
       <View>
-        {/* 🔹 Top bar with Back + Title + Hamburger */}
-        <View style={styles.topBarRow}>
-          <TouchableOpacity
-            onPress={goBack}
-            style={[
-              styles.backBtn,
-              { backgroundColor: theme.background ?? '#edf2f7' },
-            ]}
-          >
-            <Text
-              style={[
-                styles.backText,
-                { color: theme.primary ?? '#2b6cb0' },
-              ]}
-            >
-              {t('back')}
-            </Text>
-          </TouchableOpacity>
+      <View style={styles.container}>
 
-          <View style={{ flex: 1, marginLeft: 8 }}>
-            <Text style={[styles.title, { color: theme.text }]}>
-              {t('farmer_dashboard')}
-            </Text>
-            <Text style={[styles.text, { color: theme.text }]}>
-              {t('farmer_message')}
-            </Text>
-          </View>
+  {/* Row 1: Back + Hamburger */}
+  <View style={styles.headerTopRow}>
+    <TouchableOpacity onPress={goBack} style={styles.backBtn}>
+      <Text style={[styles.backText, { color: theme.primary }]}>
+        {t('back') || 'Back'}
+      </Text>
+    </TouchableOpacity>
 
-          <AppHamburgerMenu role="farmer" />
+    {/* 👇 SAME hamburger component */}
+    <AppHamburgerMenu role="farmer" />
+  </View>
 
-        </View>
+  {/* Row 2: Title + subtitle */}
+  <View style={styles.headerTextBlock}>
+    <Text style={[styles.title, { color: theme.text }]}>
+      {t('farmer_dashboard') || 'Farmer Dashboard'}
+    </Text>
+    <Text style={[styles.text, { color: theme.text }]}>
+      {t('farmer_message') ||
+        ''}
+    </Text>
+  </View>
+
+</View>
+
 
         {/* Tabs row */}
         <View style={styles.tabsRow}>
@@ -5981,4 +6010,18 @@ const styles = StyleSheet.create({
   picker: {
           
   },
+  headerContainer: {
+  marginBottom: 12,
+},
+
+headerTopRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+},
+
+headerTextBlock: {
+  marginTop: 8,
+},
+
 });

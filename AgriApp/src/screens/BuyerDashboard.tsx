@@ -1454,22 +1454,47 @@ export default function BuyerDashboard() {
   );
 
   return (
-      <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
-        <View style={styles.topBarRow}>
-        <TouchableOpacity onPress={goBack} style={[styles.backBtn, { backgroundColor: theme.background ?? '#edf2f7' }]}>
-          <Text style={[styles.backText, { color: theme.primary ?? '#2b6cb0' }]}>{t('back') || 'Back'}</Text>
-        </TouchableOpacity>
-        <View style={styles.titleWrap}>
-        <Text style={[styles.title, { color: theme.text }]}>{t('buyer_dashboard') || 'Buyer Dashboard'}</Text>
-        <Text style={[styles.text, { color: theme.text }]}>{t('buyer_msg') || 'Find and bid on crop lots'}</Text>
-        </View>
+      // <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+      // <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
+      //   <View style={styles.topBarRow}>
+      //   <TouchableOpacity onPress={goBack} style={[styles.backBtn, { backgroundColor: theme.background ?? '#edf2f7' }]}>
+      //     <Text style={[styles.backText, { color: theme.primary ?? '#2b6cb0' }]}>{t('back') || 'Back'}</Text>
+      //   </TouchableOpacity>
+      //   <View style={styles.titleWrap}>
+      //   <Text style={[styles.title, { color: theme.text }]}>{t('buyer_dashboard') || 'Buyer Dashboard'}</Text>
+      //   <Text style={[styles.text, { color: theme.text }]}>{t('buyer_msg') || 'Find and bid on crop lots'}</Text>
+      //   </View>
 
-          {/* ☰ Hamburger on extreme right */}
-  <View style={styles.menuWrap}>
+      //   {/* ☰ Hamburger on extreme right */}
+      //   <View style={styles.menuWrap}>
+      //   <AppHamburgerMenu role="buyer" />
+      //   </View>
+      //   </View>
+
+      <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
+  {/* Row 1: Back + Hamburger */}
+  <View style={styles.headerTopRow}>
+    <TouchableOpacity onPress={goBack} style={styles.backBtn}>
+      <Text style={[styles.backText, { color: theme.primary }]}>
+        {t('back') || 'Back'}
+      </Text>
+    </TouchableOpacity>
+
+    {/* 👇 SAME hamburger component */}
     <AppHamburgerMenu role="buyer" />
   </View>
-</View>
+
+  {/* Row 2: Title + subtitle */}
+  <View style={styles.headerTextBlock}>
+    <Text style={[styles.title, { color: theme.text }]}>
+      {t('buyer_dashboard') || 'Buyer Dashboard'}
+    </Text>
+    <Text style={[styles.text, { color: theme.text }]}>
+      {t('buyer_msg') ||
+        'View daily market prices, manage bids, and explore pre-registered lots'}
+    </Text>
+  </View>
 
         <View style={styles.tabsRow}>
           {(['daily', 'short', 'pre', 'placed'] as const).map(tab => (
@@ -1940,9 +1965,22 @@ titleWrap: {
   flex: 1,
   marginLeft: 12,
 },
-
 menuWrap: {
   marginLeft: 12,
 },
+headerContainer: {
+  marginBottom: 12,
+},
+
+headerTopRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+},
+
+headerTextBlock: {
+  marginTop: 8,
+},
+
   
 });

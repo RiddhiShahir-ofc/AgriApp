@@ -39,6 +39,7 @@ interface Theme {
   secondary: string;
   input: string;
   placeholder: string;
+  muted: string;
 }
 
 
@@ -50,6 +51,7 @@ const lightPreview: Theme = {
   secondary: '#03DAC6', // Teal for buttons
   input: '#8e8b8b82',
   placeholder: '#0c050582',
+  muted: '#777777',
 
 };
 
@@ -60,6 +62,7 @@ const darkPreview: Theme = {
   secondary: '#03DAC6', // Teal for buttons
   input :'white',
   placeholder: '#efebebff',
+  muted: '#AAAAAA', 
 
 };
 

@@ -2237,6 +2237,7 @@ import api from '../services/api';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App'
+import AppHamburgerMenu from '../components/AppHamburgerMenu';
 
 type Farmer = {
   id: string;
@@ -2464,13 +2465,40 @@ export default function AnchorDashboard() {
 
   /* ---------------- UI ---------------- */
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
-           <TouchableOpacity onPress={goBack}>
-          <Text style={styles.backText}>{t('back')}</Text>
-        </TouchableOpacity>
-      <Text style={styles.title}>{t('anchor_dashboard')}</Text>
-      <Text style={[styles.btnText,{color: theme.text}]}>{t('anchor_msg')}</Text>
-      <Text> </Text>
+    // <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+    //        <TouchableOpacity onPress={goBack}>
+    //       <Text style={styles.backText}>{t('back')}</Text>
+    //     </TouchableOpacity>
+    //   <Text style={styles.title}>{t('anchor_dashboard')}</Text>
+    //   <Text style={[styles.btnText,{color: theme.text}]}>{t('anchor_msg')}</Text>
+    //   <Text> </Text>
+
+    <SafeAreaView style={styles.container}>
+
+  {/* Row 1: Back + Hamburger */}
+  <View style={styles.headerTopRow}>
+    <TouchableOpacity onPress={goBack}>
+      <Text style={[styles.backText, { color: theme.primary }]}>
+        {t('back') || 'Back'}
+      </Text>
+    </TouchableOpacity>
+
+    {/* 👇 SAME hamburger component */}
+    <AppHamburgerMenu role="anchor" />
+  </View>
+
+  {/* Row 2: Title + subtitle */}
+  <View style={styles.headerTextBlock}>
+    <Text style={[styles.title, { color: theme.text }]}>
+      {t('anchor_dashboard') || 'Anchor Dashboard'}
+    </Text>
+    <Text style={[styles.btnText, { color: theme.text }]}>
+      {t('anchor_msg') ||
+        'Here you can manage contracts, farmers, and assigned lots'}
+    </Text>
+    <Text> </Text>
+  </View>
+
 
       {/* ACTION BUTTONS */}
       <View style={styles.actionsRow}>
@@ -2736,6 +2764,21 @@ viewBtn: {
 viewBtnText: {
   fontWeight: '600',
 },
+
+headerContainer: {
+  marginBottom: 12,
+},
+
+headerTopRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+},
+
+headerTextBlock: {
+  marginTop: 8,
+},
+
 
 });
 
