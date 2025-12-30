@@ -1870,7 +1870,7 @@
 // //   smallEditBtnText: { color: '#fff', fontWeight: '700', fontSize: 12 },
 // // });
 
-// import DashboardMenu from '../components/DashboardMenu'
+
 // import React, { useEffect, useState, useMemo } from 'react';
 // import {
 //   Text,
@@ -3878,7 +3878,7 @@ import DateTimePicker, { DateTimePickerEvent,
 import { Picker } from '@react-native-picker/picker';
 
 import GraphChart from '../components/GraphChart';
-import DashboardMenu from '../components/DashboardMenu';
+import AppHamburgerMenu from '../components/AppHamburgerMenu';
 import api from '../services/api';
 
 type PropsNav = NativeStackNavigationProp<RootStackParamList>;
@@ -3895,13 +3895,15 @@ type Lot = {
 };
 
 type Bid = {
-  lotId: string;
+  buyerInterestLotId: number;   
   lotOwner: string;
+  lotId: string;
   bidder: string;
   bidValue: string;
   createdAt: number;
   status?: 'pending' | 'accepted' | 'rejected';
 };
+
 
 type LotWithBids = Lot & {
   bids: Bid[];
@@ -4123,11 +4125,17 @@ export default function FarmerDashboard() {
   }, []);
 
   // Load received bids when tab changes to "received"
+  // useEffect(() => {
+  //   if (selectedTab === 'received' && phone) {
+  //     loadReceivedBids(phone);
+  //   }
+  // }, [selectedTab, phone]);
   useEffect(() => {
-    if (selectedTab === 'received' && phone) {
-      loadReceivedBids(phone);
-    }
-  }, [selectedTab, phone]);
+  if (selectedTab === 'received') {
+    loadReceivedBids();
+  }
+}, [selectedTab]);
+
 
   const onSelectTab = (
     tab: 'daily' | 'short' | 'preregister' | 'received',
@@ -4518,132 +4526,214 @@ export default function FarmerDashboard() {
     }
   };
 
-  const loadReceivedBids = async (ownerPhone: string) => {
-    setLoadingBids(true);
-    try {
-      const lotJson = await AsyncStorage.getItem(
-        `${STORAGE_KEY_PREFIX}${ownerPhone}`,
-      );
-      const ownerLots: Lot[] = lotJson ? JSON.parse(lotJson) : [];
+  // const loadReceivedBids = async (ownerPhone: string) => {
+  //   setLoadingBids(true);
+  //   try {
+  //     const lotJson = await AsyncStorage.getItem(
+  //       `${STORAGE_KEY_PREFIX}${ownerPhone}`,
+  //     );
+  //     const ownerLots: Lot[] = lotJson ? JSON.parse(lotJson) : [];
 
-      const result: LotWithBids[] = [];
+  //     const result: LotWithBids[] = [];
 
-      for (const lot of ownerLots) {
-        const bidKey = `BIDS_LOT_${lot.id}`;
-        const bidJson = await AsyncStorage.getItem(bidKey);
-        if (!bidJson) continue;
+  //     for (const lot of ownerLots) {
+  //       const bidKey = `BIDS_LOT_${lot.id}`;
+  //       const bidJson = await AsyncStorage.getItem(bidKey);
+  //       if (!bidJson) continue;
 
-        let bids: Bid[] = [];
-        try {
-          bids = JSON.parse(bidJson);
-        } catch (e) {
-          console.warn('Failed parse bids for lot', lot.id, e);
-          continue;
-        }
+  //       let bids: Bid[] = [];
+  //       try {
+  //         bids = JSON.parse(bidJson);
+  //       } catch (e) {
+  //         console.warn('Failed parse bids for lot', lot.id, e);
+  //         continue;
+  //       }
 
-        const filtered = bids.filter(b => b.lotOwner === ownerPhone);
-        if (filtered.length > 0) {
-          result.push({ ...lot, bids: filtered });
-        }
-      }
+  //       const filtered = bids.filter(b => b.lotOwner === ownerPhone);
+  //       if (filtered.length > 0) {
+  //         result.push({ ...lot, bids: filtered });
+  //       }
+  //     }
 
-      setLotsWithBids(result);
-    } catch (err) {
-      console.warn(err);
-    } finally {
-      setLoadingBids(false);
-    }
-  };
+  //     setLotsWithBids(result);
+  //   } catch (err) {
+  //     console.warn(err);
+  //   } finally {
+  //     setLoadingBids(false);
+  //   }
+  // };
 
-  const updateBidStatus = async (
-    lotId: string,
-    bidCreatedAt: number,
-    status: 'accepted' | 'rejected',
-  ) => {
-    try {
-      const bidKey = `BIDS_LOT_${lotId}`;
-      const bidJson = await AsyncStorage.getItem(bidKey);
-      if (!bidJson) return;
+  const loadReceivedBids = async () => {
+  setLoadingBids(true);
+  try {
+    const res = await api.get('/farmer/lots/bids');
 
-      let bids: Bid[] = JSON.parse(bidJson);
-      bids = bids.map(b =>
-        b.createdAt === bidCreatedAt ? { ...b, status } : b,
-      );
+    const data = Array.isArray(res.data) ? res.data : [];
 
-      await AsyncStorage.setItem(bidKey, JSON.stringify(bids));
+    const mapped: LotWithBids[] = data.map((item: any) => ({
+      id: item.preLotId,
+      crop: item.cropName,
+      mandi: item.mandiName,
+      grade: item.grade,
+      quantity: item.quantity,
+      sellingamount: item.expectedAmount,
+      expectedArrival: item.expectedArrivalDate,
+      createdAt: Date.now(),
+      bids: item.bids.map((b: any) => ({
+        lotId: item.preLotId,
+        bidder: `${b.buyerName} (${b.buyerMobile})`,
+        bidValue: String(b.bidAmount),
+        createdAt: new Date(b.createdAt).getTime(),
+        status: b.status,
+        buyerInterestLotId: b.buyerInterestLotId,
+      })),
+    }));
 
-      if (phone) {
-        await loadReceivedBids(phone);
-      }
-    } catch (e) {
-      console.warn('Failed to update bid status', e);
-    }
-  };
+    setLotsWithBids(mapped);
+  } catch (err) {
+    console.warn('Failed to load received bids', err);
+  } finally {
+    setLoadingBids(false);
+  }
+};
 
-  const handleAcceptBid = (lotId: string, createdAt: number) => {
-    updateBidStatus(lotId, createdAt, 'accepted');
-  };
 
-  const handleRejectBid = (lotId: string, createdAt: number) => {
-    updateBidStatus(lotId, createdAt, 'rejected');
-  };
+  // const updateBidStatus = async (
+  //   lotId: string,
+  //   bidCreatedAt: number,
+  //   status: 'accepted' | 'rejected',
+  // ) => {
+  //   try {
+  //     const bidKey = `BIDS_LOT_${lotId}`;
+  //     const bidJson = await AsyncStorage.getItem(bidKey);
+  //     if (!bidJson) return;
 
-  // 🔹 HANDLERS FOR HAMBURGER MENU
-  const handleLogout = async () => {
-    try {
-      await AsyncStorage.multiRemove([
-        'ACCESS_TOKEN',
-        'LOGGED_IN_USER',
-        'LOGGED_IN_ROLE',
-      ]);
-    } catch (e) {
-      console.warn('Failed to clear auth data on logout', e);
-    }
-    navigation.navigate('Dashboard');
-  };
+  //     let bids: Bid[] = JSON.parse(bidJson);
+  //     bids = bids.map(b =>
+  //       b.createdAt === bidCreatedAt ? { ...b, status } : b,
+  //     );
 
-  const handleOpenProfile = () => {
-    // Change 'Dashboard' to your actual profile route when ready
-    navigation.navigate('Dashboard');
-  };
+  //     await AsyncStorage.setItem(bidKey, JSON.stringify(bids));
+
+  //     if (phone) {
+  //       await loadReceivedBids(phone);
+  //     }
+  //   } catch (e) {
+  //     console.warn('Failed to update bid status', e);
+  //   }
+  // };
+
+  // const handleAcceptBid = (lotId: string, createdAt: number) => {
+  //   updateBidStatus(lotId, createdAt, 'accepted');
+  // };
+
+  // const handleRejectBid = (lotId: string, createdAt: number) => {
+  //   updateBidStatus(lotId, createdAt, 'rejected');
+  // };
+  const handleAcceptBid = async (lotId: string, buyerInterestLotId: number) => {
+  try {
+    await api.post(
+      `/farmer/lots/${lotId}/bids/${buyerInterestLotId}/accept`
+    );
+
+    Alert.alert(
+      t('success_title') ?? 'Success',
+      t('bid_accepted') ?? 'Bid accepted successfully'
+    );
+
+    loadReceivedBids();
+  } catch (err) {
+    Alert.alert(
+      t('error_title') ?? 'Error',
+      t('accept_failed') ?? 'Failed to accept bid'
+    );
+  }
+};
+
+const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
+  try {
+    await api.post(
+      `/farmer/lots/${lotId}/bids/${buyerInterestLotId}/reject`
+    );
+
+    Alert.alert(
+      t('success_title') ?? 'Success',
+      t('bid_rejected') ?? 'Bid rejected successfully'
+    );
+
+    loadReceivedBids();
+  } catch (err) {
+    Alert.alert(
+      t('error_title') ?? 'Error',
+      t('reject_failed') ?? 'Failed to reject bid'
+    );
+  }
+};
 
   // Actual Display Screen
   const ListHeaderElement = useMemo(() => {
     return (
+      // <View>
+      //   {/* 🔹 Top bar with Back + Title + Hamburger */}
+      //   <View style={styles.topBarRow}>
+      //     <TouchableOpacity
+      //       onPress={goBack}
+      //       style={[
+      //         styles.backBtn,
+      //         { backgroundColor: theme.background ?? '#edf2f7' },
+      //       ]}
+      //     >
+      //       <Text
+      //         style={[
+      //           styles.backText,
+      //           { color: theme.primary ?? '#2b6cb0' },
+      //         ]}
+      //       >
+      //         {t('back')}
+      //       </Text>
+      //     </TouchableOpacity>
+
+      //     <View style={{ flex: 1, marginLeft: 8 }}>
+      //       <Text style={[styles.title, { color: theme.text }]}>
+      //         {t('farmer_dashboard')}
+      //       </Text>
+      //       <Text style={[styles.text, { color: theme.text }]}>
+      //         {t('farmer_message')}
+      //       </Text>
+      //     </View>
+
+      //     <AppHamburgerMenu role="farmer" />
+
+      //   </View>
+
       <View>
-        {/* 🔹 Top bar with Back + Title + Hamburger */}
-        <View style={styles.topBarRow}>
-          <TouchableOpacity
-            onPress={goBack}
-            style={[
-              styles.backBtn,
-              { backgroundColor: theme.background ?? '#edf2f7' },
-            ]}
-          >
-            <Text
-              style={[
-                styles.backText,
-                { color: theme.primary ?? '#2b6cb0' },
-              ]}
-            >
-              {t('back')}
-            </Text>
-          </TouchableOpacity>
+      <View style={styles.container}>
 
-          <View style={{ flex: 1, marginLeft: 8 }}>
-            <Text style={[styles.title, { color: theme.text }]}>
-              {t('farmer_dashboard')}
-            </Text>
-            <Text style={[styles.text, { color: theme.text }]}>
-              {t('farmer_message')}
-            </Text>
-          </View>
+  {/* Row 1: Back + Hamburger */}
+  <View style={styles.headerTopRow}>
+    <TouchableOpacity onPress={goBack} style={styles.backBtn}>
+      <Text style={[styles.backText, { color: theme.primary }]}>
+        {t('back') || 'Back'}
+      </Text>
+    </TouchableOpacity>
 
-          <DashboardMenu
-            onOpenProfile={handleOpenProfile}
-            onLogout={handleLogout}
-          />
-        </View>
+    {/* 👇 SAME hamburger component */}
+    <AppHamburgerMenu role="farmer" />
+  </View>
+
+  {/* Row 2: Title + subtitle */}
+  <View style={styles.headerTextBlock}>
+    <Text style={[styles.title, { color: theme.text }]}>
+      {t('farmer_dashboard') || 'Farmer Dashboard'}
+    </Text>
+    <Text style={[styles.text, { color: theme.text }]}>
+      {t('farmer_message') ||
+        ''}
+    </Text>
+  </View>
+
+</View>
+
 
         {/* Tabs row */}
         <View style={styles.tabsRow}>
@@ -4671,7 +4761,7 @@ export default function FarmerDashboard() {
             style={[
               styles.tab,
               selectedTab === 'short'
-                ? { backgroundColor: theme.primary ?? '#3182ce' }
+                ? { backgroundColor: theme.primary ?? '#15f048ff' }
                 : { backgroundColor: theme.background ?? '#f0f0f0' },
             ]}
             onPress={() => onSelectTab('short')}
@@ -4691,7 +4781,7 @@ export default function FarmerDashboard() {
             style={[
               styles.tab,
               selectedTab === 'preregister'
-                ? { backgroundColor: theme.primary ?? '#3182ce' }
+                ? { backgroundColor: theme.primary ?? '#15f048ff' }
                 : { backgroundColor: theme.background ?? '#f0f0f0' },
             ]}
             onPress={() => onSelectTab('preregister')}
@@ -4760,6 +4850,8 @@ export default function FarmerDashboard() {
                       : ''
                   }
                   onValueChange={v => setMandiName(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_mandi') ?? 'Select mandi'}
@@ -4807,6 +4899,8 @@ export default function FarmerDashboard() {
                       : ''
                   }
                   onValueChange={v => setCropName(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_crop') ?? 'Select crop'}
@@ -4871,7 +4965,7 @@ export default function FarmerDashboard() {
                   { borderColor: theme.text },
                 ]}
               >
-                <GraphChart filters={appliedFilters} />
+               
               </View>
             </View>
           </>
@@ -4907,6 +5001,8 @@ export default function FarmerDashboard() {
                       : ''
                   }
                   onValueChange={v => setStfMandi(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_mandi') ?? 'Select mandi'}
@@ -4955,6 +5051,8 @@ export default function FarmerDashboard() {
                       : ''
                   }
                   onValueChange={v => setStfCrop(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_crop') ?? 'Select crop'}
@@ -5053,7 +5151,7 @@ export default function FarmerDashboard() {
               <TouchableOpacity
                 style={[
                   styles.searchBtn,
-                  { backgroundColor: theme.primary ?? '#2b6cb0' },
+                  { backgroundColor: theme.primary ?? '#15f048ff' },
                 ]}
                 onPress={getShortTermForecastInline}
               >
@@ -5139,10 +5237,13 @@ export default function FarmerDashboard() {
                       : ''
                   }
                   onValueChange={v => setPrCrop(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_crop') ?? 'Select crop'}
                     value=""
+                  
                   />
                   {cropOptions.map(c => (
                     <Picker.Item key={c} label={c} value={c} />
@@ -5182,6 +5283,8 @@ export default function FarmerDashboard() {
                 <Picker
                   selectedValue={prGrade}
                   onValueChange={v => setPrGrade(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_grade') ?? 'Select grade'}
@@ -5275,6 +5378,8 @@ export default function FarmerDashboard() {
                       : ''
                   }
                   onValueChange={v => setPrMandi(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_mandi') ?? 'Select mandi'}
@@ -5540,12 +5645,18 @@ export default function FarmerDashboard() {
                                   backgroundColor: '#16a34a',
                                 },
                               ]}
+                              // onPress={() =>
+                              //   handleAcceptBid(
+                              //     lotWithBids.id,
+                              //     bid.createdAt,
+                              //   )
+                              // }
                               onPress={() =>
-                                handleAcceptBid(
-                                  lotWithBids.id,
-                                  bid.createdAt,
+                             handleAcceptBid(
+                              lotWithBids.id,
+                                 bid.buyerInterestLotId,
                                 )
-                              }
+                              }    
                             >
                               <Text
                                 style={[
@@ -5565,12 +5676,19 @@ export default function FarmerDashboard() {
                                   backgroundColor: '#b91c1c',
                                 },
                               ]}
+                              // onPress={() =>
+                              //   handleRejectBid(
+                              //     lotWithBids.id,
+                              //     bid.createdAt,
+                              //   )
+                              // }
                               onPress={() =>
-                                handleRejectBid(
-                                  lotWithBids.id,
-                                  bid.createdAt,
+                             handleAcceptBid(
+                              lotWithBids.id,
+                             bid.buyerInterestLotId,
                                 )
                               }
+
                             >
                               <Text
                                 style={[
@@ -5706,7 +5824,7 @@ export default function FarmerDashboard() {
         data={listData}
         keyExtractor={item => item.id}
         renderItem={renderLotItem}
-        ListHeaderComponent={ListHeaderElement}
+        ListHeaderComponent={ListHeaderElement} 
         ListEmptyComponent={renderEmpty}
         contentContainerStyle={{ paddingBottom: 30 }}
         keyboardShouldPersistTaps="always"
@@ -5764,7 +5882,7 @@ const styles = StyleSheet.create({
   },
   searchBtn: {
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 30,
     alignItems: 'center',
     marginTop: 6,
   },
@@ -5773,7 +5891,7 @@ const styles = StyleSheet.create({
   chartBox: {
     borderWidth: 1,
     borderRadius: 8,
-    padding: 12,
+    padding: 15,
     marginTop: 8,
   },
   chartTitle: { fontWeight: '700', marginBottom: 10 },
@@ -5796,7 +5914,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     minWidth: 44,
   },
-  horizonBtnActive: { backgroundColor: '#2b6cb0' },
+  horizonBtnActive: { backgroundColor: '#15f048ff' },
   horizonText: { color: '#333', fontWeight: '600' },
   horizonTextActive: { color: '#fff', fontWeight: '700' },
 
@@ -5815,7 +5933,7 @@ const styles = StyleSheet.create({
   formTitle: { fontSize: 16, fontWeight: '700', marginTop: 12 },
   addBtn: {
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 30,
     alignItems: 'center',
     marginTop: 12,
   },
@@ -5881,4 +5999,29 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   smallEditBtnText: { color: '#fff', fontWeight: '700', fontSize: 12 },
+
+    pickerWrapper: {
+   // backgroundColor: '#fff',   // ✅ white background
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 12,
+  },
+  picker: {
+          
+  },
+  headerContainer: {
+  marginBottom: 12,
+},
+
+headerTopRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+},
+
+headerTextBlock: {
+  marginTop: 8,
+},
+
 });

@@ -191,7 +191,7 @@ const BuyerRegister: React.FC = () => {
     loadCrops();
   }, []);
 
-  // 🔵 NEW: check buyer status via backend and redirect if already registered
+  // check buyer status via backend and redirect if already registered
   useEffect(() => {
     const checkBuyerStatus = async () => {
       try {
@@ -325,7 +325,7 @@ const BuyerRegister: React.FC = () => {
     }
   };
 
-    // 🔵 NEW: while checking /buyer/status, show a loader instead of form
+    // while checking /buyer/status, show a loader instead of form
   if (checkingStatus) {
     return (
       <SafeAreaView
@@ -440,9 +440,9 @@ const styles = StyleSheet.create({
   title: { fontSize: 24, fontWeight: '700', marginBottom: 12 },
   input: { borderWidth: 1, borderRadius: 8, padding: 10, marginBottom: 10 },
   btn: {
-    backgroundColor: '#2b6cb0',
+    backgroundColor: '#0db34aff',
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 30,
     alignItems: 'center',
     marginTop: 10,
   },

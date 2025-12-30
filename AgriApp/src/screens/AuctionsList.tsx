@@ -2141,7 +2141,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#10b981',
     paddingVertical: 8,
     paddingHorizontal: 14,
-    borderRadius: 8,
+    borderRadius: 30,
   },
 
   disabledBtn: {

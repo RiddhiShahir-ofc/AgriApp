@@ -45,6 +45,13 @@ import ReadyForAuctionMap from './src/screens/ReadyForAuctionMap';
 import LiveAuctionLotsScreen from './src/screens/LiveAuctionLotsScreen';
 import SellLotScreen from './src/screens/SellLotScreen';
 
+import FarmerProfile from './src/screens/FarmerProfile';
+import BuyerProfile from './src/screens/BuyerProfile';
+import SellerProfile from './src/screens/SellerProfile';
+import AnchorProfile from './src/screens/AnchorProfile';
+import MandiOfficialProfile from './src/screens/MandiOfficialProfile';
+import SettingsScreen from './src/screens/SettingsScreen';
+
 export type RootStackParamList = {
   Landing: undefined;
   Register: { fromGraph?: boolean } | undefined;
@@ -83,6 +90,13 @@ export type RootStackParamList = {
   ReadyForAuctionMap:{ arrivedLotId: number; mandiId: number } |undefined;
   LiveAuctionLots: { auctionId: string};
   SellLotScreen:undefined;
+
+  FarmerProfile: undefined;
+  BuyerProfile: undefined;
+  SellerProfile: undefined;
+  AnchorProfile: undefined;
+  MandiOfficialProfile: undefined;
+  Settings: undefined;
 
 };
 
@@ -189,6 +203,13 @@ export default function App() {
             <Stack.Screen name="ReadyForAuctionMap" component={ReadyForAuctionMap} />
             <Stack.Screen name="LiveAuctionLots" component={LiveAuctionLotsScreen} />
             <Stack.Screen name="SellLotScreen" component={SellLotScreen} />
+
+            <Stack.Screen name="FarmerProfile" component={FarmerProfile} />
+            <Stack.Screen name="BuyerProfile" component={BuyerProfile} />
+            <Stack.Screen name="SellerProfile" component={SellerProfile} />
+            <Stack.Screen name="AnchorProfile" component={AnchorProfile} />
+            <Stack.Screen name="MandiOfficialProfile" component={MandiOfficialProfile} />
+            <Stack.Screen name="Settings" component={SettingsScreen} />
 
           </Stack.Navigator>
         </NavigationContainer>

@@ -1,14 +1,14 @@
 {
     "title": "Welcome to Farm Bazaar",
-    "selectLanguage": "Select preferred Language",
+    "selectLanguage": "Select Language",
     "dailyMarketWatch": "Daily Market Watch",
     "loginRegister": "Login / Register",
     "english": "English",
     "hindi": "हिंदी",
     "marathi": "मराठी",
-    "modedark": "Dark Mode",
-    "modelight": "Light Mode",
-    "selectTheme": "Select Preffered Theme",
+    "modedark": "Dark Theme",
+    "modelight": "Light Theme",
+    "selectTheme": "Select Theme",
 
     "enter_mobile_number": "Enter Mobile Number",
     "enter_valid_phone_alert": "Enter a valid 10 digit phone number",
@@ -61,7 +61,7 @@
     "gallery":"Choose from Gallery",
     "farmer_name":"Farmer Name",
     "village":"Village Location",
-    "intrested_crop":"Intrested Crop",
+    "intrested_crop":"Intrested Crops",
     "register":"Register",
 
     "missing_some_fields":"Missing Fields", 
@@ -137,7 +137,7 @@
     "chart_placeholder_text":"Market price chart will be displayed here.",
     "pre_register_lot":"Pre-Register Lot",
     "short_term_forecast":"Short Term Forecast",
-    "fill_mandi_search":"Please fill in mandi and crop to search.",
+    "fill_mandi_search":"Please select mandi and crop to search.",
     "daily_market_price":"Daily Market Price",
 
     "info":"Info",
@@ -154,7 +154,7 @@
     "select_crop": "Select Crop",
     "select_grade": "Select Grade",
   
-    "enter_quantity": "Enter Quantity (quintal)",
+    "enter_quantity": "Enter Quantity (Quintal)",
     "mandi_label": "Mandi Location",
     
     "arrival_label": "Expected Arrival Date",
@@ -164,7 +164,7 @@
     "no_lots": "No lots registered yet",
     "lot_added_success": "Lot added successfully",
     "fill_crop": "Please select crop",
-    "fill_quantity": "Please enter quantity",
+    "fill_quantity": "Please enter quantity (Quintal)",
     "fill_mandi": "Please Select Mandi",
 
   "pre_bidding_title": "Available Lots for Pre-Bidding",
@@ -174,7 +174,7 @@
   "fill_bid_value": "Please enter a bid value",
   "invalid_bid": "Please enter a valid number",
   "bid_placed": "Your bid has been placed",
-  "lot_quantity": "Quantity",
+  "lot_quantity": "Quantity (Quintal)",
   "lot_date": "Auction Date",
   "lot_owner": "Owner",
   "pre_bidding": "Pre Bidding",
@@ -187,7 +187,7 @@
   "mandiDashboard": "Mandi Dashboard",
   "delhiAzadpurMandi": "Azadpur Mandi, Delhi",
   "totalFarmers": "Total Farmers",
-  "quantity": "Quantity Of Crops",
+  "quantity": "Quantity Of Crops (Quintal)",
   "todaysPrice": "Today's Price",
   "buyers": "Buyers",
   "analytics": "Analytics of Crops",
@@ -234,13 +234,11 @@
   "anchor_stats_total_land": "Total Land (Acres)",
   "anchor_stats_total_crop_volume_value": "1,980 Q",
   "anchor_stats_registered_farmers_value": "274",
-  "anchor_stats_active_transactions_value": "48",
-  "anchor_stats_total_land_value": "1,458",
 
-  "anchor_action_register_single_farmer": " + Register Single Farmer",
-  "anchor_action_bulk_import_farmers": "⬆ Bulk Import Farmers",
+  "anchor_action_register_single_farmer": " Register Single Farmer",
+  "anchor_action_bulk_register_farmers": " Bulk Register Farmers",
 
-  "anchor_section_registered_farmers": "Registered Farmers",
+  "anchor_section_registered_farmers": "Anchor Registered Farmers",
   "anchor_search_placeholder": "Search farmers by name or location...",
   "anchor_btn_view_farmer": "View Details",
 
@@ -254,7 +252,7 @@
   "anchor_label_location": "Location *",
   "anchor_label_primary_crop": "Primary Crop *",
   "anchor_label_land_size": "Land Size (acres) *",
-  "anchor_placeholder_farmer_name": "'Enter farmer name",
+  "anchor_placeholder_farmer_name": "Enter farmer name",
   "anchor_placeholder_phone_number": "10-digit number",
   "anchor_placeholder_location": "Village, District, State",
   "anchor_placeholder_primary_crop": "Onion / Potato / Tomato / Wheat / Rice",
@@ -296,7 +294,7 @@
 
 "register_lot_btn": "Register Lot",
 "search_owner_label": "Search Owner (existing farmer/seller)",
-"search_owner_placeholder": "Enter owner name or mobile and press search",
+"search_owner_placeholder": "Enter owner name or mobile number",
 "search_btn": "Search",
 "search_results": "Search Results",
 "selected_owner": "Selected Owner",
@@ -306,8 +304,8 @@
 "owner_mobile_placeholder": "Mobile Number",
 "owner_role_label": "Owner Role",
 "grade_label": "Grade",
-"quantity_label": "Quantity",
-"quantity_placeholder": "Enter quantity (e.g. 100)",
+"quantity_label": "Quantity (Quintal)",
+"quantity_placeholder": "Enter quantity (e.g. 100 quintal)",
 
 "select_mandi": "Select mandi",
 "create_arrived_lot_btn": "Create Arrived Lot",
@@ -435,6 +433,13 @@
 "view_lots":"View Lots",
 "no_lots_found":"No lots mapped to this auction",
 "live_auction_lots":"Live Auction Lots",
-"no_officer_profile":"Officer profile not found"
+"no_officer_profile":"Officer profile not found",
+"aboutUs":"About Us : Here you can connect farmers, buyers, and mandis on one platform. Track real-time market prices, predict trends, and grow your agricultural business.",
+"privacy_note": "Your number is safe with us. We do not share your data with third parties.",
+"terms_note": "By clicking Send OTP, you agree to our Terms of Service and Privacy Policy.",
+"enter_name":"Enter your name",
+"edit_name":"Edit Name",
+"convert_land_unit":"Convert Land Unit"
+
 
 }

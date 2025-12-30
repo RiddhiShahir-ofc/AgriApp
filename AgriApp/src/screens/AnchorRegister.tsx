@@ -457,9 +457,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   btn: {
-    backgroundColor: '#2b6cb0',
+    backgroundColor: '#15c048ff',
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 30,
     alignItems: 'center',
   },
   btnText: { color: '#fff', fontWeight: '700' },

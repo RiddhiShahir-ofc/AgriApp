@@ -2472,7 +2472,9 @@ export default function RegisterLot() {
                 <TextInput placeholder={t('owner_mobile_placeholder') ?? 'Mobile Number'} placeholderTextColor="#9ca3af" value={manualMobile} onChangeText={setManualMobile} keyboardType="phone-pad" style={[styles.input, { borderColor: theme.text, color: theme.text }]} />
                 <Text style={[styles.label, { color: theme.text }]}>{t('owner_role_label')}</Text>
                 <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
-                  <Picker selectedValue={manualRole} onValueChange={(v) => setManualRole(v as 'farmer'|'seller')}>
+                  <Picker selectedValue={manualRole} onValueChange={(v) => setManualRole(v as 'farmer'|'seller')}
+                    style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}>
                     <Picker.Item label={t('farmer') ?? 'Farmer'} value="farmer" />
                     <Picker.Item label={t('seller') ?? 'Seller'} value="seller" />
                   </Picker>
@@ -2485,7 +2487,9 @@ export default function RegisterLot() {
         {/* Lot details */}
         <Text style={[styles.label, { color: theme.text }]}>{t('crop')}</Text>
         <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
-          <Picker selectedValue={isValidPickerValue(cropName, cropOptions) ? cropName : ''} onValueChange={v => { setCropName(String(v)); }}>
+          <Picker selectedValue={isValidPickerValue(cropName, cropOptions) ? cropName : ''} onValueChange={v => { setCropName(String(v)); }}
+            style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}>
             <Picker.Item label={t('select_crop') ?? 'Select crop'} value="" />
             {cropOptions.map(c => (<Picker.Item key={c} label={c} value={c} />))}
             <Picker.Item label="Other" value="Other" />
@@ -2498,7 +2502,9 @@ export default function RegisterLot() {
 
         <Text style={[styles.label, { color: theme.text }]}>{t('grade_label')}</Text>
         <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
-          <Picker selectedValue={grade} onValueChange={v => setGrade(String(v))}>
+          <Picker selectedValue={grade} onValueChange={v => setGrade(String(v))}
+            style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}>
             <Picker.Item label={t('select_grade') ?? 'Select grade'} value="" />
             {currentGrades.map(g => (<Picker.Item key={g} label={g} value={g} />))}
           </Picker>
@@ -2513,7 +2519,9 @@ export default function RegisterLot() {
 
         <Text style={[styles.label, { color: theme.text }]}>{t('mandi_label')}</Text>
         <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
-          <Picker selectedValue={isValidPickerValue(mandiName, mandiOptions) ? mandiName : ''} onValueChange={v => setMandiName(String(v))}>
+          <Picker selectedValue={isValidPickerValue(mandiName, mandiOptions) ? mandiName : ''} onValueChange={v => setMandiName(String(v))}
+            style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}>
             <Picker.Item label={t('select_mandi') ?? 'Select mandi'} value="" />
             {mandiOptions.map(m => (<Picker.Item key={m} label={m} value={m} />))}
             <Picker.Item label="Other" value="Other" />
@@ -2539,10 +2547,10 @@ const styles = StyleSheet.create({
   subLabel: { fontSize: 14, fontWeight: '600', paddingHorizontal: 16, marginTop: 10, color: '#6b7280' },
   input: { borderWidth: 1, borderRadius: 8, padding: 10, marginHorizontal: 16, marginTop: 8 },
   pickerWrap: { borderWidth: 1, borderRadius: 8, marginHorizontal: 16, marginTop: 8, overflow: 'hidden' },
-  submitBtn: { backgroundColor: '#10b981', margin: 16, paddingVertical: 12, borderRadius: 8, alignItems: 'center' },
+  submitBtn: { backgroundColor: '#10b981', margin: 16, paddingVertical: 12, borderRadius: 30, alignItems: 'center' },
   submitBtnText: { color: '#fff', fontWeight: '700' },
   row: { flexDirection: 'row', alignItems: 'center', marginHorizontal: 16, marginTop: 8 },
-  smallBtn: { marginLeft: 8, backgroundColor: '#374151', paddingVertical: 10, paddingHorizontal: 12, borderRadius: 8 },
+  smallBtn: { marginLeft: 8, backgroundColor: '#1cba53ff', paddingVertical: 10, paddingHorizontal: 12, borderRadius: 30 },
   smallBtnText: { color: '#fff', fontWeight: '700' },
   ownerItem: { padding: 10, marginHorizontal: 16, marginTop: 8, borderRadius: 8, borderWidth: 1, borderColor: '#e5e7eb' },
   ownerItemSelected: { borderColor: '#10b981', backgroundColor: '#ecfdf5' },
@@ -2550,4 +2558,5 @@ const styles = StyleSheet.create({
   clearBtn: { marginTop: 6 },
   subTitle: { paddingHorizontal: 16, marginTop: 8, fontWeight: '700' },
   prelotBox: { marginHorizontal: 16, marginTop: 10, padding: 12, borderRadius: 8, borderWidth: 1, backgroundColor: '#f8fafc' },
+  picker:{},
 });

@@ -7,8 +7,8 @@
     "english": "English",
     "hindi": "हिंदी",
     "marathi": "मराठी",
-    "modedark": "डार्क मोड",
-    "modelight": "लाइट मोड",
+    "modedark": "डार्क थीम",
+    "modelight": "लाइट थीम",
     "selectTheme": "आपली आवडती थीम निवडा",
 
     "enter_mobile_number": "मोबाईल नंबर प्रविष्ट करा",
@@ -138,7 +138,7 @@
     "chart_placeholder_text":"येथे बाजार भाव चार्ट दिसेल.",
     "pre_register_lot":"पूर्व-नोंदणी लॉट",
     "short_term_forecast":"लघु कालावधी पूर्वानुमान",
-    "fill_mandi_search":"कृपया मंडी आणि पिक भरा शोधण्यासाठी.",
+    "fill_mandi_search":"कृपया मंडी आणि पिक निवडा शोधण्यासाठी.",
     "daily_market_price":"दैनिक बाजार भाव",
 
     "forecast_results":"पूर्वानुमान परिणाम",
@@ -167,7 +167,7 @@
     "no_lots": "अद्याप कोणतेही लॉट नोंदणीकृत नाहीत",
     "lot_added_success": "लॉट यशस्वीरीत्या जोडला गेला",
     "fill_crop": "कृपया पीक निवडा",
-    "fill_quantity": "कृपया प्रमाण प्रविष्ट करा",
+    "fill_quantity": "कृपया प्रमाण प्रविष्ट करा (क्विंटल)",
     "fill_mandi": "कृपया मंडी निवडा",
 
   "pre_bidding_title": "पूर्व-बोलीसाठी उपलब्ध लॉट",
@@ -177,7 +177,7 @@
   "fill_bid_value": "कृपया बोली मूल्य प्रविष्ट करा",
   "invalid_bid": "कृपया वैध संख्या प्रविष्ट करा",
   "bid_placed": "आपली बोली लावली गेली आहे",
-  "lot_quantity": "प्रमाण",
+  "lot_quantity": "प्रमाण (क्विंटल)",
   "lot_date": "नीलामी तारीख",
   "lot_owner": "मालक",
   "pre_bidding": "पूर्व बोली",
@@ -191,7 +191,7 @@
   "mandiDashboard": "मंडी डॅशबोर्ड",
   "delhiAzadpurMandi": "आझादपूर मंडी, दिल्ली",
   "totalFarmers": "एकूण शेतकरी",
-  "quantity": "पिकांचे एकूण प्रमाण",
+  "quantity": "पिकांचे एकूण प्रमाण (क्विंटल)",
   "todaysPrice": "आजची किंमत",
   "buyers": "एकूण खरेदीदार",
   "analytics": "पिकांचे विश्लेषण",
@@ -239,8 +239,8 @@
     "anchor_stats_active_transactions_value": "48",
     "anchor_stats_total_land_value": "1,458",
 
-    "anchor_action_register_single_farmer": "+ एक शेतकरी नोंदणी करा",
-    "anchor_action_bulk_import_farmers": "⬆ शेतकरी बल्क इम्पोर्ट",
+    "anchor_action_register_single_farmer": " एक शेतकरी नोंदणी करा",
+    "anchor_action_bulk_register_farmers": " शेतकरी बल्क नोंदणी करा",
 
     "anchor_section_registered_farmers": "नोंदणीकृत शेतकरी",
     "anchor_search_placeholder": "शेतकरी नाव किंवा ठिकाणाने शोधा...",
@@ -298,7 +298,7 @@
 
     "register_lot_btn": "लॉट नोंदणी करा",
     "search_owner_label": "मालक शोधा (विद्यमान शेतकरी/विक्रेता)",
-    "search_owner_placeholder": "मालकाचे नाव किंवा मोबाईल एंटर करा आणि सर्च दाबा",
+    "search_owner_placeholder": "मालकाचे नाव किंवा मोबाईल एंटर करा",
     "search_btn": "शोध",
     "search_results": "शोध परिणाम",
     "selected_owner": "निवडलेला मालक",
@@ -307,7 +307,7 @@
     "owner_name_placeholder": "मालकाचे नाव",
     "owner_mobile_placeholder": "मोबाइल नंबर",
     "owner_role_label": "मालकाची भूमिका",
-    "quantity_placeholder": "प्रमाण एंटर करा (उदा. १००)",
+    "quantity_placeholder": "प्रमाण एंटर करा (उदा. १०० क्विंटल)",
     "create_arrived_lot_btn": "आलेले लॉट तयार करा",
     "missing_owner_fields": "मालकाचे फील्ड गहाळ आहेत",
     "fill_owner_fields": "कृपया मालकाचे नाव आणि मोबाइल आणि भूमिका द्या",
@@ -430,7 +430,13 @@
     "no_lots_found":"या लिलावात कोणतेही लॉट मॅप केलेले नाहीत",
     "live_auction_lots":"लाइव्ह लिलाव लॉट",
     "no_officer_profile":"अधिकाऱ्याची प्रोफाइल सापडली नाही",
-    "checking_status" :"नोंदणी स्थिती तपासत आहे..."
+    "checking_status" :"नोंदणी स्थिती तपासत आहे...",
+    "aboutUs":"आमच्याबद्दल : येथे तुम्ही शेतकरी, खरेदीदार आणि मंडई एकाच प्लॅटफॉर्मवर जोडू शकता. रिअल-टाइम बाजारभावांचा मागोवा घ्या, ट्रेंडचा अंदाज घ्या आणि तुमचा कृषी व्यवसाय वाढवा.",
+    "privacy_note": "तुमचा मोबाईल नंबर सुरक्षित आहे. आम्ही तुमची माहिती तृतीय पक्षासोबत शेअर करत नाही.",
+    "terms_note": "OTP पाठवताना तुम्ही आमच्या सेवा अटी आणि गोपनीयता धोरणास सहमती देता.",
+    "enter_name":"तुमचे नाव एंटर करा",
+    "edit_name":"नाव संपादित करा",
+    "convert_land_unit":"जमीन युनिट रूपांतरित करा"
 
 }
 

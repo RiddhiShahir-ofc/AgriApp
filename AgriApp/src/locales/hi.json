@@ -7,8 +7,8 @@
     "english": "English",
     "hindi": "हिंदी",
     "marathi": "मराठी",
-    "modedark": "डार्क मोड",
-    "modelight": "लाइट मोड",
+    "modedark": "डार्क थीम",
+    "modelight": "लाइट थीम",
     "selectTheme": "पसंदीदा थीम चुनें",
 
     "enter_mobile_number": "मोबाइल नंबर दर्ज करें",
@@ -138,7 +138,7 @@
     "short_term_forecast":"लघु अवधि पूर्वानुमान ",
     "chart_placeholder_text":"बाजार मूल्य चार्ट यहां प्रदर्शित किया जाएगा।",
     "pre_register_lot":"लॉट पूर्व-पंजीकरण",
-    "fill_mandi_search":"कृपया मंडी और फसल भरें ताकि खोजा जा सके।",
+    "fill_mandi_search":"कृपया मंडी और फसल चुनिये ताकि खोजा जा सके।",
     "daily_market_price":"दैनिक बाजार मूल्य",
 
     "forecast_results":"पूर्वानुमान परिणाम",
@@ -167,7 +167,7 @@
     "no_lots": "अभी कोई लॉट पंजीकृत नहीं है",
     "lot_added_success": "लॉट सफलतापूर्वक जोड़ा गया",
     "fill_crop": "कृपया फसल चुनें",
-    "fill_quantity": "कृपया मात्रा दर्ज करें",
+    "fill_quantity": "कृपया मात्रा दर्ज करें (क्विंटल)",
     "fill_mandi": "कृपया मंडी चुनें",
 
   "pre_bidding_title": "पूर्व-बोली के लिए उपलब्ध लॉट",
@@ -177,7 +177,7 @@
   "fill_bid_value": "कृपया एक बोली मूल्य दर्ज करें",
   "invalid_bid": "कृपया एक मान्य संख्या दर्ज करें",
   "bid_placed": "आपकी बोली लगाई गई है",
-  "lot_quantity": "मात्रा",
+  "lot_quantity": "मात्रा (क्विंटल)",
   "lot_date": "नीलामी तिथि",
   "lot_owner": "मालिक",
   "pre_bidding": "पूर्व बोली लगाना",
@@ -191,7 +191,7 @@
   "mandiDashboard": "मंडी डैशबोर्ड",
   "delhiAzadpurMandi": "आज़ादपुर मंडी, दिल्ली",
   "totalFarmers": "कुल किसान",
-  "quantity": "फसलों की कुल मात्रा",
+  "quantity": "फसलों की कुल मात्रा (क्विंटल)",
   "todaysPrice": "आज का मूल्य",
   "buyers": "कुल खरीदार",
   "analytics": "फसलों का विश्लेषण",
@@ -239,8 +239,8 @@
     "anchor_stats_active_transactions_value": "48",
     "anchor_stats_total_land_value": "1,458",
 
-    "anchor_action_register_single_farmer": "+ एक किसान पंजीकृत करें",
-    "anchor_action_bulk_import_farmers": "⬆ किसान बल्क इम्पोर्ट",
+    "anchor_action_register_single_farmer": " एक किसान पंजीकृत करें",
+    "anchor_action_bulk_register_farmers": " किसान बल्क पंजीकृत करें",
 
     "anchor_section_registered_farmers": "पंजीकृत किसान",
     "anchor_search_placeholder": "किसान को नाम या स्थान से खोजें...",
@@ -298,7 +298,7 @@
 
     "register_lot_btn": "लॉट पंजीकृत करें",
     "search_owner_label": "मालिक (मौजूदा किसान/विक्रेता) खोजें",
-    "search_owner_placeholder": "मालिक का नाम या मोबाइल नंबर दर्ज करें और खोजें दबाएँ",
+    "search_owner_placeholder": "मालिक का नाम या मोबाइल नंबर दर्ज करें",
     "search_btn": "खोजें",
     "search_results": "खोज परिणाम",
     "selected_owner": "चयनित मालिक",
@@ -307,7 +307,7 @@
     "owner_name_placeholder": "मालिक का नाम",
     "owner_mobile_placeholder": "मोबाइल नंबर",
     "owner_role_label": "मालिक की भूमिका",
-    "quantity_placeholder": "मात्रा दर्ज करें (उदाहरण: 100)",
+    "quantity_placeholder": "मात्रा दर्ज करें (उदाहरण: 100 क्विंटल)",
     "create_arrived_lot_btn": "आगमन हो चुके लॉट बनाएँ",
     "missing_owner_fields": "स्वामी फ़ील्ड अनुपलब्ध",
     "fill_owner_fields": "कृपया स्वामी का नाम, मोबाइल नंबर और भूमिका प्रदान करें",
@@ -430,6 +430,12 @@
     "no_lots_found":"स नीलामी से कोई लॉट मैप नहीं किया गया है",
     "live_auction_lots":"लाइव नीलामी लॉट",
     "no_officer_profile":"अधिकारी प्रोफ़ाइल नहीं मिली",
-    "checking_status" :"पंजीकरण स्थिति की जाँच की जा रही है..."
+    "checking_status" :"पंजीकरण स्थिति की जाँच की जा रही है...",
+    "aboutUs":"हमारे बारे में : यहां आप किसानों, खरीदारों और मंडियों को एक ही मंच पर जोड़ सकते हैं। वास्तविक समय में बाजार की कीमतों पर नजर रखें, रुझानों का अनुमान लगाएं और अपने कृषि व्यवसाय को बढ़ाएं।",
+    "privacy_note": "आपका नंबर सुरक्षित है। हम आपकी जानकारी किसी तीसरे पक्ष के साथ साझा नहीं करते।",
+    "terms_note": "OTP भेजने पर आप हमारी सेवा की शर्तों और गोपनीयता नीति से सहमत होते हैं।",
+    "enter_name":"अपना नाम दर्ज करें",
+    "edit_name":"नाम संपादित करें",
+    "convert_land_unit":"भूमि इकाई परिवर्तित करें"
 
 }

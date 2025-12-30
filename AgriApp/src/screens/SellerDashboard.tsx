@@ -1958,6 +1958,7 @@ import { Picker } from '@react-native-picker/picker';
 
 import GraphChart from '../components/GraphChart';
 import api from '../services/api';
+import AppHamburgerMenu from '../components/AppHamburgerMenu';
 
 type PropsNav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -1973,19 +1974,28 @@ type Lot = {
 };
 
 //  Bid + LotWithBids for received bids
+// type Bid = {
+//   lotId: string;
+//   lotOwner: string;
+//   bidder: string;
+//   sellingamount: string;
+//   bidValue: string;
+//   createdAt: number;
+//   status?: 'pending' | 'accepted' | 'rejected';
+// };
 type Bid = {
-  lotId: string;
-  lotOwner: string;
+  buyerInterestLotId: number;   //  REQUIRED FOR API
   bidder: string;
-  sellingamount: string;
   bidValue: string;
   createdAt: number;
   status?: 'pending' | 'accepted' | 'rejected';
 };
 
+
 type LotWithBids = Lot & {
   bids: Bid[];
 };
+
 
 // DB crop / mandi shapes for UI
 type UICrop = { id: number; name: string; grade?: string | null };
@@ -2207,11 +2217,17 @@ export default function SellerDashboard() {
   }, [prCrop, prGrade, currentGrades]);
 
   //  Load received bids when tab changes to "received"
+  // useEffect(() => {
+  //   if (selectedTab === 'received' && phone) {
+  //     loadReceivedBids(phone);
+  //   }
+  // }, [selectedTab, phone]);
   useEffect(() => {
-    if (selectedTab === 'received' && phone) {
-      loadReceivedBids(phone);
-    }
-  }, [selectedTab, phone]);
+  if (selectedTab === 'received') {
+    loadReceivedBids();
+  }
+}, [selectedTab]);
+
 
   const onSelectTab = (
     tab: 'daily' | 'short' | 'preregister' | 'received',
@@ -2459,81 +2475,155 @@ export default function SellerDashboard() {
   };
 
   //  Load all bids received on this seller's lots
-  const loadReceivedBids = async (ownerPhone: string) => {
-    setLoadingBids(true);
-    try {
-      const lotJson = await AsyncStorage.getItem(
-        `${STORAGE_KEY_PREFIX}${ownerPhone}`,
-      );
-      const ownerLots: Lot[] = lotJson ? JSON.parse(lotJson) : [];
+  // const loadReceivedBids = async (ownerPhone: string) => {
+  //   setLoadingBids(true);
+  //   try {
+  //     const lotJson = await AsyncStorage.getItem(
+  //       `${STORAGE_KEY_PREFIX}${ownerPhone}`,
+  //     );
+  //     const ownerLots: Lot[] = lotJson ? JSON.parse(lotJson) : [];
 
-      const result: LotWithBids[] = [];
+  //     const result: LotWithBids[] = [];
 
-      for (const lot of ownerLots) {
-        const bidKey = `BIDS_LOT_${lot.id}`;
-        const bidJson = await AsyncStorage.getItem(bidKey);
-        if (!bidJson) continue;
+  //     for (const lot of ownerLots) {
+  //       const bidKey = `BIDS_LOT_${lot.id}`;
+  //       const bidJson = await AsyncStorage.getItem(bidKey);
+  //       if (!bidJson) continue;
 
-        let bids: Bid[] = [];
-        try {
-          bids = JSON.parse(bidJson);
-        } catch (e) {
-          console.warn('Failed parse bids for lot', lot.id, e);
-          continue;
-        }
+  //       let bids: Bid[] = [];
+  //       try {
+  //         bids = JSON.parse(bidJson);
+  //       } catch (e) {
+  //         console.warn('Failed parse bids for lot', lot.id, e);
+  //         continue;
+  //       }
 
-        const filtered = bids.filter(b => b.lotOwner === ownerPhone);
-        if (filtered.length > 0) {
-          result.push({ ...lot, bids: filtered });
-        }
-      }
+  //       const filtered = bids.filter(b => b.lotOwner === ownerPhone);
+  //       if (filtered.length > 0) {
+  //         result.push({ ...lot, bids: filtered });
+  //       }
+  //     }
 
-      setLotsWithBids(result);
-    } catch (err) {
-      console.warn(err);
-    } finally {
-      setLoadingBids(false);
-    }
-  };
+  //     setLotsWithBids(result);
+  //   } catch (err) {
+  //     console.warn(err);
+  //   } finally {
+  //     setLoadingBids(false);
+  //   }
+  // };
+
+  const loadReceivedBids = async () => {
+  setLoadingBids(true);
+  try {
+    const res = await api.get('/seller/lots/bids');
+
+    const data = Array.isArray(res.data) ? res.data : [];
+
+    const mapped: LotWithBids[] = data.map((lot: any) => ({
+      id: lot.preLotId,
+      crop: lot.cropName,
+      grade: lot.grade,
+      quantity: lot.quantity,
+      sellingamount: lot.expectedAmount,
+      mandi: lot.mandiName,
+      expectedArrival: lot.expectedArrivalDate,
+      createdAt: Date.now(),
+      bids: lot.bids.map((b: any) => ({
+        buyerInterestLotId: b.buyerInterestLotId,
+        bidder: `${b.buyerName} (${b.buyerMobile})`,
+        bidValue: String(b.bidAmount),
+        createdAt: new Date(b.createdAt).getTime(),
+        status: b.status,
+      })),
+    }));
+
+    setLotsWithBids(mapped);
+  } catch (err: any) {
+    console.error(
+      'Fetch seller bids failed',
+      err?.response?.data ?? err,
+    );
+    Alert.alert(
+      t('error_title') ?? 'Error',
+      'Failed to fetch received bids',
+    );
+  } finally {
+    setLoadingBids(false);
+  }
+};
+
 
   //  Update status for a single bid
+  // const updateBidStatus = async (
+  //   lotId: string,
+  //   bidCreatedAt: number,
+  //   status: 'accepted' | 'rejected',
+  // ) => {
+  //   try {
+  //     const bidKey = `BIDS_LOT_${lotId}`;
+  //     const bidJson = await AsyncStorage.getItem(bidKey);
+  //     if (!bidJson) return;
+
+  //     let bids: Bid[] = JSON.parse(bidJson);
+  //     bids = bids.map(b =>
+  //       b.createdAt === bidCreatedAt ? { ...b, status } : b,
+  //     );
+
+  //     await AsyncStorage.setItem(bidKey, JSON.stringify(bids));
+
+  //     if (phone) {
+  //       await loadReceivedBids(phone);
+  //     }
+  //   } catch (e) {
+  //     console.warn('Failed to update bid status', e);
+  //   }
+  // };
+
   const updateBidStatus = async (
-    lotId: string,
-    bidCreatedAt: number,
-    status: 'accepted' | 'rejected',
-  ) => {
-    try {
-      const bidKey = `BIDS_LOT_${lotId}`;
-      const bidJson = await AsyncStorage.getItem(bidKey);
-      if (!bidJson) return;
+  preLotId: string,
+  buyerInterestLotId: number,
+  action: 'accept' | 'reject',
+) => {
+  try {
+    await api.post(
+      `/seller/lots/${preLotId}/bids/${buyerInterestLotId}/${action}`,
+    );
 
-      let bids: Bid[] = JSON.parse(bidJson);
-      bids = bids.map(b =>
-        b.createdAt === bidCreatedAt ? { ...b, status } : b,
-      );
+    await loadReceivedBids();
+  } catch (err: any) {
+    console.error(
+      `Failed to ${action} bid`,
+      err?.response?.data ?? err,
+    );
+    Alert.alert(
+      t('error_title') ?? 'Error',
+      `Failed to ${action} bid`,
+    );
+  }
+};
 
-      await AsyncStorage.setItem(bidKey, JSON.stringify(bids));
 
-      if (phone) {
-        await loadReceivedBids(phone);
-      }
-    } catch (e) {
-      console.warn('Failed to update bid status', e);
-    }
-  };
+  // const handleAcceptBid = (lotId: string, createdAt: number) => {
+  //   updateBidStatus(lotId, createdAt, 'accepted');
+  // };
 
-  const handleAcceptBid = (lotId: string, createdAt: number) => {
-    updateBidStatus(lotId, createdAt, 'accepted');
-  };
+  // const handleRejectBid = (lotId: string, createdAt: number) => {
+  //   updateBidStatus(lotId, createdAt, 'rejected');
+  // };
 
-  const handleRejectBid = (lotId: string, createdAt: number) => {
-    updateBidStatus(lotId, createdAt, 'rejected');
-  };
+  const handleAcceptBid = (lotId: string, buyerInterestLotId: number) => {
+  updateBidStatus(lotId, buyerInterestLotId, 'accept');
+};
+
+const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
+  updateBidStatus(lotId, buyerInterestLotId, 'reject');
+};
+
 
   const ListHeaderElement = useMemo(() => {
     return (
       <View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={goBack}
           style={[
             styles.backBtn,
@@ -2555,7 +2645,33 @@ export default function SellerDashboard() {
         </Text>
         <Text style={[styles.text, { color: theme.text }]}>
           {t('seller_msg') || 'Welcome Seller!'}
-        </Text>
+        </Text> */}
+
+            <View style={styles.headerContainer}>
+
+        {/* Row 1: Back + Hamburger */}
+        <View style={styles.headerTopRow}>
+          <TouchableOpacity onPress={goBack} style={styles.backBtn}>
+            <Text style={[styles.backText, { color: theme.primary }]}>
+              {t('back') || 'Back'}
+            </Text>
+          </TouchableOpacity>
+
+          <AppHamburgerMenu role="seller" />
+        </View>
+
+        {/* Row 2: Title + subtitle */}
+        <View style={styles.headerTextBlock}>
+          <Text style={[styles.title, { color: theme.text }]}>
+            {t('seller_dashboard') || 'Seller Dashboard'}
+          </Text>
+          <Text style={[styles.text, { color: theme.text }]}>
+            {t('seller_msg') ||
+              'Manage your listed items, bids, and completed sales'}
+          </Text>
+        </View>
+
+      </View>
 
         <View style={styles.tabsRow}>
           <TouchableOpacity
@@ -2686,6 +2802,8 @@ export default function SellerDashboard() {
                       : ''
                   }
                   onValueChange={v => setMandiName(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_mandi') ?? 'Select mandi'}
@@ -2733,6 +2851,8 @@ export default function SellerDashboard() {
                       : ''
                   }
                   onValueChange={v => setCropName(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_crop') ?? 'Select crop'}
@@ -2833,6 +2953,8 @@ export default function SellerDashboard() {
                       : ''
                   }
                   onValueChange={v => setStfMandi(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_mandi') ?? 'Select mandi'}
@@ -2881,6 +3003,8 @@ export default function SellerDashboard() {
                       : ''
                   }
                   onValueChange={v => setStfCrop(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_crop') ?? 'Select crop'}
@@ -3065,6 +3189,8 @@ export default function SellerDashboard() {
                       : ''
                   }
                   onValueChange={v => setPrCrop(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_crop') ?? 'Select crop'}
@@ -3107,6 +3233,8 @@ export default function SellerDashboard() {
                 <Picker
                   selectedValue={prGrade}
                   onValueChange={v => setPrGrade(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_grade') ?? 'Select grade'}
@@ -3197,6 +3325,8 @@ export default function SellerDashboard() {
                       : ''
                   }
                   onValueChange={v => setPrMandi(v)}
+                  style={[styles.picker, { color: theme.text }]}
+                  dropdownIconColor={theme.text}
                 >
                   <Picker.Item
                     label={t('select_mandi') ?? 'Select mandi'}
@@ -3462,7 +3592,8 @@ export default function SellerDashboard() {
                               onPress={() =>
                                 handleAcceptBid(
                                   lotWithBids.id,
-                                  bid.createdAt,
+                                  //bid.createdAt,
+                                   bid.buyerInterestLotId,
                                 )
                               }
                             >
@@ -3487,7 +3618,8 @@ export default function SellerDashboard() {
                               onPress={() =>
                                 handleRejectBid(
                                   lotWithBids.id,
-                                  bid.createdAt,
+                                  //bid.createdAt,
+                                   bid.buyerInterestLotId,
                                 )
                               }
                             >
@@ -3782,10 +3914,26 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
    smallEditBtn: {
-    backgroundColor: '#4B9CFD',
+    backgroundColor: '#0daa3cff',
     paddingVertical: 6,
     paddingHorizontal: 10,
     borderRadius: 6,
   },
   smallEditBtnText: { color: '#fff', fontWeight: '700', fontSize: 12 },
+  picker:{},
+
+  headerContainer: {
+  marginBottom: 12,
+},
+
+headerTopRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+},
+
+headerTextBlock: {
+  marginTop: 8,
+},
+
 });

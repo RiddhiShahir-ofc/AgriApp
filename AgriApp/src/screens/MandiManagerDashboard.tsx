@@ -2259,6 +2259,7 @@ import { RootStackParamList } from '../../App';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import api from '../services/api';
+import AppHamburgerMenu from '../components/AppHamburgerMenu';
 
 type PropsNav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -2610,11 +2611,22 @@ export default function MandiManagerDashboard() {
   }
 
   return (
+    // <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+    //   <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
+    //     <TouchableOpacity onPress={goBack} style={styles.backBtn}>
+    //       <Text style={[styles.backText, { color: '#2b6cb0' }]}>{t('back')}</Text>
+    //     </TouchableOpacity>
+
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
-        <TouchableOpacity onPress={goBack} style={styles.backBtn}>
-          <Text style={[styles.backText, { color: '#2b6cb0' }]}>{t('back')}</Text>
-        </TouchableOpacity>
+    <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
+    <TouchableOpacity onPress={goBack} style={styles.backBtn}>
+    <Text style={[styles.backText, { color: theme.primary }]}>
+      {t('back')}
+    </Text>
+  </TouchableOpacity>
+
+  <AppHamburgerMenu role="mandiofficial" />
+
 
         <Text style={[styles.title, { color: theme.text }]}>{t('mandi_manager_dashboard') ?? 'Mandi Manager Dashboard'}</Text>
         <Text style={[styles.text, { color: theme.text }]}>{t('mandi_manager_msg') ?? 'Manage auction schedules for your mandi.'}</Text>
