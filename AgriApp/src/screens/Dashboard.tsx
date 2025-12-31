@@ -553,7 +553,7 @@ export default function Dashboard({ navigation }: Props) {
   const [showEditName, setShowEditName] = useState(false);
   const [tempName, setTempName] = useState('');
 
-  const [filters, setFilters] = useState({ mandi: '', crop: '' });
+  const [filters, setFilters] = useState({ mandi: '', crop: '', district: '' });
   const [appliedFilters, setAppliedFilters] = useState(filters);
 
   const { theme } = useTheme();

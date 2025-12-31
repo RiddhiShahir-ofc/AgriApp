@@ -211,7 +211,7 @@
 //   secondaryButtonText: { color: '#fff', fontWeight: '700' },
 // });
 
-// src/screens/MandiOfficerDashboard.tsx
+
 import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -262,15 +262,24 @@ export default function MandiOfficerDashboard() {
     //     <Text style={[styles.backText, { color: '#2b6cb0' }]}>{t('back')}</Text>
     //   </TouchableOpacity>
 
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
-  <TouchableOpacity onPress={goBack} style={styles.backBtn}>
-    <Text style={[styles.backText, { color: theme.primary }]}>
-      {t('back')}
-    </Text>
-  </TouchableOpacity>
+//     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+//   <TouchableOpacity onPress={goBack} style={styles.backBtn}>
+//     <Text style={[styles.backText, { color: theme.primary }]}>
+//       {t('back')}
+//     </Text>
+//   </TouchableOpacity>
 
-  <AppHamburgerMenu role="mandiofficial" />
+// <AppHamburgerMenu role="mandiofficial" />
 
+  <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
+        <TouchableOpacity onPress={goBack} style={styles.backBtn}>
+          <Text style={[styles.backText, { color: theme.primary }]}>
+            {t('back') ?? 'Back'}
+          </Text>
+        </TouchableOpacity>
+        <AppHamburgerMenu role="mandiofficial" />
 
       <Text style={[styles.title, { color: theme.text }]}>{t('mandi_officer_dashboard')}</Text>
       <Text style={[styles.text, { color: theme.text }]}>{t('mandi_officer_msg')}</Text>

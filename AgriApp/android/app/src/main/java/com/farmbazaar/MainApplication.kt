@@ -1,4 +1,4 @@
-package com.agriapp
+package com.farmbazaar
 
 import android.app.Application
 import com.facebook.react.PackageList

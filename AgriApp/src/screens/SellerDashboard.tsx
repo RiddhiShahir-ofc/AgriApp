@@ -3803,7 +3803,7 @@ const styles = StyleSheet.create({
   },
   searchBtn: {
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 30,
     alignItems: 'center',
     marginTop: 6,
   },
@@ -3835,7 +3835,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     minWidth: 44,
   },
-  horizonBtnActive: { backgroundColor: '#2b6cb0' },
+  horizonBtnActive: { backgroundColor: '#0b9c36ff' },
   horizonText: { color: '#333', fontWeight: '600' },
   horizonTextActive: { color: '#fff', fontWeight: '700' },
 
@@ -3854,7 +3854,7 @@ const styles = StyleSheet.create({
   formTitle: { fontSize: 16, fontWeight: '700', marginTop: 12 },
   addBtn: {
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 30,
     alignItems: 'center',
     marginTop: 12,
   },

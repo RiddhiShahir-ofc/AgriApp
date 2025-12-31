@@ -249,8 +249,8 @@ import { useTheme } from '../context/ThemeContext';
 import api from '../services/api';
 
 interface FilterProps {
-  filters: { mandi: string; crop: string };
-  setFilters: (filters: { mandi: string; crop: string }) => void;
+  filters: { mandi: string; crop: string; district: string };
+  setFilters: (filters: { mandi: string; crop: string; district: string }) => void;
   onSearch: () => void;
 }
 
@@ -265,6 +265,8 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
 
   const [mandiOptions, setMandiOptions] = useState<Option[]>([]);
   const [cropOptions, setCropOptions] = useState<Option[]>([]);
+  const [districtOptions, setDistrictOptions] = useState<Option[]>([]);
+
 
   const handleSearch = () => {
   if (!filters.mandi || !filters.crop) {
@@ -299,6 +301,27 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
     };
 
     loadMandis();
+  }, []);
+
+    /* ---------------- Load Districts ---------------- */
+  useEffect(() => {
+    const loadDistricts = async () => {
+      try {
+        const res = await api.get('/mandis');
+        const mapped: Option[] = [
+          { label: t('select_district') ?? 'Select District', value: '' },
+          ...res.data.map((m: any) => ({
+            label: m.Location,      // adjust if backend differs
+            value: String(m.mandiId),
+          })),
+        ];
+        setDistrictOptions(mapped);
+      } catch (err) {
+        console.log('Error loading district', err);
+      }
+    };
+
+    loadDistricts();
   }, []);
 
   /* ---------------- Load Crops ---------------- */
@@ -344,6 +367,26 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
         </Picker>
       </View>
 
+           {/* ---------------- District ---------------- */}
+      <Text style={[styles.label, { color: theme.text }]}>
+        {t('district')}
+      </Text>
+
+      <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
+        <Picker
+          selectedValue={filters.district}
+          onValueChange={(value) =>
+            setFilters({ ...filters, district: value })
+          }
+          style={[styles.picker, { color: theme.text }]}
+          dropdownIconColor={theme.text}
+        >
+          {districtOptions.map((opt) => (
+            <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
+          ))}
+        </Picker>
+      </View>
+
       {/* ---------------- Crop ---------------- */}
       <Text style={[styles.label, { color: theme.text }]}>
         {t('crop')}
@@ -369,6 +412,7 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
         style={[styles.searchBtn, { backgroundColor: theme.primary }]}
         onPress={handleSearch}
       >
+        
         <Text style={[styles.searchText, { color: theme.text }]}>
           {t('search')}
         </Text>
