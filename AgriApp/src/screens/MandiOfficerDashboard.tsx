@@ -274,12 +274,14 @@ export default function MandiOfficerDashboard() {
   <SafeAreaView
       style={[styles.container, { backgroundColor: theme.background }]}
     >
+      <View style={styles.headerRow}>
         <TouchableOpacity onPress={goBack} style={styles.backBtn}>
           <Text style={[styles.backText, { color: theme.primary }]}>
             {t('back') ?? 'Back'}
           </Text>
         </TouchableOpacity>
         <AppHamburgerMenu role="mandiofficial" />
+      </View>
 
       <Text style={[styles.title, { color: theme.text }]}>{t('mandi_officer_dashboard')}</Text>
       <Text style={[styles.text, { color: theme.text }]}>{t('mandi_officer_msg')}</Text>
@@ -323,6 +325,13 @@ export default function MandiOfficerDashboard() {
 }
 
 const styles = StyleSheet.create({
+    headerRow: {
+    flexDirection: 'row',        // 👈 side-by-side
+    alignItems: 'center',        // 👈 vertical alignment
+    justifyContent: 'space-between', // optional
+    paddingHorizontal: 12,
+  },
+  
   container: { flex: 1, padding: 20 },
   title: { fontSize: 26, fontWeight: '700', marginBottom: 10 },
   text: { fontSize: 16 },

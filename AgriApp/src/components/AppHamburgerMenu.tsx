@@ -11,12 +11,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 
+import {User,LogOut,Settings} from 'lucide-react-native';
+
 type Role =
   | 'farmer'
   | 'buyer'
   | 'seller'
   | 'anchor'
-  | 'mandiofficial';
+  | 'mandiofficial'
+  | 'user';
 
 const PROFILE_ROUTE_MAP: Record<Role, string> = {
   farmer: 'FarmerProfile',
@@ -24,6 +27,7 @@ const PROFILE_ROUTE_MAP: Record<Role, string> = {
   seller: 'SellerProfile',
   anchor: 'AnchorProfile',
   mandiofficial: 'MandiOfficialProfile',
+  user: 'UserProfile',
 };
 
 export default function AppHamburgerMenu({ role }: { role: Role }) {
@@ -66,6 +70,7 @@ export default function AppHamburgerMenu({ role }: { role: Role }) {
           >
             {/* Profile */}
             <MenuItem
+            icon={<User size={18} />}
               label={t('profile') ?? 'Profile'}
               onPress={() => {
                 setVisible(false);
@@ -75,6 +80,7 @@ export default function AppHamburgerMenu({ role }: { role: Role }) {
 
             {/* Settings */}
             <MenuItem
+              icon={<Settings size={18} />}
               label={t('settings') ?? 'Settings'}
               onPress={() => {
                 setVisible(false);
@@ -84,6 +90,7 @@ export default function AppHamburgerMenu({ role }: { role: Role }) {
 
             {/* Logout */}
             <MenuItem
+              icon={<LogOut size={18} color="red" />}
               label={t('logout') ?? 'Logout'}
               danger
               onPress={() => {
@@ -102,16 +109,19 @@ const MenuItem = ({
   label,
   onPress,
   danger,
+  icon,
 }: {
   label: string;
   onPress: () => void;
   danger?: boolean;
+  icon?: React.ReactElement;
 }) => (
   <TouchableOpacity style={styles.item} onPress={onPress}>
+    {icon && <View style={{ marginRight: 8 }}>{icon}</View>}
     <Text
       style={[
         styles.text,
-        danger && { color: '#dc2626' },
+        danger && { color: '#dc2626' }, // Tailwind red-600 color    
       ]}
     >
       {label}
@@ -134,6 +144,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   item: {
+    flexDirection: 'row',      // THIS IS THE KEY
+    alignItems: 'center',      // vertically center icon + text
     paddingVertical: 12,
     paddingHorizontal: 16,
   },

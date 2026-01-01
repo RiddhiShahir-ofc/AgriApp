@@ -3863,7 +3863,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    marginBottom: 8,
+    marginBottom: 30,
     marginTop: 12,
   },
   emptyBox: {

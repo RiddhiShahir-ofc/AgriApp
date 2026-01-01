@@ -1323,8 +1323,7 @@ const MandiOfficialRegister: React.FC = () => {
   const handleSubmit = async () => {
     if (!officialName || !employeeId || !email || !selectedMandiId || !selectedRoleId) {
       return Alert.alert(
-        t('missing_fields') ?? 'Missing fields',
-        t('fill_fields') ?? 'Please fill all required fields',
+        t('fill_allfields') ?? 'Please fill all required fields',
       );
     }
 
@@ -1390,7 +1389,7 @@ const MandiOfficialRegister: React.FC = () => {
           { backgroundColor: theme.background, justifyContent: 'center', alignItems: 'center' },
         ]}
       >
-        <ActivityIndicator size="large" color="#2b6cb0" />
+        <ActivityIndicator size="large" color="#13c039ff" />
         <Text style={{ marginTop: 10, color: theme.text }}>
           {t('checking_status') ?? 'Checking registration status...'}
         </Text>
@@ -1475,9 +1474,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   btn: {
-    backgroundColor: '#2b6cb0',
+    backgroundColor: '#1bb13eff',
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 30,
     alignItems: 'center',
     marginTop: 10,
   },

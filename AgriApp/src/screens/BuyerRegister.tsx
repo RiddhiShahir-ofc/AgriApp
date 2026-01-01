@@ -148,7 +148,7 @@ const BuyerRegister: React.FC = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
 
-  // 🔵 NEW: while checking /buyer/status, we hide the form
+  //  while checking /buyer/status, we hide the form
   const [checkingStatus, setCheckingStatus] = useState(true);
 
   // -------- Load crops from backend ----------

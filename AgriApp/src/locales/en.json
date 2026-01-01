@@ -66,6 +66,7 @@
 
     "missing_some_fields":"Missing Fields", 
     "fill_fields":"Please fill all fields & upload a photo.",
+    "fill_allfields":"Please fill all the fields.",
     "permission_req":"Permission required", 
     "storage":"Storage permission denied.",
     "camera":"Camera permission denied.",
@@ -226,6 +227,7 @@
   "settings":"Settings",
   "menu":"Menu",
   "profile":"Profile",
+  "district":"District",
 
 
   "anchor_stats_registered_farmers": "Registered Farmers",

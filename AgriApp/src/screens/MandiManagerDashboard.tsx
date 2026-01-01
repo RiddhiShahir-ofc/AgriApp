@@ -2619,6 +2619,8 @@ export default function MandiManagerDashboard() {
 
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
     <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
+
+    <View style={styles.headerRow}>
     <TouchableOpacity onPress={goBack} style={styles.backBtn}>
     <Text style={[styles.backText, { color: theme.primary }]}>
       {t('back')}
@@ -2626,7 +2628,7 @@ export default function MandiManagerDashboard() {
   </TouchableOpacity>
 
   <AppHamburgerMenu role="mandiofficial" />
-
+  </View>
 
         <Text style={[styles.title, { color: theme.text }]}>{t('mandi_manager_dashboard') ?? 'Mandi Manager Dashboard'}</Text>
         <Text style={[styles.text, { color: theme.text }]}>{t('mandi_manager_msg') ?? 'Manage auction schedules for your mandi.'}</Text>
@@ -2750,6 +2752,12 @@ export default function MandiManagerDashboard() {
 }
 
 const styles = StyleSheet.create({
+    headerRow: {
+    flexDirection: 'row',        // 👈 side-by-side
+    alignItems: 'center',        // 👈 vertical alignment
+    justifyContent: 'space-between', // optional
+    paddingHorizontal: 12,
+  },
   container: { flex: 1, padding: 20 },
   title: { fontSize: 26, fontWeight: '700', marginBottom: 6 },
   text: { fontSize: 16 },

@@ -311,7 +311,7 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
         const mapped: Option[] = [
           { label: t('select_district') ?? 'Select District', value: '' },
           ...res.data.map((m: any) => ({
-            label: m.Location,      // adjust if backend differs
+            label: m.location,    
             value: String(m.mandiId),
           })),
         ];
@@ -347,26 +347,8 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
 
   return (
     <View style={[styles.filterContainer, { backgroundColor: theme.background }]}>
-      {/* ---------------- Mandi ---------------- */}
-      <Text style={[styles.label, { color: theme.text }]}>
-        {t('mandi')}
-      </Text>
 
-      <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
-        <Picker
-          selectedValue={filters.mandi}
-          onValueChange={(value) =>
-            setFilters({ ...filters, mandi: value })
-          }
-          style={[styles.picker, { color: theme.text }]}
-          dropdownIconColor={theme.text}
-        >
-          {mandiOptions.map((opt) => (
-            <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
-          ))}
-        </Picker>
-      </View>
-
+      
            {/* ---------------- District ---------------- */}
       <Text style={[styles.label, { color: theme.text }]}>
         {t('district')}
@@ -382,6 +364,26 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
           dropdownIconColor={theme.text}
         >
           {districtOptions.map((opt) => (
+            <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
+          ))}
+        </Picker>
+      </View>
+
+      {/* ---------------- Mandi ---------------- */}
+      <Text style={[styles.label, { color: theme.text }]}>
+        {t('mandi')}
+      </Text>
+
+      <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
+        <Picker
+          selectedValue={filters.mandi}
+          onValueChange={(value) =>
+            setFilters({ ...filters, mandi: value })
+          }
+          style={[styles.picker, { color: theme.text }]}
+          dropdownIconColor={theme.text}
+        >
+          {mandiOptions.map((opt) => (
             <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
           ))}
         </Picker>
@@ -412,7 +414,7 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
         style={[styles.searchBtn, { backgroundColor: theme.primary }]}
         onPress={handleSearch}
       >
-        
+
         <Text style={[styles.searchText, { color: theme.text }]}>
           {t('search')}
         </Text>

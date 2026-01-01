@@ -50,6 +50,7 @@ import BuyerProfile from './src/screens/BuyerProfile';
 import SellerProfile from './src/screens/SellerProfile';
 import AnchorProfile from './src/screens/AnchorProfile';
 import MandiOfficialProfile from './src/screens/MandiOfficialProfile';
+import UserProfile from './src/screens/UserProfile';
 import SettingsScreen from './src/screens/SettingsScreen';
 
 export type RootStackParamList = {
@@ -96,6 +97,7 @@ export type RootStackParamList = {
   SellerProfile: undefined;
   AnchorProfile: undefined;
   MandiOfficialProfile: undefined;
+  UserProfile: undefined;
   Settings: undefined;
 
 };
@@ -209,6 +211,7 @@ export default function App() {
             <Stack.Screen name="SellerProfile" component={SellerProfile} />
             <Stack.Screen name="AnchorProfile" component={AnchorProfile} />
             <Stack.Screen name="MandiOfficialProfile" component={MandiOfficialProfile} />
+            <Stack.Screen name="UserProfile" component={UserProfile} />
             <Stack.Screen name="Settings" component={SettingsScreen} />
 
           </Stack.Navigator>

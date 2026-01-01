@@ -534,6 +534,8 @@ import {
   ArrowLeft,
 } from 'lucide-react-native';
 
+import AppHamburgerMenu from '../components/AppHamburgerMenu';
+
 type Props = NativeStackScreenProps<RootStackParamList, 'Dashboard'>;
 
 /* ---------------- Roles ---------------- */
@@ -549,7 +551,7 @@ export default function Dashboard({ navigation }: Props) {
   const [phone, setPhone] = useState<string | null>(null);
   const [profileName, setProfileName] = useState<string | null>(null);
 
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  //const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showEditName, setShowEditName] = useState(false);
   const [tempName, setTempName] = useState('');
 
@@ -629,9 +631,11 @@ const goBack = () => navigation.navigate('Dashboard');
             {t('dashboard_title')}
           </Text>
 
-          <TouchableOpacity onPress={() => setShowProfileMenu(true)}>
+          <AppHamburgerMenu role="user" />
+          {/* <TouchableOpacity onPress={() => setShowProfileMenu(true)}>
             <User size={28} color={theme.text} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+
         </View>
 
         {/* ---------------- Welcome ---------------- */}
@@ -758,7 +762,7 @@ const goBack = () => navigation.navigate('Dashboard');
 
 
       {/* ---------------- Profile Menu ---------------- */}
-      <Modal transparent visible={showProfileMenu} animationType="fade">
+      {/* <Modal transparent visible={showProfileMenu} animationType="fade">
         <TouchableOpacity
           style={styles.modalBackdrop}
           onPress={() => setShowProfileMenu(false)}
@@ -766,7 +770,7 @@ const goBack = () => navigation.navigate('Dashboard');
           <View style={[styles.profileMenu, { backgroundColor: theme.background }]}>
             <TouchableOpacity style={styles.menuItem}>
               <Settings size={18} />
-              <Text style={[styles.menuText,{color:theme.text}]}>Settings</Text>
+              <Text style={[styles.menuText,{color:theme.text}]}>{t('settings')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.menuItem} onPress={logout}>
@@ -775,7 +779,8 @@ const goBack = () => navigation.navigate('Dashboard');
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
-      </Modal>
+      </Modal> */}
+
     </SafeAreaView>
   );
 }

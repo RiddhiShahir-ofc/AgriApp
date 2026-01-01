@@ -439,6 +439,7 @@ export default function MandiApproverDashboard() {
     //         </TouchableOpacity>
 
     <SafeAreaView style={styles.container}>
+      <View style={styles.headerRow}>
   <TouchableOpacity onPress={goBack} style={styles.backBtn}>
     <Text style={[styles.backText, { color: theme.primary }]}>
       {t('back')}
@@ -446,7 +447,7 @@ export default function MandiApproverDashboard() {
   </TouchableOpacity>
 
   <AppHamburgerMenu role="mandiofficial" />
-
+</View>
 
       <Text style={[styles.title, { color: theme.text }]}>
         {t('mandi_approver_dashboard') ?? 'Mandi Approver Dashboard'}
@@ -480,6 +481,12 @@ export default function MandiApproverDashboard() {
 }
 
 const styles = StyleSheet.create({
+    headerRow: {
+    flexDirection: 'row',        // 👈 side-by-side
+    alignItems: 'center',        // 👈 vertical alignment
+    justifyContent: 'space-between', // optional
+    paddingHorizontal: 12,
+  },
   container: { flex: 1, padding: 20 },
   title: { fontSize: 26, fontWeight: '700', marginBottom: 10 },
   text: { fontSize: 16 },

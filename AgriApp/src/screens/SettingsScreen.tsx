@@ -23,13 +23,13 @@ export default function SettingsScreen() {
 
       {/* Language */}
       <Text style={[styles.section, { color: theme.text }]}>
-        {t('language') ?? 'Language'}
+        {t('selectLanguage') ?? 'Language'}
       </Text>
 
       {[
         { code: 'en', label: 'English' },
-        { code: 'hi', label: 'Hindi' },
-        { code: 'mr', label: 'Marathi' },
+        { code: 'hi', label: 'हिंदी' },
+        { code: 'mr', label: 'मराठी' },
       ].map(l => (
         <Option
           key={l.code}
@@ -41,7 +41,7 @@ export default function SettingsScreen() {
 
       {/* Theme */}
       <Text style={[styles.section, { color: theme.text }]}>
-        {t('theme') ?? 'Theme'}
+        {t('selectTheme') ?? 'Theme'}
       </Text>
 
       <Option
