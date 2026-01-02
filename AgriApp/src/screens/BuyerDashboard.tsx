@@ -1226,6 +1226,18 @@ type BidWithLot = Bid & {
   lot?: Lot;
 };
 
+type UIMandi = {
+  id: number;
+  name: string;
+  district: string;
+};
+
+  type UICrop = {
+  id: number;
+  name: string;
+};
+
+
 export default function BuyerDashboard() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { theme } = useTheme();
@@ -1238,12 +1250,12 @@ export default function BuyerDashboard() {
 
   
   // Daily
-
+  const [district, setDistrict] = useState('');
   const [mandiName, setMandiName] = useState('');
   const [cropName, setCropName] = useState('');
 
   // Short-term forecast
-
+  const [stfDistrict, setStfDistrict] = useState('');
   const [stfMandi, setStfMandi] = useState('');
   const [stfCrop, setStfCrop] = useState('');
   const [horizon, setHorizon] = useState<'7days' | '14days' | '30days'>('7days');
@@ -1262,8 +1274,9 @@ export default function BuyerDashboard() {
   const [myBids, setMyBids] = useState<Bid[]>([]);
   const [loadingMyBids, setLoadingMyBids] = useState(false);
 
-  const cropOptions = ['Wheat', 'Rice', 'Maize', 'Onion'];
-  const mandiOptions = ['Pune Mandi', 'Nashik Mandi', 'Nagpur Mandi'];
+  const [mandis, setMandis] = useState<UIMandi[]>([]);
+  const [crops, setCrops] = useState<UICrop[]>([]);
+
   const isPredefined = (value: string, options: string[]) =>
   value === '' || options.includes(value) || value === 'Other';
 
@@ -1332,6 +1345,80 @@ export default function BuyerDashboard() {
       setForecastLoading(false);
     }, 400);
   };
+
+  /*========== LOAD MANDIS ========== */
+  useEffect(() => {
+  const loadMandis = async () => {
+    try {
+      const res = await api.get('/mandis');
+      const mapped: UIMandi[] = res.data.map((m: any) => ({
+        id: m.mandiId ?? m.id,
+        name: m.mandiName ?? m.name,
+        district: m.district ?? '',
+      }));
+      setMandis(mapped);
+    } catch (e) {
+      console.warn('Failed to load mandis', e);
+    }
+  };
+
+  loadMandis();
+}, []);
+
+const districtOptions = React.useMemo(
+  () =>
+    Array.from(
+      new Set(mandis.map(m => m.district).filter(Boolean))
+    ),
+  [mandis],
+);
+
+const mandiOptions = React.useMemo(
+  () =>
+    mandis
+      .filter(m => !district || m.district === district)
+      .map(m => m.name),
+  [mandis, district],
+);
+
+const stfMandiOptions = React.useMemo(
+  () =>
+    mandis
+      .filter(m => !stfDistrict || m.district === stfDistrict)
+      .map(m => m.name),
+  [mandis, stfDistrict],
+);
+
+const cropOptions = React.useMemo(
+  () =>
+    Array.from(
+      new Set(crops.map(c => c.name).filter(Boolean))
+    ),
+  [crops],
+);
+
+
+/*========== LOAD CROPS ========== */
+useEffect(() => {
+  const loadCrops = async () => {
+    try {
+      const res = await api.get('/crops');
+
+      const mapped: UICrop[] = (res.data ?? []).map((c: any) => ({
+        id: c.cropId ?? c.id,
+        name: c.cropName ?? c.name,
+      }));
+
+      setCrops(mapped);
+    } catch (e) {
+      console.warn('Failed to load crops', e);
+    }
+  };
+
+  loadCrops();
+}, []);
+
+
 
   /* ================= PLACE BID ================= */
   const placeBid = async (lot: Lot) => {
@@ -1465,13 +1552,7 @@ export default function BuyerDashboard() {
       //   <Text style={[styles.text, { color: theme.text }]}>{t('buyer_msg') || 'Find and bid on crop lots'}</Text>
       //   </View>
 
-      //   {/* ☰ Hamburger on extreme right */}
-      //   <View style={styles.menuWrap}>
-      //   <AppHamburgerMenu role="buyer" />
-      //   </View>
-      //   </View>
-
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
   {/* Row 1: Back + Hamburger */}
   <View style={styles.headerTopRow}>
@@ -1481,7 +1562,7 @@ export default function BuyerDashboard() {
       </Text>
     </TouchableOpacity>
 
-    {/* 👇 SAME hamburger component */}
+    {/*  SAME hamburger component */}
     <AppHamburgerMenu role="buyer" />
   </View>
 
@@ -1613,6 +1694,29 @@ export default function BuyerDashboard() {
                 },
               ]}
             >
+
+              <Text style={[styles.searchTitle, { color: theme.text }]}>
+  {t('district') ?? 'District'}
+</Text>
+
+<View style={[styles.pickerWrap, { borderColor: theme.text }]}>
+  <Picker
+    selectedValue={district}
+    onValueChange={v => {
+      setDistrict(v);
+      setMandiName('');
+    }}
+    style={[styles.picker, { color: theme.text }]}
+    dropdownIconColor={theme.text}
+  >
+    <Picker.Item label={t('select_district') ?? 'Select district'} value="" />
+    {districtOptions.map(d => (
+      <Picker.Item key={d} label={d} value={d} />
+    ))}
+  </Picker>
+</View>
+
+
               <Text
                 style={[styles.searchTitle, { color: theme.text }]}
               >
@@ -1759,17 +1863,42 @@ export default function BuyerDashboard() {
 
             <View style={[styles.searchBox, { borderColor: theme.text }]}>
 
+              <Text style={[styles.searchTitle, { color: theme.text }]}>
+  {t('district') ?? 'District'}
+</Text>
+
+<View style={[styles.pickerWrap, { borderColor: theme.text }]}>
+  <Picker
+    selectedValue={stfDistrict}
+    onValueChange={v => {
+      setStfDistrict(v);
+      setStfMandi('');
+    }}
+    style={[styles.picker, { color: theme.text }]}
+    dropdownIconColor={theme.text}
+  >
+    <Picker.Item label={t('select_district') ?? 'Select district'} value="" />
+    {districtOptions.map(d => (
+      <Picker.Item key={d} label={d} value={d} />
+    ))}
+  </Picker>
+</View>
+
+
               <Text style={[styles.searchTitle, { color: theme.text }]}>{t('mandi')}</Text>
 
               <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
 
-                <Picker selectedValue={isPredefined(stfMandi, mandiOptions) ? stfMandi : 'Other'} onValueChange={v => v !== 'Other' && setStfMandi(v)}
+                <Picker selectedValue={isPredefined(stfMandi, stfMandiOptions) ? stfMandi : 'Other'} onValueChange={v => v !== 'Other' && setStfMandi(v)}
                   style={[styles.picker, { color: theme.text }]}
                   dropdownIconColor={theme.text}>
 
                   <Picker.Item label="Select mandi" value="" />
 
-                  {mandiOptions.map(m => <Picker.Item key={m} label={m} value={m} />)}
+                  {stfMandiOptions.map(m => (
+  <Picker.Item key={m} label={m} value={m} />
+))}
+
 
                   <Picker.Item label="Other" value="Other" />
 

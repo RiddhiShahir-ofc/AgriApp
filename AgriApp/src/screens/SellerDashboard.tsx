@@ -1999,7 +1999,7 @@ type LotWithBids = Lot & {
 
 // DB crop / mandi shapes for UI
 type UICrop = { id: number; name: string; grade?: string | null };
-type UIMandi = { id: number; name: string; location: string };
+type UIMandi = { id: number; name: string; location: string;  district?: string;  };
 
 export default function SellerDashboard() {
   const navigation = useNavigation<PropsNav>();
@@ -2013,11 +2013,13 @@ export default function SellerDashboard() {
   >('daily');
 
   // Daily mandi/crop search
+  const [district, setDistrict] = useState('');
   const [mandiName, setMandiName] = useState('');
   const [cropName, setCropName] = useState('');
   const [appliedFilters, setAppliedFilters] = useState({ mandi: '', crop: '' });
 
   // Short-term forecast state
+  const [stfDistrict, setStfDistrict] = useState('');
   const [stfMandi, setStfMandi] = useState('');
   const [stfCrop, setStfCrop] = useState('');
   const [horizon, setHorizon] = useState<'7days' | '14days' | '30days'>('7days');
@@ -2054,10 +2056,24 @@ export default function SellerDashboard() {
     [crops],
   );
 
-  const mandiOptions = useMemo(
-    () => Array.from(new Set(mandis.map(m => m.name))),
-    [mandis],
-  );
+const districtOptions = useMemo(
+  () =>
+    Array.from(
+      new Set(mandis.map(m => m.district).filter(Boolean))
+    ) as string[],
+  [mandis],
+);
+
+  // const mandiOptions = useMemo(
+  //   () => Array.from(new Set(mandis.map(m => m.name))),
+  //   [mandis],
+  // );
+  const mandiOptions = useMemo(() => {
+  return mandis
+    .filter(m => !district || m.district === district)
+    .map(m => m.name);
+}, [mandis, district]);
+
 
   //  Grades from DB for selected crop
   const currentGrades = useMemo(() => {
@@ -2178,11 +2194,13 @@ export default function SellerDashboard() {
             const id = m.mandiId ?? m.MandiId ?? m.id;
             const name = m.mandiName ?? m.MandiName ?? m.name;
             const location = m.location ?? m.Location ?? '';
+            const district = m.district ?? m.District ?? '';
             if (!id || !name) return null;
             return {
               id: Number(id),
               name: String(name),
               location: String(location),
+              district: String(district),
             };
           })
           .filter(Boolean) as UIMandi[];
@@ -2784,6 +2802,28 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                 },
               ]}
             >
+
+              <Text style={[styles.searchTitle, { color: theme.text }]}>
+  {t('district') ?? 'District'}
+</Text>
+
+<View style={[styles.pickerWrap, { borderColor: theme.text }]}>
+  <Picker
+    selectedValue={district}
+    onValueChange={v => {
+      setDistrict(v);
+      setMandiName(''); // reset mandi
+    }}
+    style={[styles.picker, { color: theme.text }]}
+    dropdownIconColor={theme.text}
+  >
+    <Picker.Item label={t('select_district') ?? 'Select district'} value="" />
+    {districtOptions.map(d => (
+      <Picker.Item key={d} label={d} value={d} />
+    ))}
+  </Picker>
+</View>
+
               <Text
                 style={[styles.searchTitle, { color: theme.text }]}
               >
@@ -2935,6 +2975,29 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                 },
               ]}
             >
+
+              <Text style={[styles.searchTitle, { color: theme.text }]}>
+  {t('district') ?? 'District'}
+</Text>
+
+<View style={[styles.pickerWrap, { borderColor: theme.text }]}>
+  <Picker
+    selectedValue={stfDistrict}
+    onValueChange={v => {
+      setStfDistrict(v);
+      setStfMandi('');
+    }}
+    style={[styles.picker, { color: theme.text }]}
+    dropdownIconColor={theme.text}
+  >
+    <Picker.Item label={t('select_district') ?? 'Select district'} value="" />
+    {districtOptions.map(d => (
+      <Picker.Item key={d} label={d} value={d} />
+    ))}
+  </Picker>
+</View>
+
+
               <Text
                 style={[styles.searchTitle, { color: theme.text }]}
               >

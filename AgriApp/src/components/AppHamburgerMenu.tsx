@@ -105,6 +105,60 @@ export default function AppHamburgerMenu({ role }: { role: Role }) {
   );
 }
 
+// const MenuItem = ({
+//   label,
+//   onPress,
+//   danger,
+//   icon,
+// }: {
+//   label: string;
+//   onPress: () => void;
+//   danger?: boolean;
+//   icon?: React.ReactElement;
+// }) => (
+
+//   <TouchableOpacity style={styles.item} onPress={onPress}>
+//     {icon && <View style={{ marginRight: 8 }}>{icon}</View>}
+//     <Text
+//       style={[
+//         styles.text,
+//         danger && { color: '#dc2626' }, // Tailwind red-600 color    
+//       ]}
+//     >
+//       {label}
+//     </Text>
+//   </TouchableOpacity>
+// );
+
+// const MenuItem = ({
+//   label,
+//   onPress,
+//   danger,
+//   icon,
+// }: {
+//   label: string;
+//   onPress: () => void;
+//   danger?: boolean;
+//   icon?: React.ReactElement;
+// }) => {
+//   const { theme } = useTheme(); // 👈 get theme here
+
+//   return (
+//     <TouchableOpacity style={styles.item} onPress={onPress}>
+//       {icon && <View style={{ marginRight: 8 }}>{icon}</View>}
+
+//       <Text
+//         style={[
+//           styles.text,
+//           { color: danger ? '#dc2626' : theme.text }, // 👈 dynamic color
+//         ]}
+//       >
+//         {label}
+//       </Text>
+//     </TouchableOpacity>
+//   );
+// };
+
 const MenuItem = ({
   label,
   onPress,
@@ -114,20 +168,35 @@ const MenuItem = ({
   label: string;
   onPress: () => void;
   danger?: boolean;
-  icon?: React.ReactElement;
-}) => (
-  <TouchableOpacity style={styles.item} onPress={onPress}>
-    {icon && <View style={{ marginRight: 8 }}>{icon}</View>}
-    <Text
-      style={[
-        styles.text,
-        danger && { color: '#dc2626' }, // Tailwind red-600 color    
-      ]}
-    >
-      {label}
-    </Text>
-  </TouchableOpacity>
-);
+  icon?: React.ReactElement<{ color?: string; size?: number }>;
+
+}) => {
+  const { theme } = useTheme();
+
+  const iconColor = danger ? '#dc2626' : theme.text;
+
+  return (
+    <TouchableOpacity style={styles.item} onPress={onPress}>
+      {icon && (
+        <View style={{ marginRight: 8 }}>
+          {React.cloneElement(icon, {
+            color: iconColor, //  icon color controlled here
+          })}
+        </View>
+      )}
+
+      <Text
+        style={[
+          styles.text,
+          { color: iconColor }, //  text color matches icon
+        ]}
+      >
+        {label}
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
 
 const styles = StyleSheet.create({
   overlay: {

@@ -311,7 +311,7 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
         const mapped: Option[] = [
           { label: t('select_district') ?? 'Select District', value: '' },
           ...res.data.map((m: any) => ({
-            label: m.location,    
+            label: m.district,    
             value: String(m.mandiId),
           })),
         ];

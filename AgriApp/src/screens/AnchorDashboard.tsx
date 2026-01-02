@@ -2369,11 +2369,11 @@ export default function AnchorDashboard() {
 
     setShowRegisterForm(false);
 
-    // ✅ IMPORTANT: reset search filters
+    //  IMPORTANT: reset search filters
     setSearchText('');
     setAppliedSearch('');
 
-    // ✅ reload list
+    //  reload list
     loadFarmers();
   } catch (e: any) {
     Alert.alert(
@@ -2473,7 +2473,7 @@ export default function AnchorDashboard() {
     //   <Text style={[styles.btnText,{color: theme.text}]}>{t('anchor_msg')}</Text>
     //   <Text> </Text>
 
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container,{backgroundColor: theme.background}]}>
 
   {/* Row 1: Back + Hamburger */}
   <View style={styles.headerTopRow}>
@@ -2483,7 +2483,7 @@ export default function AnchorDashboard() {
       </Text>
     </TouchableOpacity>
 
-    {/* 👇 SAME hamburger component */}
+    {/* hamburger component */}
     <AppHamburgerMenu role="anchor" />
   </View>
 
@@ -2506,7 +2506,7 @@ export default function AnchorDashboard() {
           style={[styles.secondaryBtn, { backgroundColor: theme.primary }]}
           onPress={() => setShowRegisterForm((p) => !p)}
         >
-          <Text style={[styles.btnText]}>
+          <Text style={[styles.btnText,{color: theme.text}]}>
             {t('anchor_action_register_single_farmer')}
           </Text>
         </TouchableOpacity>
@@ -2599,7 +2599,7 @@ export default function AnchorDashboard() {
       </View>
 
       {/* REGISTERED FARMERS SECTION */}
-<Text style={styles.sectionTitle}>
+<Text style={[styles.sectionTitle, { color: theme.text }]}>
   {t('anchor_section_registered_farmers') ?? 'Anchor Registered Farmers'}
 </Text>
 
@@ -2610,18 +2610,18 @@ export default function AnchorDashboard() {
         keyExtractor={(i) => i.id}
 
 renderItem={({ item }) => (
-  <View style={styles.farmerCard}>
+  <View style={[styles.farmerCard, {borderColor: theme.text}]}>
     <View style={{ flex: 1 }}>
-      <Text style={styles.subText}>Farmer Name: {item.name}</Text>
-      <Text style={styles.subText}>Location: {item.location}</Text>
-      <Text style={styles.subText}>Intrested Crops: {item.crop}</Text>
+      <Text style={[styles.subText,{color: theme.text}]}>Farmer Name: {item.name}</Text>
+      <Text style={[styles.subText,{color: theme.text}]}>Location: {item.location}</Text>
+      <Text style={[styles.subText,{color: theme.text}]}>Intrested Crops: {item.crop}</Text>
     </View>
 
     <TouchableOpacity
-      style={styles.viewBtn}
+      style={[styles.viewBtn,{borderColor: theme.text}]}
       onPress={() => viewFarmer(item.id)}
     >
-      <Text style={styles.viewBtnText}>View</Text>
+      <Text style={[styles.viewBtnText, {color: theme.text}]}>View</Text>
     </TouchableOpacity>
   </View>
 )}
@@ -2631,7 +2631,7 @@ renderItem={({ item }) => (
       <Modal visible={showBulkModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modal}>
-            <Text style={styles.modalTitle}>Bulk Register Farmers</Text>
+            <Text style={[styles.modalTitle,{color: theme.text}]}>Bulk Register Farmers</Text>
 
             <TouchableOpacity onPress={() => downloadTemplate('csv')}>
               <Text style={styles.link}>Download CSV Template</Text>

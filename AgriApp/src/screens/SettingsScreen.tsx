@@ -58,6 +58,26 @@ export default function SettingsScreen() {
   );
 }
 
+// const Option = ({
+//   label,
+//   onPress,
+//   active,
+// }: {
+//   label: string;
+//   onPress: () => void;
+//   active: boolean;
+// }) => (
+//   <TouchableOpacity
+//     onPress={onPress}
+//     style={[
+//       styles.option,
+//       active && styles.active,
+//     ]}
+//   >
+//     <Text style={styles.optionText}>{label}</Text>
+//   </TouchableOpacity>
+// );
+
 const Option = ({
   label,
   onPress,
@@ -66,17 +86,29 @@ const Option = ({
   label: string;
   onPress: () => void;
   active: boolean;
-}) => (
-  <TouchableOpacity
-    onPress={onPress}
-    style={[
-      styles.option,
-      active && styles.active,
-    ]}
-  >
-    <Text style={styles.optionText}>{label}</Text>
-  </TouchableOpacity>
-);
+}) => {
+  const { theme } = useTheme(); // 👈 access theme here
+
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      style={[
+        styles.option,
+        {
+          borderColor: active ? '#0fce3c97' : theme.text,
+          backgroundColor: active
+            ? '#15f04833'
+            : theme.background,
+        },
+      ]}
+    >
+      <Text style={[styles.optionText, { color: theme.text }]}>
+        {label}
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },

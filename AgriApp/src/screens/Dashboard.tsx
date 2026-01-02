@@ -760,27 +760,6 @@ const goBack = () => navigation.navigate('Dashboard');
   </View>
 </Modal>
 
-
-      {/* ---------------- Profile Menu ---------------- */}
-      {/* <Modal transparent visible={showProfileMenu} animationType="fade">
-        <TouchableOpacity
-          style={styles.modalBackdrop}
-          onPress={() => setShowProfileMenu(false)}
-        >
-          <View style={[styles.profileMenu, { backgroundColor: theme.background }]}>
-            <TouchableOpacity style={styles.menuItem}>
-              <Settings size={18} />
-              <Text style={[styles.menuText,{color:theme.text}]}>{t('settings')}</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.menuItem} onPress={logout}>
-              <LogOut size={18} color="red" />
-              <Text style={[styles.menuText, { color: 'red' }]}>{t('logout') ?? 'Logout'}</Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-      </Modal> */}
-
     </SafeAreaView>
   );
 }

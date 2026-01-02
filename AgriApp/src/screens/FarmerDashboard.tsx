@@ -3911,7 +3911,7 @@ type LotWithBids = Lot & {
 
 // DB crop / mandi shapes for UI
 type UICrop = { id: number; name: string; grade?: string | null };
-type UIMandi = { id: number; name: string; location: string };
+type UIMandi = { id: number; name: string; location: string; district?: string };
 
 export default function FarmerDashboard() {
   const navigation = useNavigation<PropsNav>();
@@ -3925,11 +3925,13 @@ export default function FarmerDashboard() {
   >('daily');
 
   // Daily mandi/crop search
+  const [district, setDistrict] = useState('');
   const [mandiName, setMandiName] = useState('');
   const [cropName, setCropName] = useState('');
   const [appliedFilters, setAppliedFilters] = useState({ mandi: '', crop: '' });
 
   // Short-term forecast state
+  const [stfDistrict, setStfDistrict] = useState('');
   const [stfMandi, setStfMandi] = useState('');
   const [stfCrop, setStfCrop] = useState('');
   const [horizon, setHorizon] = useState<'7days' | '14days' | '30days'>(
@@ -3969,11 +3971,26 @@ export default function FarmerDashboard() {
     [crops],
   );
 
+  // Unique district names for dropdowns
+  const districtOptions = useMemo(
+  () =>
+    Array.from(
+      new Set(mandis.map(m => m.district).filter(Boolean))
+    ) as string[],
+  [mandis],
+);
+
   // Unique mandi names for dropdowns
-  const mandiOptions = useMemo(
-    () => Array.from(new Set(mandis.map(m => m.name))),
-    [mandis],
-  );
+  // const mandiOptions = useMemo(
+  //   () => Array.from(new Set(mandis.map(m => m.name))),
+  //   [mandis],
+  // );
+  const mandiOptions = useMemo(() => {
+  return mandis
+    .filter(m => !district || m.district === district)
+    .map(m => m.name);
+}, [mandis, district]);
+
 
   //  Get grades from DB for selected crop
   const currentGrades = useMemo(() => {
@@ -4097,11 +4114,13 @@ export default function FarmerDashboard() {
             const id = m.mandiId ?? m.MandiId ?? m.id;
             const name = m.mandiName ?? m.MandiName ?? m.name;
             const location = m.location ?? m.Location ?? '';
+            const district = m.district ?? m.District ?? '';
             if (!id || !name) return null;
             return {
               id: Number(id),
               name: String(name),
               location: String(location),
+              district: String(district),
             };
           })
           .filter(Boolean) as UIMandi[];
@@ -4526,43 +4545,6 @@ export default function FarmerDashboard() {
     }
   };
 
-  // const loadReceivedBids = async (ownerPhone: string) => {
-  //   setLoadingBids(true);
-  //   try {
-  //     const lotJson = await AsyncStorage.getItem(
-  //       `${STORAGE_KEY_PREFIX}${ownerPhone}`,
-  //     );
-  //     const ownerLots: Lot[] = lotJson ? JSON.parse(lotJson) : [];
-
-  //     const result: LotWithBids[] = [];
-
-  //     for (const lot of ownerLots) {
-  //       const bidKey = `BIDS_LOT_${lot.id}`;
-  //       const bidJson = await AsyncStorage.getItem(bidKey);
-  //       if (!bidJson) continue;
-
-  //       let bids: Bid[] = [];
-  //       try {
-  //         bids = JSON.parse(bidJson);
-  //       } catch (e) {
-  //         console.warn('Failed parse bids for lot', lot.id, e);
-  //         continue;
-  //       }
-
-  //       const filtered = bids.filter(b => b.lotOwner === ownerPhone);
-  //       if (filtered.length > 0) {
-  //         result.push({ ...lot, bids: filtered });
-  //       }
-  //     }
-
-  //     setLotsWithBids(result);
-  //   } catch (err) {
-  //     console.warn(err);
-  //   } finally {
-  //     setLoadingBids(false);
-  //   }
-  // };
-
   const loadReceivedBids = async () => {
   setLoadingBids(true);
   try {
@@ -4597,39 +4579,6 @@ export default function FarmerDashboard() {
   }
 };
 
-
-  // const updateBidStatus = async (
-  //   lotId: string,
-  //   bidCreatedAt: number,
-  //   status: 'accepted' | 'rejected',
-  // ) => {
-  //   try {
-  //     const bidKey = `BIDS_LOT_${lotId}`;
-  //     const bidJson = await AsyncStorage.getItem(bidKey);
-  //     if (!bidJson) return;
-
-  //     let bids: Bid[] = JSON.parse(bidJson);
-  //     bids = bids.map(b =>
-  //       b.createdAt === bidCreatedAt ? { ...b, status } : b,
-  //     );
-
-  //     await AsyncStorage.setItem(bidKey, JSON.stringify(bids));
-
-  //     if (phone) {
-  //       await loadReceivedBids(phone);
-  //     }
-  //   } catch (e) {
-  //     console.warn('Failed to update bid status', e);
-  //   }
-  // };
-
-  // const handleAcceptBid = (lotId: string, createdAt: number) => {
-  //   updateBidStatus(lotId, createdAt, 'accepted');
-  // };
-
-  // const handleRejectBid = (lotId: string, createdAt: number) => {
-  //   updateBidStatus(lotId, createdAt, 'rejected');
-  // };
   const handleAcceptBid = async (lotId: string, buyerInterestLotId: number) => {
   try {
     await api.post(
@@ -4673,38 +4622,6 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
   // Actual Display Screen
   const ListHeaderElement = useMemo(() => {
     return (
-      // <View>
-      //   {/* 🔹 Top bar with Back + Title + Hamburger */}
-      //   <View style={styles.topBarRow}>
-      //     <TouchableOpacity
-      //       onPress={goBack}
-      //       style={[
-      //         styles.backBtn,
-      //         { backgroundColor: theme.background ?? '#edf2f7' },
-      //       ]}
-      //     >
-      //       <Text
-      //         style={[
-      //           styles.backText,
-      //           { color: theme.primary ?? '#2b6cb0' },
-      //         ]}
-      //       >
-      //         {t('back')}
-      //       </Text>
-      //     </TouchableOpacity>
-
-      //     <View style={{ flex: 1, marginLeft: 8 }}>
-      //       <Text style={[styles.title, { color: theme.text }]}>
-      //         {t('farmer_dashboard')}
-      //       </Text>
-      //       <Text style={[styles.text, { color: theme.text }]}>
-      //         {t('farmer_message')}
-      //       </Text>
-      //     </View>
-
-      //     <AppHamburgerMenu role="farmer" />
-
-      //   </View>
 
       <View>
       <View style={styles.container}>
@@ -4832,6 +4749,29 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
                 },
               ]}
             >
+
+              <Text style={[styles.searchTitle, { color: theme.text }]}>
+  {t('district') ?? 'District'}
+</Text>
+
+<View style={[styles.pickerWrap, { borderColor: theme.text }]}>
+  <Picker
+    selectedValue={district}
+    onValueChange={v => {
+      setDistrict(v);
+      setMandiName(''); // reset mandi
+    }}
+    style={[styles.picker, { color: theme.text }]}
+    dropdownIconColor={theme.text}
+  >
+    <Picker.Item label={t('select_district') ?? 'Select district'} value="" />
+    {districtOptions.map(d => (
+      <Picker.Item key={d} label={d} value={d} />
+    ))}
+  </Picker>
+</View>
+
+
               <Text
                 style={[styles.searchTitle, { color: theme.text }]}
               >
@@ -4983,6 +4923,29 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
                 },
               ]}
             >
+
+              <Text style={[styles.searchTitle, { color: theme.text }]}>
+  {t('district') ?? 'District'}
+</Text>
+
+<View style={[styles.pickerWrap, { borderColor: theme.text }]}>
+  <Picker
+    selectedValue={stfDistrict}
+    onValueChange={v => {
+      setStfDistrict(v);
+      setStfMandi('');
+    }}
+    style={[styles.picker, { color: theme.text }]}
+    dropdownIconColor={theme.text}
+  >
+    <Picker.Item label={t('select_district') ?? 'Select district'} value="" />
+    {districtOptions.map(d => (
+      <Picker.Item key={d} label={d} value={d} />
+    ))}
+  </Picker>
+</View>
+
+
               <Text
                 style={[styles.searchTitle, { color: theme.text }]}
               >
