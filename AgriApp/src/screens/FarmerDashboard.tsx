@@ -3878,8 +3878,11 @@ import DateTimePicker, { DateTimePickerEvent,
 import { Picker } from '@react-native-picker/picker';
 
 import GraphChart from '../components/GraphChart';
+import FilterBar from '../components/FilterBar';
 import AppHamburgerMenu from '../components/AppHamburgerMenu';
 import api from '../services/api';
+import MandiPriceSummary from '../components/MandiPriceSummary';
+
 
 type PropsNav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -3914,6 +3917,22 @@ type UICrop = { id: number; name: string; grade?: string | null };
 type UIMandi = { id: number; name: string; location: string; district?: string };
 
 export default function FarmerDashboard() {
+
+  // Daily price filters
+const [dailyPriceFilters, setDailyPriceFilters] = useState<{
+  district: string;
+  mandi: string;
+  days: number;
+} | null>(null);
+
+// Short-term price filters
+const [shortPriceFilters, setShortPriceFilters] = useState<{
+  district: string;
+  mandi: string;
+  days: number;
+} | null>(null);
+
+
   const navigation = useNavigation<PropsNav>();
   const goBack = () => navigation.navigate('Dashboard');
 
@@ -3964,6 +3983,11 @@ export default function FarmerDashboard() {
   //  Crops & Mandis from DB
   const [crops, setCrops] = useState<UICrop[]>([]);
   const [mandis, setMandis] = useState<UIMandi[]>([]);
+
+  // 🔹 Shared price filter state (SAME AS Dashboard)
+const [mandi, setMandi] = useState('');
+const [days, setDays] = useState<number>(1);
+
 
   // Unique crop names for dropdowns
   const cropOptions = useMemo(
@@ -4177,49 +4201,144 @@ export default function FarmerDashboard() {
   };
 
   const onSearchDaily = () => {
-    if (!mandiName && !cropName) {
+    if (!mandiName || !district) {
       Alert.alert(
         t('error_title') ?? 'Error',
         t('fill_mandi_search') ?? 'Enter mandi or crop to search',
       );
       return;
     }
-    setAppliedFilters({ mandi: mandiName, crop: cropName });
+    //setAppliedFilters({ mandi: mandiName, crop: cropName });
+      setDailyPriceFilters({
+    district: district,
+    mandi: mandiName,
+    days: 1, 
+  });
   };
 
-  const getShortTermForecastInline = async () => {
-    if (!stfMandi && !stfCrop) {
-      Alert.alert(
-        t('error_title') ?? 'Error',
-        t('fill_mandi_search') ?? 'Enter mandi or crop to search',
-      );
-      return;
-    }
-    try {
-      setForecastLoading(true);
-      setForecastSummary(null);
-      const summary = `${
-        t('short_term_forecast') ?? 'Short term forecast'
-      }: ${stfCrop || 'selected crop'} at ${
-        stfMandi || 'selected mandi'
-      } — ${
-        horizon === '7days'
-          ? 'Next 7 days'
-          : horizon === '14days'
-          ? 'Next 14 days'
-          : 'Next 30 days'
-      }.`;
-      setForecastSummary(summary);
-    } catch (err) {
-      console.error(err);
-      Alert.alert(
-        t('error_title') ?? 'Error',
-        t('error_generic') ?? 'Something went wrong',
-      );
-    } finally {
-      setForecastLoading(false);
-    }
-  };
+  // const getShortTermForecastInline = async () => {
+  //   if (!stfMandi && !stfCrop) {
+  //     Alert.alert(
+  //       t('error_title') ?? 'Error',
+  //       t('fill_mandi_search') ?? 'Enter mandi or crop to search',
+  //     );
+  //     return;
+  //   }
+  //   try {
+  //     setForecastLoading(true);
+  //     setForecastSummary(null);
+  //     const summary = `${
+  //       t('short_term_forecast') ?? 'Short term forecast'
+  //     }: ${stfCrop || 'selected crop'} at ${
+  //       stfMandi || 'selected mandi'
+  //     } — ${
+  //       horizon === '7days'
+  //         ? 'Next 7 days'
+  //         : horizon === '14days'
+  //         ? 'Next 14 days'
+  //         : 'Next 30 days'
+  //     }.`;
+  //     setForecastSummary(summary);
+  //   } catch (err) {
+  //     console.error(err);
+  //     Alert.alert(
+  //       t('error_title') ?? 'Error',
+  //       t('error_generic') ?? 'Something went wrong',
+  //     );
+  //   } finally {
+  //     setForecastLoading(false);
+  //   }
+  // };
+
+//   const getShortTermForecastInline = () => {
+//   if (!stfDistrict || !stfMandi) {
+//     Alert.alert(
+//       t('error_title') ?? 'Error',
+//       'Please select district and mandi'
+//     );
+//     return;
+//   }
+
+//   // const days =
+//   //   horizon === '7days'
+//   //     ? 7
+//   //     : horizon === '14days'
+//   //     ? 14
+//   //     : 30;
+
+//   const getDaysFromHorizon = () => {
+//   if (horizon === '14days') return 14;
+//   if (horizon === '30days') return 30;
+//   return 7; // ✅ default
+// };
+
+//   setShortPriceFilters({
+//     district: stfDistrict,
+//     mandi: stfMandi,
+//     days: getDaysFromHorizon(),
+//   });
+// };
+
+const getDaysFromHorizon = () => {
+  if (horizon === '14days') return 14;
+  if (horizon === '30days') return 30;
+  return 7; // ✅ default
+};
+
+const getMandiPrices = async (params: {
+  district: string;
+  market: string;
+  days: number;
+}) => {
+  const res = await api.get('/api/v1/mandi/kg', { params });
+  return res;
+};
+
+useEffect(() => {
+  if (selectedTab === 'short' && stfDistrict && stfMandi) {
+    getShortTermForecastInline();
+  }
+}, [selectedTab, horizon]);
+
+useEffect(() => {
+  if (!dailyPriceFilters) return;
+
+  // this guarantees latest state is used
+  setDailyPriceFilters(prev =>
+    prev
+      ? { district: prev.district, mandi: prev.mandi, days: 1 }
+      : null
+  );
+}, [dailyPriceFilters?.district, dailyPriceFilters?.mandi]);
+
+
+
+const getShortTermForecastInline = async () => {
+  if (!stfDistrict || !stfMandi) {
+    Alert.alert('Error', 'Please select district and mandi');
+    return;
+  }
+
+  try {
+    setForecastLoading(true);
+
+    const days = getDaysFromHorizon();
+
+    const res = await getMandiPrices({
+      district,
+      market: stfMandi,
+      days,
+    });
+
+    setForecastSummary(null); // optional
+
+  } catch (err) {
+    console.log('Short term API error', err);
+  } finally {
+    setForecastLoading(false);
+  }
+};
+
 
   const formatDate = (d: Date) => {
     const dd = String(d.getDate()).padStart(2, '0');
@@ -4789,7 +4908,7 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
                       ? mandiName
                       : ''
                   }
-                  onValueChange={v => setMandiName(v)}
+                  onValueChange={v =>{ setMandiName(v);setMandi(v)}}
                   style={[styles.picker, { color: theme.text }]}
                   dropdownIconColor={theme.text}
                 >
@@ -4899,14 +5018,33 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
               >
                 {t('daily_market_price_chart_title')}
               </Text>
-              <View
+              {/* <View
                 style={[
                   styles.chartPlaceholder,
                   { borderColor: theme.text },
                 ]}
               >
                
-              </View>
+              </View> */}
+
+                <View>
+  {dailyPriceFilters ? (
+    <MandiPriceSummary
+      district={dailyPriceFilters.district}
+      mandi={dailyPriceFilters.mandi}
+      days={dailyPriceFilters.days}
+    />
+  ) : (
+    <View style={styles.chartPlaceholder}>
+      <Text style={{ color: theme.text }}>
+        {t('select_district_mandi') ??
+          'Select district & mandi to view today’s price'}
+      </Text>
+    </View>
+  )}
+</View>
+
+
             </View>
           </>
         )}
@@ -5140,7 +5278,7 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
               >
                 {t('short_term_forecast')}
               </Text>
-              <View style={styles.chartPlaceholder}>
+              {/* <View style={styles.chartPlaceholder}>
                 <Text style={{ color: theme.text ?? '#666' }}>
                   {forecastLoading
                     ? t('loading') ?? 'Loading...'
@@ -5148,7 +5286,26 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
                       t('chart_placeholder_text') ??
                       'Forecast chart will appear here'}
                 </Text>
-              </View>
+              </View> */}
+
+                <View>
+  {shortPriceFilters ? (
+    <MandiPriceSummary
+      district={shortPriceFilters.district}
+      mandi={shortPriceFilters.mandi}
+      days={shortPriceFilters.days}
+    />
+  ) : (
+    <View style={styles.chartPlaceholder}>
+      <Text style={{ color: theme.text }}>
+        {t('select_district_mandi_days') ??
+          'Select district, mandi and days to view prices'}
+      </Text>
+    </View>
+  )}
+</View>
+
+
               {forecastSummary && (
                 <Text
                   style={{ color: theme.text, marginTop: 8 }}

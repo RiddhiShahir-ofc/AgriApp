@@ -538,6 +538,13 @@ import AppHamburgerMenu from '../components/AppHamburgerMenu';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Dashboard'>;
 
+interface DashboardFilters {
+  mandi: string;
+  crop: string;
+  district: string;
+  days: number;
+}
+
 /* ---------------- Roles ---------------- */
 const roles = [
   { id: 'farmer', name: 'Farmer', icon: Tractor },
@@ -555,7 +562,14 @@ export default function Dashboard({ navigation }: Props) {
   const [showEditName, setShowEditName] = useState(false);
   const [tempName, setTempName] = useState('');
 
-  const [filters, setFilters] = useState({ mandi: '', crop: '', district: '' });
+  //const [filters, setFilters] = useState({ mandi: '', crop: '', district: '', days: 1 });
+  const [filters, setFilters] = useState<DashboardFilters>({
+  mandi: '',
+  crop: '',
+  district: '',
+  days: 1,
+});
+
   const [appliedFilters, setAppliedFilters] = useState(filters);
 
   const { theme } = useTheme();
@@ -590,7 +604,7 @@ export default function Dashboard({ navigation }: Props) {
   };
 
   const handleSearch = () => {
-    setAppliedFilters(filters);
+    setAppliedFilters({...filters});
   };
 
 const goBack = () => navigation.navigate('Dashboard');

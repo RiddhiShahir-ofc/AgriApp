@@ -229,6 +229,8 @@
   "profile":"Profile",
   "district":"District",
   "select_district":"Select District",
+  "select_district_mandi": "Select District and Mandi",
+  "select_district_mandi_days": "Select District, Mandi and Days",
 
 
   "anchor_stats_registered_farmers": "Registered Farmers",

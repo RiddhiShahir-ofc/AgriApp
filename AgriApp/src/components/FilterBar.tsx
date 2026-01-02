@@ -248,9 +248,15 @@ import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import api from '../services/api';
 
+// interface FilterProps {
+//   filters: { mandi: string; crop: string; district: string; days?: number };
+//   setFilters: (filters: { mandi: string; crop: string; district: string; days?: number }) => void;
+//   onSearch: () => void;
+// }
+
 interface FilterProps {
-  filters: { mandi: string; crop: string; district: string };
-  setFilters: (filters: { mandi: string; crop: string; district: string }) => void;
+  filters: DashboardFilters;
+  setFilters: React.Dispatch<React.SetStateAction<DashboardFilters>>;
   onSearch: () => void;
 }
 
@@ -258,6 +264,14 @@ type Option = {
   label: string;
   value: string;
 };
+
+export type DashboardFilters = {
+  mandi: string;
+  crop: string;
+  district: string;
+  days: number; // ✅ REQUIRED
+};
+
 
 export default function FilterBar({ filters, setFilters, onSearch }: FilterProps) {
   const { t } = useLanguage();
@@ -269,14 +283,22 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
 
 
   const handleSearch = () => {
-  if (!filters.mandi || !filters.crop) {
-    Alert.alert(
-      t('error_title') ?? 'Error',
-      t('fill_mandi_search') ??
-        'Please select mandi and crop, then click on search'
-    );
-    return;
-  }
+  // if (!filters.mandi || !filters.crop) {
+  //   Alert.alert(
+  //     t('error_title') ?? 'Error',
+  //     t('fill_mandi_search') ??
+  //       'Please select mandi and crop, then click on search'
+  //   );
+  //   return;
+  // }
+  if (!filters.mandi || !filters.district) {
+  Alert.alert(
+    t('error_title') ?? 'Error',
+    'Please select district and mandi'
+  );
+  return;
+}
+
 
   onSearch();
 };
@@ -290,8 +312,8 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
         const mapped: Option[] = [
           { label: t('select_mandi') ?? 'Select Mandi', value: '' },
           ...res.data.map((m: any) => ({
-            label: m.mandiName,      // adjust if backend differs
-            value: String(m.mandiId),
+            label: m.mandiName ||m.MandiName || m.market,      // adjust if backend differs
+            value: m.mandiName ||m.MandiName || m.market,
           })),
         ];
         setMandiOptions(mapped);
@@ -311,8 +333,8 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
         const mapped: Option[] = [
           { label: t('select_district') ?? 'Select District', value: '' },
           ...res.data.map((m: any) => ({
-            label: m.district,    
-            value: String(m.mandiId),
+            label: m.district || m.District,
+            value: m.district || m.District,
           })),
         ];
         setDistrictOptions(mapped);

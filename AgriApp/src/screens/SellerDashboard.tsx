@@ -2016,7 +2016,7 @@ export default function SellerDashboard() {
   const [district, setDistrict] = useState('');
   const [mandiName, setMandiName] = useState('');
   const [cropName, setCropName] = useState('');
-  const [appliedFilters, setAppliedFilters] = useState({ mandi: '', crop: '' });
+  const [appliedFilters, setAppliedFilters] = useState({ district: '', mandi: '', crop: '', days: 7 });
 
   // Short-term forecast state
   const [stfDistrict, setStfDistrict] = useState('');
@@ -2275,7 +2275,7 @@ const districtOptions = useMemo(
       );
       return;
     }
-    setAppliedFilters({ mandi: mandiName, crop: cropName });
+    setAppliedFilters({ district, mandi: mandiName, crop: cropName, days: 7 });
   };
 
   const getShortTermForecastInline = async () => {
