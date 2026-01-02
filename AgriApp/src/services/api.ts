@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const BASE_URL = 'http://10.0.2.2:5227'; // emulator -> host. Change to machine IP for physical device.
+const BASE_URL = 'https://backend.farmbazaar.in'; // emulator -> host. Change to machine IP for physical device.
 
 const api = axios.create({
   baseURL: BASE_URL,
