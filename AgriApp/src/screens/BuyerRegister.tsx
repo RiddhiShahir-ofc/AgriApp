@@ -273,6 +273,30 @@ const BuyerRegister: React.FC = () => {
       }
 
       // 1) call backend /buyer/register
+
+       const registerBuyerOnBackend = async (): Promise<void> => {
+    // convert selected crop ids (string) -> number[]
+    const interestedCropIds = selectedCrops
+      .map((v) => Number(v))
+      .filter((n) => !Number.isNaN(n));
+
+    const payload = {
+      buyerName: buyerName,
+      businessId: businessId || null,
+      businessName: businessName,
+      location: location || null,
+      profilePhotoUrl: null, // you can add image upload later if needed
+      interestedCropIds,
+      // email is not part of BuyerRegisterRequest; extra fields will be ignored by ASP.NET by default
+      email,
+    };
+
+    const res = await api.post('/buyer/register', payload);
+    if (!res.status.toString().startsWith('2')) {
+      throw new Error(res.data?.message || 'Buyer registration failed');
+    }
+  };
+
       await registerBuyerOnBackend();
 
       // 2) mark role locally

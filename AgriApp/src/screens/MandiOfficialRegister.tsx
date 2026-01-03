@@ -1339,6 +1339,47 @@ const MandiOfficialRegister: React.FC = () => {
 
       const res = await api.post('/mandi-official/register', payload);
 
+      // --------------- Call backend /api/mandi-official/register ---------------
+  const registerMandiOfficialOnBackend = async () => {
+    if (!selectedMandiId) {
+      throw new Error(
+        t('select_mandi') ?? 'Please select an assigned mandi.'
+      );
+    }
+
+    if (!selectedRoleId) {
+      throw new Error(
+        t('select_role') ?? 'Please select an official role.'
+      );
+    }
+
+    const mandiIdNumber = Number(selectedMandiId);
+    if (Number.isNaN(mandiIdNumber)) {
+      throw new Error(
+        t('invalid_mandi_id') ?? 'Entered Mandi Id is invalid.'
+      );
+    }
+
+    const payload = {
+      officialName: officialName,
+      employeeId: employeeId,
+      email: email,
+      mandiId: mandiIdNumber,
+      officialRoleId: selectedRoleId,
+    };
+
+    console.log('MandiOfficial payload:', payload);
+
+    const res = await api.post('/mandi-official/register', payload);
+    console.log('MandiOfficial response:', res.status, res.data);
+
+    if (!res.status.toString().startsWith('2')) {
+      throw new Error(
+        res.data?.message || 'Mandi official registration failed'
+      );
+    }
+  };
+
       if (!res.status.toString().startsWith('2')) {
         throw new Error(res.data?.message || 'Mandi official registration failed');
       }

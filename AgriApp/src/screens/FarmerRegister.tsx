@@ -1475,6 +1475,10 @@ const FarmerRegister: React.FC = () => {
       cropIds,
       farmDetails: farmDetailsPayload,
     };
+    const res = await api.post('farmer/register', payload);
+    if (!res.status.toString().startsWith('2')) {
+      throw new Error(res.data?.message || 'Farmer registration failed');
+    }
   };
 
   // ---- Register button handler ----
