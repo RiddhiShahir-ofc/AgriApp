@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
 
   searchBtn: {
     padding: 10,
-    borderRadius: 8,
+    borderRadius: 30,
     alignItems: "center",
     marginVertical: 10,
   },
@@ -493,15 +493,15 @@ const styles = StyleSheet.create({
 
   sellBtn: {
     padding: 12,
-    borderRadius: 10,
+    borderRadius: 30,
     alignItems: "center",
     marginTop: 12,
-    backgroundColor: "#16a34a",
+    backgroundColor: "#16c355ff",
   },
 
   unsoldBtn: {
     padding: 12,
-    borderRadius: 10,
+    borderRadius: 30,
     alignItems: "center",
     marginTop: 10,
     backgroundColor: "#ef4444",
