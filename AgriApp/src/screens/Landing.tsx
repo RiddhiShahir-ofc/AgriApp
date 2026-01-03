@@ -203,6 +203,8 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 import GraphChart from '../components/GraphChart';
 
+import DummyGraph from '../components/DummyGraph';
+
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 
@@ -288,7 +290,8 @@ export default function Landing({ navigation }: Props) {
         style={[styles.graphWrap, { borderColor: theme.text }]}
         onPress={() => navigation.navigate('Register', { fromGraph: true })}
       >
-        <GraphChart />
+        {/* <GraphChart /> */}
+        <DummyGraph />
       </TouchableOpacity>
 
       <TouchableOpacity

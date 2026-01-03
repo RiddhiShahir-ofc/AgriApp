@@ -1964,6 +1964,7 @@ type PropsNav = NativeStackNavigationProp<RootStackParamList>;
 
 type Lot = {
   id: string;
+  preLotId?: string; 
   crop: string;
   grade: string;
   quantity: string;
@@ -1971,6 +1972,9 @@ type Lot = {
   mandi: string;
   expectedArrival: string;
   createdAt: number;
+
+  // edit helpers
+  isEditing?: boolean;
 };
 
 //  Bid + LotWithBids for received bids
@@ -2475,6 +2479,55 @@ const districtOptions = useMemo(
     }
   };
 
+/*-------------Edit Lot Inline -----------------*/
+const startEditLot = (id: string) => {
+  setLots(prev =>
+    prev.map(l =>
+      l.id === id ? { ...l, isEditing: true } : l,
+    ),
+  );
+};
+
+const cancelEditLot = (id: string) => {
+  setLots(prev =>
+    prev.map(l =>
+      l.id === id ? { ...l, isEditing: false } : l,
+    ),
+  );
+};
+
+const saveEditLot = async (lot: Lot) => {
+  try {
+    const payload = {
+      Quantity: Number(lot.quantity),
+      SellingAmount: Number(lot.sellingamount),
+      Grade: lot.grade,
+      ExpectedArrivalDate: lot.expectedArrival,
+    };
+
+    await api.put(`/seller/lots/${lot.preLotId}`, payload);
+
+    setLots(prev =>
+      prev.map(l =>
+        l.id === lot.id ? { ...l, isEditing: false } : l,
+      ),
+    );
+
+    Alert.alert(
+      t('success_title') ?? 'Success',
+      t('lot_updated') ?? 'Lot updated successfully',
+    );
+  } catch (err: any) {
+    console.error('Update seller lot failed', err?.response?.data ?? err);
+    Alert.alert(
+      t('error_title') ?? 'Error',
+      t('lot_update_failed') ?? 'Failed to update lot',
+    );
+  }
+};
+
+
+/*-------------Delete Lot Inline -----------------*/
   const removeLot = async (id: string) => {
     // call backend delete as well
     try {
@@ -3733,61 +3786,211 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
     currentGrades,
   ]);
 
-  const renderLotItem = ({ item }: { item: Lot }) => (
-    <View
-      style={[
-        styles.lotItem,
-        {
-          borderColor: theme.text ?? '#ccc',
-          backgroundColor: theme.background,
-        },
-      ]}
-    >
-      <View style={{ flex: 1 }}>
+//   const renderLotItem = ({ item }: { item: Lot }) => (
+//     <View
+//       style={[
+//         styles.lotItem,
+//         {
+//           borderColor: theme.text ?? '#ccc',
+//           backgroundColor: theme.background,
+//         },
+//       ]}
+//     >
+//       <View style={{ flex: 1 }}>
+//         {item.preLotId && (
+//   <Text style={[styles.lotText, { color: theme.text }]}>
+//     <Text style={{ fontWeight: '700' }}>
+//       Pre-Lot ID:{' '}
+//     </Text>
+//     {item.preLotId}
+//   </Text>
+// )}
+
+//         <Text style={[styles.lotText, { color: theme.text }]}>
+//           <Text style={{ fontWeight: '700' }}>{t('crop')}: </Text>
+//           {item.crop}
+//         </Text>
+//         <Text style={[styles.lotText, { color: theme.text }]}>
+//           <Text style={{ fontWeight: '700' }}>
+//             {t('grade_label')}:{" "}
+//           </Text>
+//           {item.grade}
+//         </Text>
+//         <Text style={[styles.lotText, { color: theme.text }]}>
+//           <Text style={{ fontWeight: '700' }}>
+//             {t('quantity_label')}:{" "}
+//           </Text>
+//           {item.quantity}
+//         </Text>
+//            <Text style={[styles.lotText, { color: theme.text }]}>
+//           <Text style={{ fontWeight: '700' }}>
+//             {t('expected_amount')}:{" "}
+//           </Text>
+//           {item.sellingamount}
+//         </Text>
+//         <Text style={[styles.lotText, { color: theme.text }]}>
+//           <Text style={{ fontWeight: '700' }}>
+//             {t('mandi_label')}:{" "}
+//           </Text>
+//           {item.mandi}
+//         </Text>
+//         <Text style={[styles.lotText, { color: theme.text }]}>
+//           <Text style={{ fontWeight: '700' }}>
+//             {t('arrival_label')}:{" "}
+//           </Text>
+//           {item.expectedArrival}
+//         </Text>
+//       </View>
+  
+//       <TouchableOpacity
+//         style={styles.removeBtn}
+//         onPress={() => removeLot(item.id)}
+//       >
+//         <Text style={styles.removeBtnText}>Delete</Text>
+//       </TouchableOpacity>
+//     </View>
+//   );
+
+const renderLotItem = ({ item }: { item: Lot }) => (
+  <View
+    style={[
+      styles.lotItem,
+      { borderColor: theme.text, backgroundColor: theme.background },
+    ]}
+  >
+    <View style={{ flex: 1 }}>
+
+      {/* PreLot ID */}
+      {item.preLotId && (
         <Text style={[styles.lotText, { color: theme.text }]}>
-          <Text style={{ fontWeight: '700' }}>{t('crop')}: </Text>
-          {item.crop}
+          <Text style={{ fontWeight: '700' }}>Pre-Lot ID: </Text>
+          {item.preLotId}
         </Text>
+      )}
+
+      <Text style={[styles.lotText, { color: theme.text }]}>
+        <Text style={{ fontWeight: '700' }}>{t('crop')}: </Text>
+        {item.crop}
+      </Text>
+
+      {/* GRADE */}
+      {item.isEditing ? (
+        <TextInput
+          value={item.grade}
+          onChangeText={v =>
+            setLots(prev =>
+              prev.map(l =>
+                l.id === item.id ? { ...l, grade: v } : l,
+              ),
+            )
+          }
+          style={[styles.input, { borderColor: theme.text }]}
+        />
+      ) : (
         <Text style={[styles.lotText, { color: theme.text }]}>
-          <Text style={{ fontWeight: '700' }}>
-            {t('grade_label')}:{" "}
-          </Text>
+          <Text style={{ fontWeight: '700' }}>{t('grade_label')}: </Text>
           {item.grade}
         </Text>
+      )}
+
+      {/* QUANTITY */}
+      {item.isEditing ? (
+        <TextInput
+          value={item.quantity}
+          keyboardType="numeric"
+          onChangeText={v =>
+            setLots(prev =>
+              prev.map(l =>
+                l.id === item.id ? { ...l, quantity: v } : l,
+              ),
+            )
+          }
+          style={[styles.input, { borderColor: theme.text }]}
+        />
+      ) : (
         <Text style={[styles.lotText, { color: theme.text }]}>
-          <Text style={{ fontWeight: '700' }}>
-            {t('quantity_label')}:{" "}
-          </Text>
+          <Text style={{ fontWeight: '700' }}>{t('quantity_label')}: </Text>
           {item.quantity}
         </Text>
-           <Text style={[styles.lotText, { color: theme.text }]}>
+      )}
+
+      {/* EXPECTED AMOUNT */}
+      {item.isEditing ? (
+        <TextInput
+          value={item.sellingamount}
+          keyboardType="numeric"
+          onChangeText={v =>
+            setLots(prev =>
+              prev.map(l =>
+                l.id === item.id
+                  ? { ...l, sellingamount: v }
+                  : l,
+              ),
+            )
+          }
+          style={[styles.input, { borderColor: theme.text }]}
+        />
+      ) : (
+        <Text style={[styles.lotText, { color: theme.text }]}>
           <Text style={{ fontWeight: '700' }}>
             {t('expected_amount')}:{" "}
           </Text>
           {item.sellingamount}
         </Text>
-        <Text style={[styles.lotText, { color: theme.text }]}>
-          <Text style={{ fontWeight: '700' }}>
-            {t('mandi_label')}:{" "}
-          </Text>
-          {item.mandi}
-        </Text>
-        <Text style={[styles.lotText, { color: theme.text }]}>
-          <Text style={{ fontWeight: '700' }}>
-            {t('arrival_label')}:{" "}
-          </Text>
-          {item.expectedArrival}
-        </Text>
+      )}
+
+      <Text style={[styles.lotText, { color: theme.text }]}>
+        <Text style={{ fontWeight: '700' }}>{t('mandi_label')}: </Text>
+        {item.mandi}
+      </Text>
+
+         <Text style={[styles.lotText, { color: theme.text }]}>
+           <Text style={{ fontWeight: '700' }}>
+             {t('arrival_label')}:{" "}
+           </Text>
+           {item.expectedArrival}
+       </Text>
+
+      {/* ACTION BUTTONS */}
+      <View style={{ flexDirection: 'row', marginTop: 8 }}>
+        {item.isEditing ? (
+          <>
+            <TouchableOpacity
+              style={[styles.smallEditBtn, { marginRight: 6 }]}
+              onPress={() => saveEditLot(item)}
+            >
+              <Text style={styles.smallEditBtnText}>Save</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.removeBtn]}
+              onPress={() => cancelEditLot(item.id)}
+            >
+              <Text style={styles.removeBtnText}>Cancel</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            <TouchableOpacity
+              style={[styles.smallEditBtn, { marginRight: 6 }]}
+              onPress={() => startEditLot(item.id)}
+            >
+              <Text style={styles.smallEditBtnText}>Edit</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.removeBtn}
+              onPress={() => removeLot(item.id)}
+            >
+              <Text style={styles.removeBtnText}>Delete</Text>
+            </TouchableOpacity>
+          </>
+        )}
       </View>
-      
-      <TouchableOpacity
-        style={styles.removeBtn}
-        onPress={() => removeLot(item.id)}
-      >
-        <Text style={styles.removeBtnText}>Delete</Text>
-      </TouchableOpacity>
     </View>
-  );
+  </View>
+);
+
 
   const renderEmpty = () => {
     if (selectedTab !== 'preregister') return null;

@@ -3888,6 +3888,7 @@ type PropsNav = NativeStackNavigationProp<RootStackParamList>;
 
 type Lot = {
   id: string; // PreLotId from backend
+  preLotId?: string;
   crop: string;
   grade: string;
   quantity: string;
@@ -4070,34 +4071,68 @@ const [days, setDays] = useState<number>(1);
       const data = Array.isArray(res.data) ? res.data : [];
 
       const mapped: Lot[] = data.map((d: any) => {
-        const id =
-          d.preLotId ??
-          d.PreLotId ??
-          d.id ??
-          d.lotId ??
-          `${Date.now()}_${Math.random()}`;
+        // const id =
+        //   d.preLotId ??
+        //   d.PreLotId ??
+        //   d.id ??
+        //   d.lotId ??
+        //   `${Date.now()}_${Math.random()}`;
 
-        return {
-          id: String(id),
-          crop: d.cropName ?? d.CropName ?? d.crop ?? '',
-          grade: d.grade ?? d.Grade ?? '-',
-          quantity: String(d.quantity ?? d.Quantity ?? ''),
-          sellingamount: String(d.sellingamount ?? d.SellingAmount ?? ''),
-          mandi:
-            d.mandiName ??
-            d.MandiName ??
-            d.mandiLocation ??
-            d.MandiLocation ??
-            '',
-          expectedArrival:
-            d.expectedArrivalDate ??
-            d.ExpectedArrivalDate ??
-            d.expectedArrival ??
-            '-',
-          createdAt: d.createdAt
-            ? new Date(d.createdAt).getTime()
-            : Date.now(),
-        };
+        // return {
+        //   id: String(id),
+        //   crop: d.cropName ?? d.CropName ?? d.crop ?? '',
+        //   grade: d.grade ?? d.Grade ?? '-',
+        //   quantity: String(d.quantity ?? d.Quantity ?? ''),
+        //   sellingamount: String(d.sellingamount ?? d.SellingAmount ?? ''),
+        //   mandi:
+        //     d.mandiName ??
+        //     d.MandiName ??
+        //     d.mandiLocation ??
+        //     d.MandiLocation ??
+        //     '',
+        //   expectedArrival:
+        //     d.expectedArrivalDate ??
+        //     d.ExpectedArrivalDate ??
+        //     d.expectedArrival ??
+        //     '-',
+        //   createdAt: d.createdAt
+        //     ? new Date(d.createdAt).getTime()
+        //     : Date.now(),
+        // };
+        const preLotId =
+  d.preLotId ??
+  d.PreLotId ??
+  null;
+
+const id =
+  d.id ??
+  d.lotId ??
+  preLotId ??   // fallback
+  `${Date.now()}_${Math.random()}`;
+
+return {
+  id: String(id),          // UI key
+  preLotId: preLotId ? String(preLotId) : undefined, // 👈 KEEP IT
+  crop: d.cropName ?? d.CropName ?? d.crop ?? '',
+  grade: d.grade ?? d.Grade ?? '-',
+  quantity: String(d.quantity ?? d.Quantity ?? ''),
+  sellingamount: String(d.sellingamount ?? d.SellingAmount ?? ''),
+  mandi:
+    d.mandiName ??
+    d.MandiName ??
+    d.mandiLocation ??
+    d.MandiLocation ??
+    '',
+  expectedArrival:
+    d.expectedArrivalDate ??
+    d.ExpectedArrivalDate ??
+    d.expectedArrival ??
+    '-',
+  createdAt: d.createdAt
+    ? new Date(d.createdAt).getTime()
+    : Date.now(),
+};
+
       });
 
       setLots(mapped);
@@ -4282,7 +4317,8 @@ const [days, setDays] = useState<number>(1);
 const getDaysFromHorizon = () => {
   if (horizon === '14days') return 14;
   if (horizon === '30days') return 30;
-  return 7; // ✅ default
+   if (horizon === '7days') return 7;
+  return 1; // ✅ default
 };
 
 const getMandiPrices = async (params: {
@@ -4471,7 +4507,7 @@ const getShortTermForecastInline = async () => {
       );
 
       const newLot: Lot = {
-        id,
+        id:data.preLotId,
         crop: data.cropName ?? data.CropName ?? prCrop,
         grade: (data.grade ?? data.Grade ?? prGrade) || '-',
         quantity: String(data.quantity ?? data.Quantity ?? prQuantity),
@@ -5868,7 +5904,15 @@ const handleRejectBid = async (lotId: string, buyerInterestLotId: number) => {
         },
       ]}
     >
+
       <View style={{ flex: 1 }}>
+
+     <Text style={[styles.lotText, { color: theme.text }]}>
+     <Text style={{ fontWeight: '700' }}>
+      PreLot ID:{' '}
+      </Text>
+      {item.preLotId}
+       </Text>
         <Text style={[styles.lotText, { color: theme.text }]}>
           <Text style={{ fontWeight: '700' }}>{t('crop')}: </Text>
           {item.crop}
