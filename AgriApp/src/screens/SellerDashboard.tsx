@@ -2099,6 +2099,20 @@ const districtOptions = useMemo(
     return value === '' || options.includes(value) || value === 'Other';
   };
 
+  const getGradesForCrop = (cropName: string) => {
+  const grades = crops
+    .filter(c => c.name === cropName && c.grade)
+    .map(c => String(c.grade));
+
+  const unique = Array.from(new Set(grades));
+
+  if (!unique.length) return ['Other'];
+  if (!unique.includes('Other')) unique.push('Other');
+
+  return unique;
+};
+
+
   //  helper: sync lots to AsyncStorage (for buyer pre-bidding)
   const syncLotsToStorage = async (lotsToStore: Lot[], ownerPhone: string | null) => {
     if (!ownerPhone) return;
@@ -2128,6 +2142,7 @@ const districtOptions = useMemo(
 
         return {
           id: String(id),
+          preLotId: String(d.preLotId ?? d.PreLotId ?? ''), // ✅ REAL preLotId
           crop: d.cropName ?? d.CropName ?? d.crop ?? '',
           grade: d.grade ?? d.Grade ?? '-',
           quantity: String(d.quantity ?? d.Quantity ?? ''),
@@ -2498,18 +2513,32 @@ const cancelEditLot = (id: string) => {
 
 const saveEditLot = async (lot: Lot) => {
   try {
+    if (!lot.preLotId) {
+      Alert.alert('Error', 'PreLotId missing. Cannot update lot.');
+      return;
+    }
+
+    const safeGrade =
+      lot.grade && lot.grade.trim() && lot.grade !== '-'
+        ? lot.grade
+        : 'Other';
+
     const payload = {
       Quantity: Number(lot.quantity),
       SellingAmount: Number(lot.sellingamount),
-      Grade: lot.grade,
-      ExpectedArrivalDate: lot.expectedArrival,
+      Grade: safeGrade, // ✅ REQUIRED by backend
+      ExpectedArrivalDate: lot.expectedArrival
+        ? new Date(lot.expectedArrival).toISOString()
+        : null,
     };
 
     await api.put(`/seller/lots/${lot.preLotId}`, payload);
 
     setLots(prev =>
       prev.map(l =>
-        l.id === lot.id ? { ...l, isEditing: false } : l,
+        l.id === lot.id
+          ? { ...l, grade: safeGrade, isEditing: false }
+          : l,
       ),
     );
 
@@ -2525,6 +2554,7 @@ const saveEditLot = async (lot: Lot) => {
     );
   }
 };
+
 
 
 /*-------------Delete Lot Inline -----------------*/
@@ -2593,7 +2623,7 @@ const saveEditLot = async (lot: Lot) => {
     const mapped: LotWithBids[] = data.map((lot: any) => ({
       id: lot.preLotId,
       crop: lot.cropName,
-      grade: lot.grade,
+      grade: lot.grade && lot.grade.trim() !== '' ? lot.grade : 'Other',
       quantity: lot.quantity,
       sellingamount: lot.expectedAmount,
       mandi: lot.mandiName,
@@ -3356,9 +3386,13 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                     label={t('select_grade') ?? 'Select grade'}
                     value=""
                   />
-                  {currentGrades.map(g => (
+                  {/* {currentGrades.map(g => (
                     <Picker.Item key={g} label={g} value={g} />
+                  ))} */}
+                  {getGradesForCrop(prCrop).map(g => (
+                   <Picker.Item key={g} label={g} value={g} />
                   ))}
+
                 </Picker>
               </View>
               {prGrade === 'Other' && (
@@ -3413,7 +3447,7 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                 placeholderTextColor={theme.text ?? '#999'}
                 value={prSellingAmount}
                 onChangeText={setPrSellingAmount}
-               keyboardType="numeric"
+               keyboardType="number-pad"
                 style={[
                   styles.input,
                   {
@@ -3776,6 +3810,7 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
     prQuantity,
     prMandi,
     prExpectedArrival,
+    prSellingAmount,
     appliedFilters,
     showDatePicker,
     dateValue,
@@ -3874,24 +3909,38 @@ const renderLotItem = ({ item }: { item: Lot }) => (
       </Text>
 
       {/* GRADE */}
-      {item.isEditing ? (
-        <TextInput
-          value={item.grade}
-          onChangeText={v =>
-            setLots(prev =>
-              prev.map(l =>
-                l.id === item.id ? { ...l, grade: v } : l,
-              ),
-            )
-          }
-          style={[styles.input, { borderColor: theme.text }]}
-        />
-      ) : (
-        <Text style={[styles.lotText, { color: theme.text }]}>
-          <Text style={{ fontWeight: '700' }}>{t('grade_label')}: </Text>
-          {item.grade}
-        </Text>
-      )}
+{item.isEditing ? (
+  <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
+    <Picker
+      selectedValue={
+        item.grade && item.grade !== '-' ? item.grade : 'Other'
+      }
+      onValueChange={v =>
+        setLots(prev =>
+          prev.map(l =>
+            l.id === item.id ? { ...l, grade: String(v) } : l,
+          ),
+        )
+      }
+      style={{ color: theme.text }}
+      dropdownIconColor={theme.text}
+    >
+      {getGradesForCrop(item.crop).map(g => (
+        <Picker.Item key={g} label={g} value={g} />
+      ))}
+    </Picker>
+  </View>
+) : (
+  <Text style={[styles.lotText, { color: theme.text }]}>
+    <Text style={{ fontWeight: '700' }}>
+      {t('grade_label')}:{" "}
+    </Text>
+    {item.grade}
+  </Text>
+)}
+
+
+
 
       {/* QUANTITY */}
       {item.isEditing ? (

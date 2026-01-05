@@ -20,6 +20,7 @@ type Lot = {
   crop: string;
   grade: string;
   quantity: string;
+  sellingamount: string;
   mandi: string;
   expectedArrival: string;
   createdAt: number;
@@ -33,6 +34,7 @@ export default function PreRegisterLot() {
   const [crop, setCrop] = useState('');
   const [grade, setGrade] = useState('');
   const [quantity, setQuantity] = useState('');
+  const [sellingamount, setSellingAmount] = useState('');
   const [mandi, setMandi] = useState('');
   const [expectedArrival, setExpectedArrival] = useState('');
   const [lots, setLots] = useState<Lot[]>([]);
@@ -128,6 +130,7 @@ export default function PreRegisterLot() {
   const validateAndAdd = async () => {
     if (!crop) return Alert.alert(t('error_title') ?? 'Error', t('fill_crop') ?? 'Please select crop');
     if (!quantity) return Alert.alert(t('error_title') ?? 'Error', t('fill_quantity') ?? 'Please enter quantity');
+    if (!sellingamount) return Alert.alert(t('error_title') ?? 'Error', t('fill_selling_amount') ?? 'Please enter selling amount');
     if (!mandi) return Alert.alert(t('error_title') ?? 'Error', t('fill_mandi') ?? 'Please select mandi');
     // expectedArrival optional, but if provided basic format check could be added
 
@@ -136,6 +139,7 @@ export default function PreRegisterLot() {
       crop,
       grade: grade || '-',
       quantity,
+      sellingamount,
       mandi,
       expectedArrival: expectedArrival || '-',
       createdAt: Date.now(),
@@ -150,6 +154,7 @@ export default function PreRegisterLot() {
     setGrade('');
     setQuantity('');
     setMandi('');
+    setSellingAmount('');
     setExpectedArrival('');
     setDateValue(new Date());
     setShowDatePicker(false);
@@ -256,6 +261,17 @@ export default function PreRegisterLot() {
             keyboardType="numeric"
             style={[styles.input, { color: theme.text, borderColor: theme.text }]}
           />
+
+          <Text style={[styles.label, { color: theme.text }]}>{t('selling_amount')}</Text>
+          <TextInput
+            placeholder={t('enter_selling_amount') ?? 'Enter Selling Amount'}
+            placeholderTextColor={theme.text}
+            value={sellingamount}
+            onChangeText={setSellingAmount}
+            keyboardType="numeric"
+            style={[styles.input, { color: theme.text, borderColor: theme.text }]}
+          />
+
 
           <View style={styles.row}>
             <View style={{ flex: 1, marginRight: 8 }}>
