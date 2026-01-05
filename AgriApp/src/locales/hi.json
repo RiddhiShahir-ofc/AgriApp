@@ -306,7 +306,7 @@
     "clear_selection": "चयन साफ़ करें",
     "manual_owner_title": "मैन्युअल मालिक प्रविष्टि (यदि नहीं मिली)",
     "owner_name_placeholder": "मालिक का नाम",
-    "owner_mobile_placeholder": "मोबाइल नंबर",
+    "owner_mobile_placeholder": "मालिक का मोबाइल नंबर",
     "owner_role_label": "मालिक की भूमिका",
     "quantity_placeholder": "मात्रा दर्ज करें (उदाहरण: 100 क्विंटल)",
     "create_arrived_lot_btn": "आगमन हो चुके लॉट बनाएँ",

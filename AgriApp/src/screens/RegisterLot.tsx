@@ -1984,6 +1984,9 @@ export default function RegisterLot() {
   const [mandiId, setMandiId] = useState<number | null>(null);
   const [mandiName, setMandiName] = useState('');
 
+      const [ownerName, setOwnerName] = useState('');
+      const [ownerMobile, setOwnerMobile] = useState('');
+
   // owner search/selection
   const [ownerKeyword, setOwnerKeyword] = useState<string>('');
   const [ownerSearchLoading, setOwnerSearchLoading] = useState(false);
@@ -2099,16 +2102,46 @@ export default function RegisterLot() {
     }
   };
 
+  // const onSelectOwner = (owner: Owner) => {
+  //   setSelectedOwner(owner);
+  //   setManualName('');
+  //   setManualMobile('');
+  //   setManualRole('farmer');
+  //   Keyboard.dismiss();
+  // };
+  // const clearSelectedOwner = () => {
+  //   setSelectedOwner(null);
+  // };
+
   const onSelectOwner = (owner: Owner) => {
-    setSelectedOwner(owner);
-    setManualName('');
-    setManualMobile('');
-    setManualRole('farmer');
-    Keyboard.dismiss();
-  };
-  const clearSelectedOwner = () => {
-    setSelectedOwner(null);
-  };
+  setSelectedOwner(owner);
+
+  // ✅ Autofill new fields
+  setOwnerName(owner.name);
+  setOwnerMobile(owner.mobile);
+
+  // ✅ Clear manual fields
+  setManualName('');
+  setManualMobile('');
+
+  // ✅ Clear search results
+  setOwnerResults([]);
+  setOwnerKeyword('');
+
+  Keyboard.dismiss();
+};
+const clearSelectedOwner = () => {
+  setSelectedOwner(null);
+
+  // Clear autofilled fields
+  setOwnerName('');
+  setOwnerMobile('');
+
+  // Allow searching again
+  setOwnerKeyword('');
+  setOwnerResults([]);
+};
+
 
   // helpers: pick the correct IDs from selection values
   const pickCropIdForSelection = () => {
@@ -2159,8 +2192,8 @@ export default function RegisterLot() {
               qrCodeUrl: d.qrCodeUrl ?? d.QrCodeUrl ?? null,
               ownerRole: (d.ownerRole ?? d.role ?? null) as any,
               ownerId: d.ownerId ?? d.OwnerId ?? null,
-              ownerName: d.ownerName ?? d.OwnerName ?? null,
-              ownerMobile: d.ownerMobile ?? d.OwnerMobile ?? null,
+              ownerName: d.ownerName ?? d.lotOwnerName ?? null,
+              ownerMobile: d.ownerMobile ?? d.mobileNum ?? null,
             };
 
             setPrelotDetail(detail);
@@ -2405,6 +2438,8 @@ export default function RegisterLot() {
           <View style={[styles.prelotBox, { borderColor: theme.text }]}>
             <Text style={{ fontWeight: '700', color: theme.text }}>{t('prelot_details') ?? 'PreLot Details'}</Text>
             <Text style={{ color: theme.text }}>{t('prelot_id_label') ?? 'ID'}: {prelotDetail.preLotId}</Text>
+            <Text style={{ color: theme.text }}>{t('owner_name_placeholder') ?? 'Owner Name'}: {prelotDetail.ownerName}</Text>
+            <Text style={{ color: theme.text }}>{t('owner_mobile_placeholder') ?? 'Owner Mobile Number'}: {prelotDetail.ownerMobile}</Text>
             <Text style={{ color: theme.text }}>{t('crop') ?? 'Crop'}: {prelotDetail.cropName}</Text>
             <Text style={{ color: theme.text }}>{t('grade_label') ?? 'Grade'}: {prelotDetail.grade ?? '-'}</Text>
             <Text style={{ color: theme.text }}>{t('quantity_label') ?? 'Quantity'}: {prelotDetail.quantity}</Text>
@@ -2485,6 +2520,14 @@ export default function RegisterLot() {
         )}
 
         {/* Lot details */}
+
+        {/* Owner Name and Mobile Number */}
+        <Text style={[styles.label, { color: theme.text }]}>{t('owner_name_placeholder')}</Text>
+        <TextInput placeholder={t('owner_name_placeholder') ?? 'Owner Name'} placeholderTextColor="#9ca3af" value={ownerName} onChangeText={setOwnerName} style={[styles.input, { borderColor: theme.text, color: theme.text }]} editable={!prelotDetail} />
+        <Text style={[styles.label, { color: theme.text }]}>{t('owner_mobile_placeholder')}</Text>
+        <TextInput placeholder={t('owner_mobile_placeholder') ?? 'Owner Mobile Number'} placeholderTextColor="#9ca3af" value={ownerMobile} onChangeText={setOwnerMobile} keyboardType="numeric" style={[styles.input, { borderColor: theme.text, color: theme.text }]} editable={!prelotDetail} />
+
+
         <Text style={[styles.label, { color: theme.text }]}>{t('crop')}</Text>
         <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
           <Picker selectedValue={isValidPickerValue(cropName, cropOptions) ? cropName : ''} onValueChange={v => { setCropName(String(v)); }}

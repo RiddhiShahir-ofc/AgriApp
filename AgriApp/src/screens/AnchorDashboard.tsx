@@ -2521,7 +2521,7 @@ export default function AnchorDashboard() {
         </TouchableOpacity>
       </View>
       {showRegisterForm && (
-        <View style={styles.formCard}>
+        <View style={[styles.formCard,{borderColor: theme.text}]}>
           <TextInput
   placeholder="Farmer Name"
   value={newFarmer.name}
@@ -2645,7 +2645,7 @@ renderItem={({ item }) => (
               style={[styles.primaryBtn, { backgroundColor: theme.primary }]}
               onPress={uploadBulkFile}
             >
-              <Text style={[styles.btnText]}>Upload File</Text>
+              <Text style={[styles.btnText,{color: theme.text}]}>Upload File</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => setShowBulkModal(false)}>

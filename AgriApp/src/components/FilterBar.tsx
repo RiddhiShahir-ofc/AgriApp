@@ -1,84 +1,445 @@
-// import React from 'react';
-// import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+// // import React from 'react';
+// // import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+// // import { useLanguage } from '../context/LanguageContext';
+// // import {Picker} from '@react-native-picker/picker';
+// // import { useTheme } from '../context/ThemeContext';
+
+// // interface FilterProps {
+// //   filters: { mandi: string; crop: string };
+// //   setFilters: (filters: { mandi: string; crop: string }) => void;
+// //   onSearch: () => void;
+// // }
+
+// // const defaultMandiOptions = [
+// //   { label: 'Select Mandi', value: '' },
+// //   { label: 'Pune Mandi', value: 'pune' },
+// //   { label: 'Nagpur Mandi', value: 'nagpur' },
+// //   { label: 'Nashik Mandi', value: 'nashik' },
+// //   // add more as you need
+// // ];
+
+// // const defaultCropOptions = [
+// //   { label: 'Select Crop', value: '' },
+// //   { label: 'Wheat', value: 'wheat' },
+// //   { label: 'Rice', value: 'rice' },
+// //   { label: 'Onion', value: 'onion' },
+// //   { label: 'Sugarcane', value: 'sugarcane' },
+// //   // add more as you need
+// // ];
+
+// // export default function FilterBar({ filters, setFilters, onSearch }: FilterProps) {
+// // const { t } = useLanguage();
+// // const { theme } = useTheme();
+
+// //   return (
+// //     <View style={styles.filterContainer}>
+// //       <Text style={styles.label}>{t('mandi')}</Text>
+// //       {/* <TextInput
+// //         style={styles.input}
+// //         placeholder={t('enter_mandi')}
+// //         value={filters.mandi}
+// //         onChangeText={(t) => setFilters({ ...filters, mandi: t })}
+// //       /> */}
+
+// //       <View style={styles.pickerWrap}>
+// //         <Picker
+// //           selectedValue={filters.mandi}
+// //           onValueChange={(t) => setFilters({ ...filters, mandi: t })}
+// //           mode="dropdown"
+// //           style={[styles.picker, { color: theme.text }]}
+// //           dropdownIconColor={theme.text}
+// //         >
+// //           {defaultMandiOptions.map((opt) => (
+// //             <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
+// //           ))}
+// //         </Picker>
+// //       </View>
+
+// //       <Text style={styles.label}>{t('crop')}</Text>
+// //       {/* <TextInput
+// //         style={styles.input}
+// //         placeholder={t('enter_crop')}
+// //         value={filters.crop}
+// //         onChangeText={(t) => setFilters({ ...filters, crop: t })}
+// //       /> */}
+
+// //            <View style={styles.pickerWrap}>
+// //         <Picker
+// //           selectedValue={filters.crop}
+// //           onValueChange={(value) => setFilters({ ...filters, crop: value })}
+// //           mode="dropdown"
+// //           style={[styles.picker, { color: theme.text }]}
+// //           dropdownIconColor={theme.text}
+// //         >
+// //           {defaultCropOptions.map((opt) => (
+// //             <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
+// //           ))}
+// //         </Picker>
+// //       </View>
+
+// //       <TouchableOpacity style={styles.searchBtn} onPress={onSearch}>
+// //         <Text style={[styles.searchText,{color:theme.text}]}>{t('search')}</Text>
+// //       </TouchableOpacity>
+// //     </View>
+// //   );
+// // }
+
+// // const styles = StyleSheet.create({
+// //   filterContainer: {
+// //     backgroundColor: '#f9f9f9',
+// //     borderColor: 'theme.text',
+// //     padding: 10,
+// //     borderRadius: 10,
+// //     marginBottom: 10,
+// //   },
+// //   label: { fontWeight: '600', marginTop: 8 },
+// //   // input: {
+// //   //   borderWidth: 1,
+// //   //   borderColor: 'theme.text',
+// //   //   borderRadius: 8,
+// //   //   padding: 8,
+// //   //   marginTop: 4,
+// //   // },
+
+// //   pickerWrap: { 
+// //      borderWidth: 1,
+// //      borderColor: 'theme.text',
+// //      borderRadius: 8,
+// //      paddingHorizontal: 8,
+// //      paddingVertical: 6,
+// //      marginTop: 4,
+// //      height: 42,         
+// //      justifyContent: 'center',
+// //   },
+
+// //   searchBtn: {
+// //     marginTop: 10,
+// //     backgroundColor: '#15f048ff',
+// //     borderRadius: 30,
+// //     paddingVertical: 10,
+// //     alignItems: 'center',
+// //   },
+// //   searchText: {
+// //     color: 'theme.text',
+// //     fontWeight: '700',
+// //   },
+// //   picker:{},
+// // });
+
+// // // import React, { useEffect, useState } from 'react';
+// // // import { View } from 'react-native';
+// // // import DropDownPicker from 'react-native-dropdown-picker';
+
+// // // import { useLanguage } from '../context/LanguageContext';
+// // // import { useTheme } from '../context/ThemeContext';
+// // // import api from '../services/api';
+
+// // // type Option = {
+// // //   label: string;
+// // //   value: string;
+// // // };
+
+// // // export default function MandiCropSelector() {
+// // //   const { t } = useLanguage();
+// // //   const { theme } = useTheme();
+
+// // //   // 🔹 Mandi state
+// // //   const [mandiOptions, setMandiOptions] = useState<Option[]>([]);
+// // //   const [selectedMandiId, setSelectedMandiId] = useState<string | null>(null);
+// // //   const [mandiOpen, setMandiOpen] = useState(false);
+
+// // //   // 🔹 Crop state (depends on selected mandi)
+// // //   const [cropOptions, setCropOptions] = useState<Option[]>([]);
+// // //   const [selectedCropId, setSelectedCropId] = useState<string | null>(null);
+// // //   const [cropOpen, setCropOpen] = useState(false);
+
+// // //   // ⬇️ Load mandis from DB
+// // //   useEffect(() => {
+// // //     const loadMandis = async () => {
+// // //       try {
+// // //         const res = await api.get('/mandis'); // adjust endpoint if needed
+// // //         const mapped = res.data.map((m: any) => ({
+// // //           // If your DB has localized names (e.g. m.nameHi), you can switch on current language here.
+// // //           label: `${m.mandiName}, ${m.location}`,
+// // //           value: String(m.mandiId),
+// // //         }));
+// // //         setMandiOptions(mapped);
+
+// // //         if (!selectedMandiId && mapped.length > 0) {
+// // //           setSelectedMandiId(mapped[0].value);
+// // //         }
+// // //       } catch (err) {
+// // //         console.log('Error loading mandis:', err);
+// // //       }
+// // //     };
+
+// // //     loadMandis();
+// // //   }, []);
+
+// // //   // ⬇️ Load crops whenever mandi changes
+// // //   useEffect(() => {
+// // //     const loadCrops = async () => {
+// // //       if (!selectedMandiId) {
+// // //         setCropOptions([]);
+// // //         setSelectedCropId(null);
+// // //         return;
+// // //       }
+
+// // //       try {
+// // //         // Example: /mandis/{id}/crops – change to your actual route
+// // //         const res = await api.get(`/mandis/${selectedMandiId}/crops`);
+// // //         const mapped = res.data.map((c: any) => ({
+// // //           // same idea: if you have multilingual fields, pick based on current language
+// // //           label: c.cropName,
+// // //           value: String(c.cropId),
+// // //         }));
+// // //         setCropOptions(mapped);
+// // //         setSelectedCropId(null); // reset crop when mandi changes
+// // //       } catch (err) {
+// // //         console.log('Error loading crops:', err);
+// // //       }
+// // //     };
+
+// // //     loadCrops();
+// // //   }, [selectedMandiId]);
+
+// // //   return (
+// // //     <View style={{ zIndex: 2000 }}>
+// // //       {/* 🔹 Mandi Dropdown */}
+// // //       <DropDownPicker
+// // //         open={mandiOpen}
+// // //         value={selectedMandiId}
+// // //         items={mandiOptions}
+// // //         setOpen={setMandiOpen}
+// // //         setValue={setSelectedMandiId}
+// // //         setItems={setMandiOptions}
+// // //         placeholder={t('select_mandi') ?? 'Select Mandi'}
+// // //         style={{ borderColor: theme.text, marginBottom: 8 }}
+// // //         dropDownContainerStyle={{ borderColor: theme.text }}
+// // //         listMode="MODAL"
+// // //         modalTitle={t('select_mandi') ?? 'Select Mandi'}
+// // //       />
+
+// // //       {/* 🔹 Crop Dropdown (depends on selected mandi) */}
+// // //       <DropDownPicker
+// // //         open={cropOpen}
+// // //         value={selectedCropId}
+// // //         items={cropOptions}
+// // //         setOpen={setCropOpen}
+// // //         setValue={setSelectedCropId}
+// // //         setItems={setCropOptions}
+// // //         placeholder={t('select_crop') ?? 'Select Crop'}
+// // //         disabled={!selectedMandiId}
+// // //         style={{ borderColor: theme.text, marginTop: 8 }}
+// // //         dropDownContainerStyle={{ borderColor: theme.text }}
+// // //         listMode="MODAL"
+// // //         modalTitle={t('select_crop') ?? 'Select Crop'}
+// // //       />
+// // //     </View>
+// // //   );
+// // // }
+
+
+// import React, { useEffect, useState } from 'react';
+// import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+// import { Picker } from '@react-native-picker/picker';
+
 // import { useLanguage } from '../context/LanguageContext';
-// import {Picker} from '@react-native-picker/picker';
 // import { useTheme } from '../context/ThemeContext';
+// import api from '../services/api';
+
+// // interface FilterProps {
+// //   filters: { mandi: string; crop: string; district: string; days?: number };
+// //   setFilters: (filters: { mandi: string; crop: string; district: string; days?: number }) => void;
+// //   onSearch: () => void;
+// // }
 
 // interface FilterProps {
-//   filters: { mandi: string; crop: string };
-//   setFilters: (filters: { mandi: string; crop: string }) => void;
+//   filters: DashboardFilters;
+//   setFilters: React.Dispatch<React.SetStateAction<DashboardFilters>>;
 //   onSearch: () => void;
 // }
 
-// const defaultMandiOptions = [
-//   { label: 'Select Mandi', value: '' },
-//   { label: 'Pune Mandi', value: 'pune' },
-//   { label: 'Nagpur Mandi', value: 'nagpur' },
-//   { label: 'Nashik Mandi', value: 'nashik' },
-//   // add more as you need
-// ];
+// type Option = {
+//   label: string;
+//   value: string;
+// };
 
-// const defaultCropOptions = [
-//   { label: 'Select Crop', value: '' },
-//   { label: 'Wheat', value: 'wheat' },
-//   { label: 'Rice', value: 'rice' },
-//   { label: 'Onion', value: 'onion' },
-//   { label: 'Sugarcane', value: 'sugarcane' },
-//   // add more as you need
-// ];
+// export type DashboardFilters = {
+//   mandi: string;
+//   crop: string;
+//   district: string;
+//   days: number; // ✅ REQUIRED
+// };
+
 
 // export default function FilterBar({ filters, setFilters, onSearch }: FilterProps) {
-// const { t } = useLanguage();
-// const { theme } = useTheme();
+//   const { t } = useLanguage();
+//   const { theme } = useTheme();
+
+//   const [mandiOptions, setMandiOptions] = useState<Option[]>([]);
+//   const [cropOptions, setCropOptions] = useState<Option[]>([]);
+//   const [districtOptions, setDistrictOptions] = useState<Option[]>([]);
+
+
+//   const handleSearch = () => {
+//   // if (!filters.mandi || !filters.crop) {
+//   //   Alert.alert(
+//   //     t('error_title') ?? 'Error',
+//   //     t('fill_mandi_search') ??
+//   //       'Please select mandi and crop, then click on search'
+//   //   );
+//   //   return;
+//   // }
+//   if (!filters.mandi || !filters.district) {
+//   Alert.alert(
+//     t('error_title') ?? 'Error',
+//     'Please select district and mandi'
+//   );
+//   return;
+// }
+
+
+//   onSearch();
+// };
+
+
+//   /* ---------------- Load Mandis ---------------- */
+//   useEffect(() => {
+//     const loadMandis = async () => {
+//       try {
+//         const res = await api.get('/mandis');
+//         const mapped: Option[] = [
+//           { label: t('select_mandi') ?? 'Select Mandi', value: '' },
+//           ...res.data.map((m: any) => ({
+//             label: m.mandiName ||m.MandiName || m.market,      // adjust if backend differs
+//             value: m.mandiName ||m.MandiName || m.market,
+//           })),
+//         ];
+//         setMandiOptions(mapped);
+//       } catch (err) {
+//         console.log('Error loading mandis', err);
+//       }
+//     };
+
+//     loadMandis();
+//   }, []);
+
+//     /* ---------------- Load Districts ---------------- */
+//   useEffect(() => {
+//     const loadDistricts = async () => {
+//       try {
+//         const res = await api.get('/mandis');
+//         const mapped: Option[] = [
+//           { label: t('select_district') ?? 'Select District', value: '' },
+//           ...res.data.map((m: any) => ({
+//             label: m.district || m.District,
+//             value: m.district || m.District,
+//           })),
+//         ];
+//         setDistrictOptions(mapped);
+//       } catch (err) {
+//         console.log('Error loading district', err);
+//       }
+//     };
+
+//     loadDistricts();
+//   }, []);
+
+//   /* ---------------- Load Crops ---------------- */
+//   useEffect(() => {
+//     const loadCrops = async () => {
+//       try {
+//         const res = await api.get('/crops');
+//         const mapped: Option[] = [
+//           { label: t('select_crop') ?? 'Select Crop', value: '' },
+//           ...res.data.map((c: any) => ({
+//             label: c.cropName,
+//             value: String(c.cropId),
+//           })),
+//         ];
+//         setCropOptions(mapped);
+//       } catch (err) {
+//         console.log('Error loading crops', err);
+//       }
+//     };
+
+//     loadCrops();
+//   }, []);
 
 //   return (
-//     <View style={styles.filterContainer}>
-//       <Text style={styles.label}>{t('mandi')}</Text>
-//       {/* <TextInput
-//         style={styles.input}
-//         placeholder={t('enter_mandi')}
-//         value={filters.mandi}
-//         onChangeText={(t) => setFilters({ ...filters, mandi: t })}
-//       /> */}
+//     <View style={[styles.filterContainer, { backgroundColor: theme.background }]}>
 
-//       <View style={styles.pickerWrap}>
+      
+//            {/* ---------------- District ---------------- */}
+//       <Text style={[styles.label, { color: theme.text }]}>
+//         {t('district')}
+//       </Text>
+
+//       <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
+//         <Picker
+//           selectedValue={filters.district}
+//           onValueChange={(value) =>
+//             setFilters({ ...filters, district: value })
+//           }
+//           style={[styles.picker, { color: theme.text }]}
+//           dropdownIconColor={theme.text}
+//         >
+//           {districtOptions.map((opt) => (
+//             <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
+//           ))}
+//         </Picker>
+//       </View>
+
+//       {/* ---------------- Mandi ---------------- */}
+//       <Text style={[styles.label, { color: theme.text }]}>
+//         {t('mandi')}
+//       </Text>
+
+//       <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
 //         <Picker
 //           selectedValue={filters.mandi}
-//           onValueChange={(t) => setFilters({ ...filters, mandi: t })}
-//           mode="dropdown"
+//           onValueChange={(value) =>
+//             setFilters({ ...filters, mandi: value })
+//           }
 //           style={[styles.picker, { color: theme.text }]}
 //           dropdownIconColor={theme.text}
 //         >
-//           {defaultMandiOptions.map((opt) => (
+//           {mandiOptions.map((opt) => (
 //             <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
 //           ))}
 //         </Picker>
 //       </View>
 
-//       <Text style={styles.label}>{t('crop')}</Text>
-//       {/* <TextInput
-//         style={styles.input}
-//         placeholder={t('enter_crop')}
-//         value={filters.crop}
-//         onChangeText={(t) => setFilters({ ...filters, crop: t })}
-//       /> */}
+//       {/* ---------------- Crop ---------------- */}
+//       <Text style={[styles.label, { color: theme.text }]}>
+//         {t('crop')}
+//       </Text>
 
-//            <View style={styles.pickerWrap}>
+//       <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
 //         <Picker
 //           selectedValue={filters.crop}
-//           onValueChange={(value) => setFilters({ ...filters, crop: value })}
-//           mode="dropdown"
+//           onValueChange={(value) =>
+//             setFilters({ ...filters, crop: value })
+//           }
 //           style={[styles.picker, { color: theme.text }]}
 //           dropdownIconColor={theme.text}
 //         >
-//           {defaultCropOptions.map((opt) => (
+//           {cropOptions.map((opt) => (
 //             <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
 //           ))}
 //         </Picker>
 //       </View>
 
-//       <TouchableOpacity style={styles.searchBtn} onPress={onSearch}>
-//         <Text style={[styles.searchText,{color:theme.text}]}>{t('search')}</Text>
+//       {/* ---------------- Search ---------------- */}
+//       <TouchableOpacity
+//         style={[styles.searchBtn, { backgroundColor: theme.primary }]}
+//         onPress={handleSearch}
+//       >
+
+//         <Text style={[styles.searchText, { color: theme.text }]}>
+//           {t('search')}
+//         </Text>
 //       </TouchableOpacity>
 //     </View>
 //   );
@@ -86,173 +447,44 @@
 
 // const styles = StyleSheet.create({
 //   filterContainer: {
-//     backgroundColor: '#f9f9f9',
-//     borderColor: 'theme.text',
-//     padding: 10,
+//     padding: 15,
 //     borderRadius: 10,
 //     marginBottom: 10,
 //   },
-//   label: { fontWeight: '600', marginTop: 8 },
-//   // input: {
-//   //   borderWidth: 1,
-//   //   borderColor: 'theme.text',
-//   //   borderRadius: 8,
-//   //   padding: 8,
-//   //   marginTop: 4,
-//   // },
-
-//   pickerWrap: { 
-//      borderWidth: 1,
-//      borderColor: 'theme.text',
-//      borderRadius: 8,
-//      paddingHorizontal: 8,
-//      paddingVertical: 6,
-//      marginTop: 4,
-//      height: 42,         
-//      justifyContent: 'center',
+//   label: {
+//     fontWeight: '600',
+//     marginTop: 6,
 //   },
-
+//   pickerWrap: {
+//     borderWidth: 1,
+//     borderRadius: 8,
+//     paddingHorizontal: 6,
+//     marginTop: 2,
+//     height: 48,
+//     justifyContent: 'center',
+//   },
+//   picker: {
+//     height: 52,
+//   },
 //   searchBtn: {
-//     marginTop: 10,
-//     backgroundColor: '#15f048ff',
+//     marginTop: 12,
 //     borderRadius: 30,
 //     paddingVertical: 10,
 //     alignItems: 'center',
 //   },
 //   searchText: {
-//     color: 'theme.text',
 //     fontWeight: '700',
 //   },
-//   picker:{},
 // });
 
-// // import React, { useEffect, useState } from 'react';
-// // import { View } from 'react-native';
-// // import DropDownPicker from 'react-native-dropdown-picker';
 
-// // import { useLanguage } from '../context/LanguageContext';
-// // import { useTheme } from '../context/ThemeContext';
-// // import api from '../services/api';
-
-// // type Option = {
-// //   label: string;
-// //   value: string;
-// // };
-
-// // export default function MandiCropSelector() {
-// //   const { t } = useLanguage();
-// //   const { theme } = useTheme();
-
-// //   // 🔹 Mandi state
-// //   const [mandiOptions, setMandiOptions] = useState<Option[]>([]);
-// //   const [selectedMandiId, setSelectedMandiId] = useState<string | null>(null);
-// //   const [mandiOpen, setMandiOpen] = useState(false);
-
-// //   // 🔹 Crop state (depends on selected mandi)
-// //   const [cropOptions, setCropOptions] = useState<Option[]>([]);
-// //   const [selectedCropId, setSelectedCropId] = useState<string | null>(null);
-// //   const [cropOpen, setCropOpen] = useState(false);
-
-// //   // ⬇️ Load mandis from DB
-// //   useEffect(() => {
-// //     const loadMandis = async () => {
-// //       try {
-// //         const res = await api.get('/mandis'); // adjust endpoint if needed
-// //         const mapped = res.data.map((m: any) => ({
-// //           // If your DB has localized names (e.g. m.nameHi), you can switch on current language here.
-// //           label: `${m.mandiName}, ${m.location}`,
-// //           value: String(m.mandiId),
-// //         }));
-// //         setMandiOptions(mapped);
-
-// //         if (!selectedMandiId && mapped.length > 0) {
-// //           setSelectedMandiId(mapped[0].value);
-// //         }
-// //       } catch (err) {
-// //         console.log('Error loading mandis:', err);
-// //       }
-// //     };
-
-// //     loadMandis();
-// //   }, []);
-
-// //   // ⬇️ Load crops whenever mandi changes
-// //   useEffect(() => {
-// //     const loadCrops = async () => {
-// //       if (!selectedMandiId) {
-// //         setCropOptions([]);
-// //         setSelectedCropId(null);
-// //         return;
-// //       }
-
-// //       try {
-// //         // Example: /mandis/{id}/crops – change to your actual route
-// //         const res = await api.get(`/mandis/${selectedMandiId}/crops`);
-// //         const mapped = res.data.map((c: any) => ({
-// //           // same idea: if you have multilingual fields, pick based on current language
-// //           label: c.cropName,
-// //           value: String(c.cropId),
-// //         }));
-// //         setCropOptions(mapped);
-// //         setSelectedCropId(null); // reset crop when mandi changes
-// //       } catch (err) {
-// //         console.log('Error loading crops:', err);
-// //       }
-// //     };
-
-// //     loadCrops();
-// //   }, [selectedMandiId]);
-
-// //   return (
-// //     <View style={{ zIndex: 2000 }}>
-// //       {/* 🔹 Mandi Dropdown */}
-// //       <DropDownPicker
-// //         open={mandiOpen}
-// //         value={selectedMandiId}
-// //         items={mandiOptions}
-// //         setOpen={setMandiOpen}
-// //         setValue={setSelectedMandiId}
-// //         setItems={setMandiOptions}
-// //         placeholder={t('select_mandi') ?? 'Select Mandi'}
-// //         style={{ borderColor: theme.text, marginBottom: 8 }}
-// //         dropDownContainerStyle={{ borderColor: theme.text }}
-// //         listMode="MODAL"
-// //         modalTitle={t('select_mandi') ?? 'Select Mandi'}
-// //       />
-
-// //       {/* 🔹 Crop Dropdown (depends on selected mandi) */}
-// //       <DropDownPicker
-// //         open={cropOpen}
-// //         value={selectedCropId}
-// //         items={cropOptions}
-// //         setOpen={setCropOpen}
-// //         setValue={setSelectedCropId}
-// //         setItems={setCropOptions}
-// //         placeholder={t('select_crop') ?? 'Select Crop'}
-// //         disabled={!selectedMandiId}
-// //         style={{ borderColor: theme.text, marginTop: 8 }}
-// //         dropDownContainerStyle={{ borderColor: theme.text }}
-// //         listMode="MODAL"
-// //         modalTitle={t('select_crop') ?? 'Select Crop'}
-// //       />
-// //     </View>
-// //   );
-// // }
-
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import api from '../services/api';
-
-// interface FilterProps {
-//   filters: { mandi: string; crop: string; district: string; days?: number };
-//   setFilters: (filters: { mandi: string; crop: string; district: string; days?: number }) => void;
-//   onSearch: () => void;
-// }
 
 interface FilterProps {
   filters: DashboardFilters;
@@ -269,54 +501,43 @@ export type DashboardFilters = {
   mandi: string;
   crop: string;
   district: string;
-  days: number; // ✅ REQUIRED
+  days: number;
 };
 
+// 🔑 Raw mandi with district
+type RawMandi = {
+  mandiName: string;
+  district: string;
+};
 
 export default function FilterBar({ filters, setFilters, onSearch }: FilterProps) {
   const { t } = useLanguage();
   const { theme } = useTheme();
 
-  const [mandiOptions, setMandiOptions] = useState<Option[]>([]);
+  const [allMandis, setAllMandis] = useState<RawMandi[]>([]);
   const [cropOptions, setCropOptions] = useState<Option[]>([]);
-  const [districtOptions, setDistrictOptions] = useState<Option[]>([]);
-
 
   const handleSearch = () => {
-  // if (!filters.mandi || !filters.crop) {
-  //   Alert.alert(
-  //     t('error_title') ?? 'Error',
-  //     t('fill_mandi_search') ??
-  //       'Please select mandi and crop, then click on search'
-  //   );
-  //   return;
-  // }
-  if (!filters.mandi || !filters.district) {
-  Alert.alert(
-    t('error_title') ?? 'Error',
-    'Please select district and mandi'
-  );
-  return;
-}
+    if (!filters.mandi || !filters.district) {
+      Alert.alert(
+        t('error_title') ?? 'Error',
+        'Please select district and mandi'
+      );
+      return;
+    }
+    onSearch();
+  };
 
-
-  onSearch();
-};
-
-
-  /* ---------------- Load Mandis ---------------- */
+  /* ---------------- Load Mandis (ONCE) ---------------- */
   useEffect(() => {
     const loadMandis = async () => {
       try {
         const res = await api.get('/mandis');
-        const mapped: Option[] = [
-          { label: t('select_mandi') ?? 'Select Mandi', value: '' },
-          ...res.data.map((m: any) => ({
-            label: m.mandiName ||m.MandiName || m.market,      // adjust if backend differs
-            value: m.mandiName ||m.MandiName || m.market,
-          })),
-        ];
-        setMandiOptions(mapped);
+        const mapped: RawMandi[] = (res.data ?? []).map((m: any) => ({
+          mandiName: m.mandiName || m.MandiName || m.market,
+          district: m.district || m.District,
+        }));
+        setAllMandis(mapped);
       } catch (err) {
         console.log('Error loading mandis', err);
       }
@@ -325,28 +546,7 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
     loadMandis();
   }, []);
 
-    /* ---------------- Load Districts ---------------- */
-  useEffect(() => {
-    const loadDistricts = async () => {
-      try {
-        const res = await api.get('/mandis');
-        const mapped: Option[] = [
-          { label: t('select_district') ?? 'Select District', value: '' },
-          ...res.data.map((m: any) => ({
-            label: m.district || m.District,
-            value: m.district || m.District,
-          })),
-        ];
-        setDistrictOptions(mapped);
-      } catch (err) {
-        console.log('Error loading district', err);
-      }
-    };
-
-    loadDistricts();
-  }, []);
-
-  /* ---------------- Load Crops ---------------- */
+  /* ---------------- Load Crops (UNCHANGED) ---------------- */
   useEffect(() => {
     const loadCrops = async () => {
       try {
@@ -367,11 +567,35 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
     loadCrops();
   }, []);
 
+  /* ---------------- District Options (derived) ---------------- */
+  const districtOptions: Option[] = useMemo(() => {
+    return [
+      { label: t('select_district') ?? 'Select District', value: '' },
+      ...Array.from(
+        new Set(allMandis.map(m => m.district).filter(Boolean))
+      ).map(d => ({ label: d, value: d })),
+    ];
+  }, [allMandis, t]);
+
+  /* ---------------- Mandi Options (FILTERED BY DISTRICT) ---------------- */
+  const mandiOptions: Option[] = useMemo(() => {
+    return [
+      { label: t('select_mandi') ?? 'Select Mandi', value: '' },
+      ...allMandis
+        .filter(
+          m => !filters.district || m.district === filters.district
+        )
+        .map(m => ({
+          label: m.mandiName,
+          value: m.mandiName,
+        })),
+    ];
+  }, [allMandis, filters.district, t]);
+
   return (
     <View style={[styles.filterContainer, { backgroundColor: theme.background }]}>
 
-      
-           {/* ---------------- District ---------------- */}
+      {/* ---------------- District ---------------- */}
       <Text style={[styles.label, { color: theme.text }]}>
         {t('district')}
       </Text>
@@ -380,12 +604,16 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
         <Picker
           selectedValue={filters.district}
           onValueChange={(value) =>
-            setFilters({ ...filters, district: value })
+            setFilters({
+              ...filters,
+              district: value,
+              mandi: '', // 🔑 reset mandi on district change
+            })
           }
           style={[styles.picker, { color: theme.text }]}
           dropdownIconColor={theme.text}
         >
-          {districtOptions.map((opt) => (
+          {districtOptions.map(opt => (
             <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
           ))}
         </Picker>
@@ -405,7 +633,7 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
           style={[styles.picker, { color: theme.text }]}
           dropdownIconColor={theme.text}
         >
-          {mandiOptions.map((opt) => (
+          {mandiOptions.map(opt => (
             <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
           ))}
         </Picker>
@@ -425,7 +653,7 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
           style={[styles.picker, { color: theme.text }]}
           dropdownIconColor={theme.text}
         >
-          {cropOptions.map((opt) => (
+          {cropOptions.map(opt => (
             <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
           ))}
         </Picker>
@@ -436,7 +664,6 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
         style={[styles.searchBtn, { backgroundColor: theme.primary }]}
         onPress={handleSearch}
       >
-
         <Text style={[styles.searchText, { color: theme.text }]}>
           {t('search')}
         </Text>

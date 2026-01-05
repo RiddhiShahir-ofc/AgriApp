@@ -1188,11 +1188,10 @@ import { RootStackParamList } from '../../App';
 
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
-
+import MandiPriceSummary from '../components/MandiPriceSummary';
 
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../services/api';
 import AppHamburgerMenu from '../components/AppHamburgerMenu';
 
@@ -1253,14 +1252,32 @@ export default function BuyerDashboard() {
   const [district, setDistrict] = useState('');
   const [mandiName, setMandiName] = useState('');
   const [cropName, setCropName] = useState('');
+  const [dailyPriceFilters, setDailyPriceFilters] = useState<{
+  district: string;
+  mandi: string;
+  days: number;
+} | null>(null);
 
   // Short-term forecast
   const [stfDistrict, setStfDistrict] = useState('');
   const [stfMandi, setStfMandi] = useState('');
   const [stfCrop, setStfCrop] = useState('');
+  
   const [horizon, setHorizon] = useState<'7days' | '14days' | '30days'>('7days');
+  //  SAME AS FarmerDashboard
+const getDaysFromHorizon = () => {
+  if (horizon === '14days') return 14;
+  if (horizon === '30days') return 30;
+  return 7;
+};
+
   const [forecastSummary, setForecastSummary] = useState<string | null>(null);
   const [forecastLoading, setForecastLoading] = useState(false);
+  const [shortPriceFilters, setShortPriceFilters] = useState<{
+  district: string;
+  mandi: string;
+  days: number;
+} | null>(null);
 
   // Pre Bidding
 
@@ -1328,23 +1345,43 @@ export default function BuyerDashboard() {
       Alert.alert(t('error_title'), t('fill_mandi_search'));
       return;
     }
-    Alert.alert(t('search'), `Mandi: ${mandiName}\nCrop: ${cropName}`);
+    setDailyPriceFilters({
+      district,
+      mandi: mandiName,
+      days: 1,
+    });
   };
 
-  const getShortTermForecastInline = async () => {
-    if (!stfMandi && !stfCrop) {
-      Alert.alert(t('error_title'), 'Select mandi and crop');
-      return;
-    }
-    setForecastLoading(true);
-    const summary = `Short term forecast: ${stfCrop} at ${stfMandi} — ${
-      horizon === '7days' ? 'Next 7 days' : horizon === '14days' ? 'Next 14 days' : 'Next 30 days'
-    }`;
-    setTimeout(() => {
-      setForecastSummary(summary);
-      setForecastLoading(false);
-    }, 400);
-  };
+
+  // ✅ SAME PATTERN AS FarmerDashboard
+const getShortTermForecastInline = () => {
+  if (!stfDistrict || !stfMandi) {
+    Alert.alert(t('error_title'), 'Please select district and mandi');
+    return;
+  }
+
+  setShortPriceFilters({
+    district: stfDistrict,
+    mandi: stfMandi,
+    days: getDaysFromHorizon(),
+  });
+};
+
+const getForecastInline = () => {
+  if (!stfDistrict || !stfMandi) {
+    Alert.alert(t('error_title'), 'Please select district and mandi');
+    return;
+  }
+
+  const days = getDaysFromHorizon();
+
+  setShortPriceFilters({
+    district: stfDistrict,
+    mandi: stfMandi,
+    days,
+  });
+};
+
 
   /*========== LOAD MANDIS ========== */
   useEffect(() => {
@@ -1541,16 +1578,6 @@ useEffect(() => {
   );
 
   return (
-      // <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
-      // <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
-      //   <View style={styles.topBarRow}>
-      //   <TouchableOpacity onPress={goBack} style={[styles.backBtn, { backgroundColor: theme.background ?? '#edf2f7' }]}>
-      //     <Text style={[styles.backText, { color: theme.primary ?? '#2b6cb0' }]}>{t('back') || 'Back'}</Text>
-      //   </TouchableOpacity>
-      //   <View style={styles.titleWrap}>
-      //   <Text style={[styles.title, { color: theme.text }]}>{t('buyer_dashboard') || 'Buyer Dashboard'}</Text>
-      //   <Text style={[styles.text, { color: theme.text }]}>{t('buyer_msg') || 'Find and bid on crop lots'}</Text>
-      //   </View>
 
       <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
@@ -1603,84 +1630,6 @@ useEffect(() => {
             </TouchableOpacity>
           ))}
         </View>
-
-         {/* DAILY TAB */}
-
-        {/* {selectedTab === 'daily' && (
-
-          <View style={[styles.searchBox, { borderColor: theme.text }]}>
-
-            <Text style={[styles.searchTitle, { color: theme.text }]}>{t('mandi')}</Text>
-
-            <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
-
-              <Picker selectedValue={isPredefined(mandiName, mandiOptions) ? mandiName : 'Other'} onValueChange={v => v !== 'Other' && setMandiName(v)}>
-
-                <Picker.Item label="Select Mandi" value="" />
-
-                {mandiOptions.map(m => <Picker.Item key={m} label={m} value={m} />)}
-
-                <Picker.Item label="Other" value="Other" />
-
-              </Picker>
-
-            </View>
-
-            {(!isPredefined(mandiName, mandiOptions) && mandiName) && (
-
-              <TextInput placeholder="Type mandi" value={mandiName} onChangeText={setMandiName} style={[styles.input, { borderColor: theme.text, color: theme.text }]} />
-
-            )}
-
-
-
-            <Text style={[styles.searchTitle, { color: theme.text }]}>{t('crop')}</Text>
-
-            <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
-
-              <Picker selectedValue={isPredefined(cropName, cropOptions) ? cropName : 'Other'} onValueChange={v => v !== 'Other' && setCropName(v)}>
-
-                <Picker.Item label="Select crop" value="" />
-
-                {cropOptions.map(c => <Picker.Item key={c} label={c} value={c} />)}
-
-                <Picker.Item label="Other" value="Other" />
-
-              </Picker>
-
-            </View>
-
-            {(!isPredefined(cropName, cropOptions) && cropName) && (
-
-              <TextInput placeholder="Type crop" value={cropName} onChangeText={setCropName} style={[styles.input, { borderColor: theme.text, color: theme.text }]} />
-
-            )}
-
-
-
-            <TouchableOpacity style={[styles.searchBtn, { backgroundColor: theme.primary }]} onPress={onSearchDaily}>
-
-              <Text style={[styles.searchBtnText,{color: theme.text}]}>{t('search')}</Text>
-
-            </TouchableOpacity>
-
-
-
-            <View style={[styles.chartBox, { borderColor: theme.text, backgroundColor: theme.background, marginTop: 12 }]}>
-
-              <Text style={[styles.chartTitle, { color: theme.text }]}>{t('daily_market_price_chart_title')}</Text>
-
-              <View style={styles.chartPlaceholder}>
-
-                <Text style={{ color: theme.text ?? '#666' }}>{t('chart_placeholder_text') ?? 'Daily market price chart goes here'}</Text>
-
-              </View>
-
-            </View>
-
-          </View>
-
-        )} */}
 
            {/* DAILY */}
         {selectedTab === 'daily' && (
@@ -1831,27 +1780,33 @@ useEffect(() => {
             </View>
 
             <View
-              style={[
-                styles.chartBox,
-                {
-                  borderColor: theme.text,
-                  backgroundColor: theme.background,
-                },
-              ]}
-            >
-              <Text
-                style={[styles.chartTitle, { color: theme.text }]}
-              >
-                {t('daily_market_price_chart_title')}
-              </Text>
-              <View
-                style={[
-                  styles.chartPlaceholder,
-                  { borderColor: theme.text },
-                ]}
-              >
-              </View>
-            </View>
+  style={[
+    styles.chartBox,
+    {
+      borderColor: theme.text,
+      backgroundColor: theme.background,
+    },
+  ]}
+>
+  <Text style={[styles.chartTitle, { color: theme.text }]}>
+    {t('daily_market_price_chart_title')}
+  </Text>
+
+  {shortPriceFilters ? (
+    <MandiPriceSummary
+      district={shortPriceFilters.district}
+      mandi={shortPriceFilters.mandi}
+      days={shortPriceFilters.days}   // 🔥 THIS CONTROLS 1 / 7 / 14 / 30
+    />
+  ) : (
+    <View style={styles.chartPlaceholder}>
+      <Text style={{ color: theme.text }}>
+        Select district, mandi and duration to view prices
+      </Text>
+    </View>
+  )}
+</View>
+
           </>
         )}
 
@@ -1965,14 +1920,26 @@ useEffect(() => {
             </TouchableOpacity>
             </View>
 
-            <View style={[styles.chartBox, { borderColor: theme.text }]}>
-              <Text style={[styles.chartTitle, { color: theme.text }]}>Forecast Result</Text>
-              <View style={styles.chartPlaceholder}>
-                <Text style={{ color: '#666' }}>
-                  {forecastLoading ? 'Loading...' : forecastSummary || 'Select mandi & crop above'}
-                </Text>
-              </View>
-            </View>
+              <View style={[styles.chartBox, { borderColor: theme.text }]}>
+  <Text style={[styles.chartTitle, { color: theme.text }]}>
+    {t('short_term_forecast')}
+  </Text>
+
+  {shortPriceFilters ? (
+    <MandiPriceSummary
+      district={shortPriceFilters.district}
+      mandi={shortPriceFilters.mandi}
+      days={shortPriceFilters.days}
+    />
+  ) : (
+    <View style={styles.chartPlaceholder}>
+      <Text style={{ color: theme.text }}>
+        Select district, mandi and duration to view forecast
+      </Text>
+    </View>
+  )}
+</View>
+
           </View>
 
         )}

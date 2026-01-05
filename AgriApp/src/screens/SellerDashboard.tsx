@@ -2020,7 +2020,7 @@ export default function SellerDashboard() {
   const [district, setDistrict] = useState('');
   const [mandiName, setMandiName] = useState('');
   const [cropName, setCropName] = useState('');
-  const [appliedFilters, setAppliedFilters] = useState({ district: '', mandi: '', crop: '', days: 7 });
+  const [appliedFilter, setAppliedFilter] = useState({ district: '', mandi: '', crop: '', days: 1 });
 
   // Short-term forecast state
   const [stfDistrict, setStfDistrict] = useState('');
@@ -2029,6 +2029,7 @@ export default function SellerDashboard() {
   const [horizon, setHorizon] = useState<'7days' | '14days' | '30days'>('7days');
   const [forecastSummary, setForecastSummary] = useState<string | null>(null);
   const [forecastLoading, setForecastLoading] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState({ district: '', mandi: '', crop: '', days: 7 });
 
   // Pre-register state
   const [prCrop, setPrCrop] = useState('');
@@ -2294,8 +2295,15 @@ const districtOptions = useMemo(
       );
       return;
     }
-    setAppliedFilters({ district, mandi: mandiName, crop: cropName, days: 7 });
+    setAppliedFilter({ district, mandi: mandiName, crop: cropName, days: 1 });
   };
+
+
+const horizonToDays = (h: typeof horizon) => {
+  if (h === '14days') return 14;
+  if (h === '30days') return 30;
+  return 7;
+};
 
   const getShortTermForecastInline = async () => {
     if (!stfMandi && !stfCrop) {
@@ -2308,6 +2316,15 @@ const districtOptions = useMemo(
     try {
       setForecastLoading(true);
       setForecastSummary(null);
+
+          // ✅ Short tab controls days
+    setAppliedFilters({
+      district: stfDistrict,
+      mandi: stfMandi,
+      crop: stfCrop,
+      days: horizonToDays(horizon),
+    });
+
       const summary = `${t('short_term_forecast') ?? 'Short term forecast'}: ${
         stfCrop || 'selected crop'
       } at ${stfMandi || 'selected mandi'} — ${
@@ -3040,7 +3057,7 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                   { borderColor: theme.text },
                 ]}
               >
-                <GraphChart filters={appliedFilters} />
+                <GraphChart filters={appliedFilter} />
               </View>
             </View>
           </>
@@ -3274,23 +3291,24 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                 style={[styles.chartTitle, { color: theme.text }]}
               >
                 {t('short_term_forecast')}
+                <GraphChart filters={appliedFilters} />
               </Text>
               <View style={styles.chartPlaceholder}>
-                <Text style={{ color: theme.text ?? '#666' }}>
+                {/* <Text style={{ color: theme.text ?? '#666' }}>
                   {forecastLoading
                     ? t('loading') ?? 'Loading...'
                     : forecastSummary ??
                       t('chart_placeholder_text') ??
                       'Forecast chart will appear here'}
-                </Text>
-              </View>
-              {forecastSummary && (
+                </Text> */}
+                {forecastSummary && (
                 <Text
                   style={{ color: theme.text, marginTop: 8 }}
                 >
                   {forecastSummary}
                 </Text>
               )}
+              </View>
             </View>
           </>
         )}
