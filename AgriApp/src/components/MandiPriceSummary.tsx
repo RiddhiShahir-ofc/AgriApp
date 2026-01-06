@@ -17,7 +17,7 @@ export default function MandiPriceSummary({
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    if (!district || !mandi) return;
+    if (!district || !mandi || !days) return;
 
     const load = async () => {
       try {

@@ -230,6 +230,8 @@
   "settings":"सेटिंग्ज",
   "menu":"मेनू",
   "profile":"प्रोफाइल",
+  "select_district": "जिल्हा निवडा",
+  "district": "जिल्हा",
 
     "anchor_stats_registered_farmers": "नोंदणीकृत शेतकरी",
     "anchor_stats_total_crop_volume": "एकूण पिक उत्पादन",
@@ -437,7 +439,8 @@
     "terms_note": "OTP पाठवताना तुम्ही आमच्या सेवा अटी आणि गोपनीयता धोरणास सहमती देता.",
     "enter_name":"तुमचे नाव एंटर करा",
     "edit_name":"नाव संपादित करा",
-    "convert_land_unit":"जमीन युनिट रूपांतरित करा"
+    "convert_land_unit":"जमीन युनिट रूपांतरित करा",
+    "select_filter":"किंमती पाहण्यासाठी जिल्हा आणि मंडी निवडा"
 
 }
 

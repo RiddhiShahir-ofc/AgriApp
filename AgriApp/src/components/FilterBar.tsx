@@ -504,7 +504,7 @@ export type DashboardFilters = {
   days: number;
 };
 
-// 🔑 Raw mandi with district
+//  Raw mandi with district
 type RawMandi = {
   mandiName: string;
   district: string;
@@ -607,7 +607,7 @@ export default function FilterBar({ filters, setFilters, onSearch }: FilterProps
             setFilters({
               ...filters,
               district: value,
-              mandi: '', // 🔑 reset mandi on district change
+              mandi: '', //  reset mandi on district change
             })
           }
           style={[styles.picker, { color: theme.text }]}

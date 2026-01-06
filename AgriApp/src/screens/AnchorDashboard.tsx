@@ -2515,7 +2515,7 @@ export default function AnchorDashboard() {
           style={[styles.secondaryBtn, { backgroundColor: theme.primary }]}
           onPress={() => setShowBulkModal(true)}
         >
-          <Text style={[styles.secondaryBtnText,{color: theme.text}]}>
+          <Text style={[styles.btnText,{color: theme.text}]}>
             {t('anchor_action_bulk_register_farmers')}
           </Text>
         </TouchableOpacity>
@@ -2524,60 +2524,67 @@ export default function AnchorDashboard() {
         <View style={[styles.formCard,{borderColor: theme.text}]}>
           <TextInput
   placeholder="Farmer Name"
+  placeholderTextColor={theme.placeholder ?? '#999'}
   value={newFarmer.name}
   onChangeText={(v) => setNewFarmer(p => ({ ...p, name: v }))}
-  style={styles.input}
+  style={[styles.input, { borderColor: theme.text }]}
 />
 
 <TextInput
   placeholder="Phone Number"
+  placeholderTextColor={theme.placeholder ?? '#999'}
   value={newFarmer.phone}
   keyboardType="numeric"
   onChangeText={(v) => setNewFarmer(p => ({ ...p, phone: v }))}
-  style={styles.input}
+  style={[styles.input, { borderColor: theme.text }]}
 />
 
 <TextInput
   placeholder="Farmer Location"
+  placeholderTextColor={theme.placeholder ?? '#999'}
   value={newFarmer.location}
   onChangeText={(v) => setNewFarmer(p => ({ ...p, location: v }))}
-  style={styles.input}
+  style={[styles.input, { borderColor: theme.text }]}
 />
 
 <TextInput
   placeholder="Interested Crop"
+  placeholderTextColor={theme.placeholder ?? '#999'}
   value={newFarmer.crop}
   onChangeText={(v) => setNewFarmer(p => ({ ...p, crop: v }))}
-  style={styles.input}
+  style={[styles.input, { borderColor: theme.text }]}
 />
 
 <TextInput
   placeholder="Land Size (Acres)"
+  placeholderTextColor={theme.placeholder ?? '#999'}
   value={newFarmer.landSize}
   keyboardType="numeric"
   onChangeText={(v) => setNewFarmer(p => ({ ...p, landSize: v }))}
-  style={styles.input}
+ style={[styles.input, { borderColor: theme.text }]}
 />
 
 <TextInput
   placeholder="Farm Location"
+  placeholderTextColor={theme.placeholder ?? '#999'}
   value={newFarmer.flocation}
   onChangeText={(v) => setNewFarmer(p => ({ ...p, flocation: v }))}
-  style={styles.input}
+style={[styles.input, { borderColor: theme.text }]}
 />
 
 <TextInput
   placeholder="Primary Crop"
+  placeholderTextColor={theme.placeholder ?? '#999'}
   value={newFarmer.fcrop}
   onChangeText={(v) => setNewFarmer(p => ({ ...p, fcrop: v }))}
-  style={styles.input}
+  style={[styles.input, { borderColor: theme.text }]}
 />
 
           <TouchableOpacity
             style={[styles.primaryBtn, { backgroundColor: theme.primary }]}
             onPress={registerFarmer}
           >
-            <Text style={styles.btnText}>
+            <Text style={[styles.btnText,{ color: theme.text }]}>
               {t('anchor_btn_register_farmer')}
             </Text>
           </TouchableOpacity>
@@ -2594,7 +2601,7 @@ export default function AnchorDashboard() {
           style={styles.searchInput}
         />
         <TouchableOpacity style={styles.searchBtn} onPress={onSearch}>
-          <Text style={styles.searchText}>{t('search')}</Text>
+          <Text style={[styles.searchText,{ color: theme.text ?? '#fff' }]}>{t('search')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -2610,7 +2617,7 @@ export default function AnchorDashboard() {
         keyExtractor={(i) => i.id}
 
 renderItem={({ item }) => (
-  <View style={[styles.farmerCard, {borderColor: theme.text}]}>
+  <View style={[styles.farmerCard, {borderColor: theme.text, backgroundColor: theme.background,}]}>
     <View style={{ flex: 1 }}>
       <Text style={[styles.subText,{color: theme.text}]}>Farmer Name: {item.name}</Text>
       <Text style={[styles.subText,{color: theme.text}]}>Location: {item.location}</Text>
@@ -2709,7 +2716,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#22c55e',
   },
-  searchText: { color: '#fff', fontWeight: '700' },
+  searchText: {  fontWeight: '700' },
 
   card: {
     padding: 10,
@@ -2749,7 +2756,6 @@ farmerCard: {
 
 subText: {
   fontSize: 13,
-  color: '#4b5563',
   marginTop: 2,
 },
 

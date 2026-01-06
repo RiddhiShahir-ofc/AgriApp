@@ -2435,7 +2435,7 @@ const clearSelectedOwner = () => {
         {prelotError ? <Text style={{ color: '#ef4444', marginHorizontal: 16 }}>{prelotError}</Text> : null}
 
         {prelotDetail ? (
-          <View style={[styles.prelotBox, { borderColor: theme.text }]}>
+          <View style={[styles.prelotBox, { borderColor: theme.text, backgroundColor: theme.background }]}>
             <Text style={{ fontWeight: '700', color: theme.text }}>{t('prelot_details') ?? 'PreLot Details'}</Text>
             <Text style={{ color: theme.text }}>{t('prelot_id_label') ?? 'ID'}: {prelotDetail.preLotId}</Text>
             <Text style={{ color: theme.text }}>{t('owner_name_placeholder') ?? 'Owner Name'}: {prelotDetail.ownerName}</Text>

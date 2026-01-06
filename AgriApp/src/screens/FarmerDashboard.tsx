@@ -23,7 +23,6 @@ import DateTimePicker, {
 import { Picker } from '@react-native-picker/picker';
 
 import GraphChart from '../components/GraphChart';
-import FilterBar from '../components/FilterBar';
 import AppHamburgerMenu from '../components/AppHamburgerMenu';
 import api from '../services/api';
 import MandiPriceSummary from '../components/MandiPriceSummary';
@@ -67,19 +66,20 @@ type UIMandi = {
 };
 
 export default function FarmerDashboard() {
-  // Daily price filters
-  const [dailyPriceFilters, setDailyPriceFilters] = useState<{
-    district: string;
-    mandi: string;
-    days: number;
-  } | null>(null);
+  // // Daily price filters
+  // const [dailyPriceFilters, setDailyPriceFilters] = useState<{
+  //   district: string;
+  //   mandi: string;
+  //   days: number;
+  // } | null>(null);
 
-  // Short-term price filters
-  const [shortPriceFilters, setShortPriceFilters] = useState<{
-    district: string;
-    mandi: string;
-    days: number;
-  } | null>(null);
+
+  // // Short-term price filters
+  // const [shortPriceFilters, setShortPriceFilters] = useState<{
+  //   district: string;
+  //   mandi: string;
+  //   days: number;
+  // } | null>(null);
 
   const navigation = useNavigation<PropsNav>();
   const goBack = () => navigation.navigate('Dashboard');
@@ -95,7 +95,7 @@ export default function FarmerDashboard() {
   const [district, setDistrict] = useState('');
   const [mandiName, setMandiName] = useState('');
   const [cropName, setCropName] = useState('');
-  const [appliedFilters, setAppliedFilters] = useState({ mandi: '', crop: '' });
+  const [appliedFilter, setAppliedFilter] = useState({ district: '', mandi: '', crop: '', days: 1 });
 
   // Short-term forecast state
   const [stfDistrict, setStfDistrict] = useState('');
@@ -106,6 +106,7 @@ export default function FarmerDashboard() {
   );
   const [forecastSummary, setForecastSummary] = useState<string | null>(null);
   const [forecastLoading, setForecastLoading] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState({ district: '', mandi: '', crop: '', days: 7 });
 
   // Pre-register state
   const [prCrop, setPrCrop] = useState(''); // crop name
@@ -132,9 +133,9 @@ export default function FarmerDashboard() {
   const [crops, setCrops] = useState<UICrop[]>([]);
   const [mandis, setMandis] = useState<UIMandi[]>([]);
 
-  // 🔹 Shared price filter state (SAME AS Dashboard)
-  const [mandi, setMandi] = useState('');
-  const [days, setDays] = useState<number>(1);
+  // // 🔹 Shared price filter state (SAME AS Dashboard)
+  // const [mandi, setMandi] = useState('');
+  // const [days, setDays] = useState<number>();
 
   // Unique crop names for dropdowns
   const cropOptions = useMemo(
@@ -182,7 +183,7 @@ export default function FarmerDashboard() {
     return value === '' || options.includes(value) || value === 'Other';
   };
 
-  //  when crop changes, reset grade if not valid for that crop
+  // //  when crop changes, reset grade if not valid for that crop
   useEffect(() => {
     if (!prCrop) {
       setPrGrade('');
@@ -192,6 +193,18 @@ export default function FarmerDashboard() {
       setPrGrade('');
     }
   }, [prCrop, prGrade, currentGrades]);
+
+  
+//   const getGradesForCrop = (cropName: string) => {
+//   const grades = crops
+//     .filter(c => c.name === cropName && c.grade)
+//     .map(c => String(c.grade));
+//   const unique = Array.from(new Set(grades));
+//   if (!uniqueGrades.length) return ['Other'];
+//   if (!uniqueGrades.includes('Other')) unique.push('Other');
+//   return uniqueGrades;
+
+// };
 
   //  helper: sync lots to AsyncStorage (for buyer pre-bidding)
   const syncLotsToStorage = async (
@@ -270,7 +283,7 @@ export default function FarmerDashboard() {
           crop: d.cropName ?? d.CropName ?? d.crop ?? '',
           grade: d.grade ?? d.Grade ?? '-',
           quantity: String(d.quantity ?? d.Quantity ?? ''),
-          sellingamount: String(d.sellingamount ?? d.SellingAmount ?? ''),
+          sellingamount: String(d.sellingamount ?? d.SellingAmount ?? d.sellingAmount??''),
           mandi:
             d.mandiName ??
             d.MandiName ??
@@ -289,7 +302,30 @@ export default function FarmerDashboard() {
       setLots(mapped);
       await syncLotsToStorage(mapped, ownerPhone);
     } catch (err) {
-      console.warn('Failed to load lots from backend', err);
+      console.warn('Failed to load Farmer lots from backend', err);
+
+      
+      // fallback: try existing local storage if any
+
+      if (ownerPhone) {
+
+        const j = await AsyncStorage.getItem(`${STORAGE_KEY_PREFIX}${ownerPhone}`);
+
+        if (j) {
+
+          try {
+
+            setLots(JSON.parse(j));
+
+          } catch (e) {
+
+            console.warn('Failed parse lots from local storage', e);
+
+          }
+
+        }
+
+      }
     }
   };
 
@@ -391,132 +427,69 @@ export default function FarmerDashboard() {
       );
       return;
     }
-    //setAppliedFilters({ mandi: mandiName, crop: cropName });
-    setDailyPriceFilters({
-      district: district,
-      mandi: mandiName,
-      days: 1,
+    setAppliedFilter({ district, mandi: mandiName, crop: cropName, days: 1 });
+  };
+
+
+   const getDaysFromHorizon = () => {
+  if (horizon === '14days') return 14;
+  if (horizon === '30days') return 30;
+  return 7; // default
+};
+
+const getShortTermForecastInline = async () => {
+  if (!stfDistrict || !stfMandi) {
+    Alert.alert('Error', 'Please select district and mandi');
+    return;
+  }
+
+  try {
+    setForecastLoading(true);
+    setForecastSummary(null);
+
+    const days = getDaysFromHorizon();
+
+      // ✅ SAFE: runs only on button press
+    setAppliedFilters({
+      district: stfDistrict,
+      mandi: stfMandi,
+      crop: stfCrop,
+      days,
     });
-  };
 
-  // const getShortTermForecastInline = async () => {
-  //   if (!stfMandi && !stfCrop) {
-  //     Alert.alert(
-  //       t('error_title') ?? 'Error',
-  //       t('fill_mandi_search') ?? 'Enter mandi or crop to search',
-  //     );
-  //     return;
-  //   }
-  //   try {
-  //     setForecastLoading(true);
-  //     setForecastSummary(null);
-  //     const summary = `${
-  //       t('short_term_forecast') ?? 'Short term forecast'
-  //     }: ${stfCrop || 'selected crop'} at ${
-  //       stfMandi || 'selected mandi'
-  //     } — ${
-  //       horizon === '7days'
-  //         ? 'Next 7 days'
-  //         : horizon === '14days'
-  //         ? 'Next 14 days'
-  //         : 'Next 30 days'
-  //     }.`;
-  //     setForecastSummary(summary);
-  //   } catch (err) {
-  //     console.error(err);
-  //     Alert.alert(
-  //       t('error_title') ?? 'Error',
-  //       t('error_generic') ?? 'Something went wrong',
-  //     );
-  //   } finally {
-  //     setForecastLoading(false);
-  //   }
-  // };
+    {appliedFilters.district ? (
+  <MandiPriceSummary
+    key={`${appliedFilters.district}_${appliedFilters.mandi}_${appliedFilters.days}`}
+    district={appliedFilters.district}
+    mandi={appliedFilters.mandi}
+    days={appliedFilters.days}
+  />
+) : (
+  <View style={styles.chartPlaceholder}>
+    <Text style={{ color: theme.text }}>
+      {t('select_district_mandi_days') ??
+        'Select district, mandi and days to view prices'}
+    </Text>
+  </View>
+)}
 
-  //   const getShortTermForecastInline = () => {
-  //   if (!stfDistrict || !stfMandi) {
-  //     Alert.alert(
-  //       t('error_title') ?? 'Error',
-  //       'Please select district and mandi'
-  //     );
-  //     return;
-  //   }
 
-  //   // const days =
-  //   //   horizon === '7days'
-  //   //     ? 7
-  //   //     : horizon === '14days'
-  //   //     ? 14
-  //   //     : 30;
-
-  //   const getDaysFromHorizon = () => {
-  //   if (horizon === '14days') return 14;
-  //   if (horizon === '30days') return 30;
-  //   return 7; // ✅ default
-  // };
-
-  //   setShortPriceFilters({
-  //     district: stfDistrict,
-  //     mandi: stfMandi,
-  //     days: getDaysFromHorizon(),
-  //   });
-  // };
-
-  const getDaysFromHorizon = () => {
-    if (horizon === '14days') return 14;
-    if (horizon === '30days') return 30;
-    if (horizon === '7days') return 7;
-    return 1; // ✅ default
-  };
-
-  const getMandiPrices = async (params: {
-    district: string;
-    market: string;
-    days: number;
-  }) => {
-    const res = await api.get('/api/v1/mandi/kg', { params });
-    return res;
-  };
-
-  useEffect(() => {
-    if (selectedTab === 'short' && stfDistrict && stfMandi) {
-      getShortTermForecastInline();
-    }
-  }, [selectedTab, horizon]);
-
-  useEffect(() => {
-    if (!dailyPriceFilters) return;
-
-    // this guarantees latest state is used
-    setDailyPriceFilters(prev =>
-      prev ? { district: prev.district, mandi: prev.mandi, days: 1 } : null,
+    setForecastSummary(
+      `${t('short_term_forecast') ?? 'Short term forecast'}: ${
+        stfCrop || 'selected crop'
+      } at ${stfMandi} — ${days} days`
     );
-  }, [dailyPriceFilters?.district, dailyPriceFilters?.mandi]);
+  } catch (err) {
+    console.error(err);
+    Alert.alert(
+      t('error_title') ?? 'Error',
+      t('error_generic') ?? 'Something went wrong'
+    );
+  } finally {
+    setForecastLoading(false);
+  }
+};
 
-  const getShortTermForecastInline = async () => {
-    if (!stfDistrict || !stfMandi) {
-      Alert.alert('Error', 'Please select district and mandi');
-      return;
-    }
-
-    try {
-      setForecastLoading(true);
-
-      const days = getDaysFromHorizon();
-
-      const res = await getMandiPrices({
-        district,
-        market: stfMandi,
-        days,
-      });
-
-      setForecastSummary(null); // optional
-    } catch (err) {
-      console.log('Short term API error', err);
-    } finally {
-      setForecastLoading(false);
-    }
-  };
 
   const formatDate = (d: Date) => {
     const dd = String(d.getDate()).padStart(2, '0');
@@ -564,9 +537,15 @@ export default function FarmerDashboard() {
     if (!prCrop) return null;
 
     // Try to match crop + grade first
+ 
     let match = crops.find(
+
       c =>
-        c.name === prCrop && ((c.grade ?? '') === prGrade || (c.grade ?? '')),
+
+        c.name === prCrop &&
+
+        (c.grade ?? '') === (prGrade) || (c.grade ?? ''),
+
     );
 
     // Fallback: any row with same crop name
@@ -650,7 +629,7 @@ export default function FarmerDashboard() {
         grade: (data.grade ?? data.Grade ?? prGrade) || '-',
         quantity: String(data.quantity ?? data.Quantity ?? prQuantity),
         sellingamount: String(
-          data.sellingamount ?? data.SellingAmount ?? prSellingAmount,
+          data.sellingAmount ?? data.SellingAmount ?? prSellingAmount,
         ),
         mandi:
           data.mandiName ??
@@ -1061,7 +1040,7 @@ export default function FarmerDashboard() {
                   }
                   onValueChange={v => {
                     setMandiName(v);
-                    setMandi(v);
+                    //setMandi(v);
                   }}
                   style={[styles.picker, { color: theme.text }]}
                   dropdownIconColor={theme.text}
@@ -1159,16 +1138,17 @@ export default function FarmerDashboard() {
               <Text style={[styles.chartTitle, { color: theme.text }]}>
                 {t('daily_market_price_chart_title')}
               </Text>
-              {/* <View
+              <View
                 style={[
                   styles.chartPlaceholder,
                   { borderColor: theme.text },
                 ]}
               >
+                <GraphChart filters={appliedFilter} />
                
-              </View> */}
+              </View>
 
-              <View>
+              {/* <View>
                 {dailyPriceFilters ? (
                   <MandiPriceSummary
                     district={dailyPriceFilters.district}
@@ -1183,7 +1163,7 @@ export default function FarmerDashboard() {
                     </Text>
                   </View>
                 )}
-              </View>
+              </View> */}
             </View>
           </>
         )}
@@ -1392,9 +1372,10 @@ export default function FarmerDashboard() {
                 </Text>
               </View> */}
 
-              <View>
+              {/* <View>
                 {shortPriceFilters ? (
                   <MandiPriceSummary
+                  key={`${shortPriceFilters.district}_${shortPriceFilters.mandi}_${shortPriceFilters.days}`}
                     district={shortPriceFilters.district}
                     mandi={shortPriceFilters.mandi}
                     days={shortPriceFilters.days}
@@ -1413,7 +1394,8 @@ export default function FarmerDashboard() {
                 <Text style={{ color: theme.text, marginTop: 8 }}>
                   {forecastSummary}
                 </Text>
-              )}
+              )} */}
+              <GraphChart filters={appliedFilters} />
             </View>
           </>
         )}

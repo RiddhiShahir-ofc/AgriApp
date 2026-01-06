@@ -230,6 +230,9 @@
   "settings":"सेटिंग्स",
   "menu":"मेनू",
   "profile":"प्रोफ़ाइल",
+  "select_district":"जिला चुनें",
+  "district":"जिला",
+
 
     "anchor_stats_registered_farmers": "पंजीकृत किसान",
     "anchor_stats_total_crop_volume": "कुल फसल मात्रा",
@@ -437,6 +440,7 @@
     "terms_note": "OTP भेजने पर आप हमारी सेवा की शर्तों और गोपनीयता नीति से सहमत होते हैं।",
     "enter_name":"अपना नाम दर्ज करें",
     "edit_name":"नाम संपादित करें",
-    "convert_land_unit":"भूमि इकाई परिवर्तित करें"
+    "convert_land_unit":"भूमि इकाई परिवर्तित करें",
+    "select_filter":"कीमतें देखने के लिए जिला और मंडी चुनें"
 
 }

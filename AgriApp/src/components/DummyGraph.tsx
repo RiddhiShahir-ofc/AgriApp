@@ -73,7 +73,8 @@ export default function GraphChart() {
           backgroundGradientTo: '#ffffff',
           decimalPlaces: 0,
           color: () => '#15f048ff', // green line
-          labelColor: () => theme.text ?? '#666',
+          //labelColor: () => theme.text ?? '#666',
+          labelColor: () => '#666',
           fillShadowGradient: '#15f048ff',
           fillShadowGradientOpacity: 0.2,
           propsForBackgroundLines: {

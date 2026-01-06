@@ -444,7 +444,8 @@
 "terms_note": "By clicking Send OTP, you agree to our Terms of Service and Privacy Policy.",
 "enter_name":"Enter your name",
 "edit_name":"Edit Name",
-"convert_land_unit":"Convert Land Unit"
+"convert_land_unit":"Convert Land Unit",
+"select_filter":"Select district and mandi to view prices"
 
 
 }

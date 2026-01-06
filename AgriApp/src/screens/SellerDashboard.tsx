@@ -2147,7 +2147,7 @@ const districtOptions = useMemo(
           crop: d.cropName ?? d.CropName ?? d.crop ?? '',
           grade: d.grade ?? d.Grade ?? '-',
           quantity: String(d.quantity ?? d.Quantity ?? ''),
-          sellingamount: String(d.SellingAmount ?? d.sellingamount ?? ''),
+          sellingamount: String(d.SellingAmount ?? d.sellingamount ?? d.sellingAmount ?? ''),
           mandi:
             d.mandiName ??
             d.MandiName ??
@@ -2535,22 +2535,41 @@ const saveEditLot = async (lot: Lot) => {
       return;
     }
 
+    // ✅ Grade must NEVER be empty
     const safeGrade =
       lot.grade && lot.grade.trim() && lot.grade !== '-'
         ? lot.grade
         : 'Other';
 
-    const payload = {
-      Quantity: Number(lot.quantity),
-      SellingAmount: Number(lot.sellingamount),
-      Grade: safeGrade, // ✅ REQUIRED by backend
-      ExpectedArrivalDate: lot.expectedArrival
-        ? new Date(lot.expectedArrival).toISOString()
-        : null,
-    };
+    // 🔥 FIND IDs (IMPORTANT)
+    const cropObj = crops.find(c => c.name === lot.crop);
+    const mandiObj = mandis.find(m => m.name === lot.mandi);
 
-    await api.put(`/seller/lots/${lot.preLotId}`, payload);
+    if (!cropObj || !mandiObj) {
+      Alert.alert('Error', 'Invalid crop or mandi selected');
+      return;
+    }
 
+    const formData = new FormData();
+
+    // ✅ FIELD NAMES MUST MATCH BACKEND
+    formData.append('CropId', String(cropObj.id));
+    formData.append('MandiId', String(mandiObj.id));
+    formData.append('Quantity', String(Number(lot.quantity)));
+    formData.append('SellingAmount', String(Number(lot.sellingamount)));
+    formData.append('Grade', safeGrade); // 🔥 REQUIRED
+    if (lot.expectedArrival) {
+      formData.append(
+        'ExpectedArrivalDate',
+        new Date(lot.expectedArrival).toISOString(),
+      );
+    }
+
+    await api.put(`/seller/lots/${lot.preLotId}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+
+    // ✅ Update UI
     setLots(prev =>
       prev.map(l =>
         l.id === lot.id
@@ -2564,7 +2583,10 @@ const saveEditLot = async (lot: Lot) => {
       t('lot_updated') ?? 'Lot updated successfully',
     );
   } catch (err: any) {
-    console.error('Update seller lot failed', err?.response?.data ?? err);
+    console.error(
+      'Update seller lot failed',
+      err?.response?.data ?? err,
+    );
     Alert.alert(
       t('error_title') ?? 'Error',
       t('lot_update_failed') ?? 'Failed to update lot',
@@ -3278,7 +3300,7 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
               </TouchableOpacity>
             </View>
 
-            <View
+            {/* <View
               style={[
                 styles.chartBox,
                 {
@@ -3294,13 +3316,7 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                 <GraphChart filters={appliedFilters} />
               </Text>
               <View style={styles.chartPlaceholder}>
-                {/* <Text style={{ color: theme.text ?? '#666' }}>
-                  {forecastLoading
-                    ? t('loading') ?? 'Loading...'
-                    : forecastSummary ??
-                      t('chart_placeholder_text') ??
-                      'Forecast chart will appear here'}
-                </Text> */}
+                
                 {forecastSummary && (
                 <Text
                   style={{ color: theme.text, marginTop: 8 }}
@@ -3309,7 +3325,43 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                 </Text>
               )}
               </View>
-            </View>
+            </View> */}
+            <View
+  style={[
+    styles.chartBox,
+    {
+      borderColor: theme.text ?? '#ddd',
+      backgroundColor: theme.background ?? '#fff',
+    },
+  ]}
+>
+  {/* Title */}
+  <Text style={[styles.chartTitle, { color: theme.text }]}>
+    {t('short_term_forecast')}
+  </Text>
+
+  {/* Forecast cards INSIDE box */}
+  <GraphChart
+    filters={{
+      district: stfDistrict,
+      mandi: stfMandi,
+      crop: stfCrop,
+      days:
+        horizon === '7days'
+          ? 7
+          : horizon === '14days'
+          ? 14
+          : 30,
+    }}
+  />
+
+  {/* Optional summary */}
+  {/* {forecastSummary && (
+    <Text style={{ color: theme.text, marginTop: 8 }}>
+      {forecastSummary}
+    </Text>
+  )} */}
+</View>
           </>
         )}
 
