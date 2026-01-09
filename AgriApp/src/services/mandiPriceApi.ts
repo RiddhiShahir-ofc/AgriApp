@@ -58,6 +58,7 @@ export const getMandiPrices = async ({
   market,
   days = 1, // ✅ DEFAULT = 1 DAY
 }: MandiPriceParams) => {
+  console.log(new Error().stack);
   const res = await mandiApi.get('/api/v1/mandi/kg', {
     params: {
       district,

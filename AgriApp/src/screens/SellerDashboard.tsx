@@ -2021,7 +2021,7 @@ export default function SellerDashboard() {
   const [mandiName, setMandiName] = useState('');
   const [cropName, setCropName] = useState('');
   const [appliedFilter, setAppliedFilter] = useState({ district: '', mandi: '', crop: '', days: 1 });
-
+const [hasSearched, setHasSearched] = useState(false);
   // Short-term forecast state
   const [stfDistrict, setStfDistrict] = useState('');
   const [stfMandi, setStfMandi] = useState('');
@@ -2079,6 +2079,12 @@ const districtOptions = useMemo(
     .map(m => m.name);
 }, [mandis, district]);
 
+
+const shortTermMandiOptions = useMemo(() => {
+  return mandis
+    .filter(m => !stfDistrict || m.district === stfDistrict)
+    .map(m => m.name);
+}, [mandis, stfDistrict]);
 
   //  Grades from DB for selected crop
   const currentGrades = useMemo(() => {
@@ -2254,6 +2260,11 @@ const districtOptions = useMemo(
     }
   }, [prCrop, prGrade, currentGrades]);
 
+// 🔹 reset search when daily filters change
+useEffect(() => {
+  setHasSearched(false);
+}, [district, mandiName, cropName]);
+
   //  Load received bids when tab changes to "received"
   // useEffect(() => {
   //   if (selectedTab === 'received' && phone) {
@@ -2296,6 +2307,7 @@ const districtOptions = useMemo(
       return;
     }
     setAppliedFilter({ district, mandi: mandiName, crop: cropName, days: 1 });
+    setHasSearched(true);
   };
 
 
@@ -3079,7 +3091,10 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                   { borderColor: theme.text },
                 ]}
               >
-                <GraphChart filters={appliedFilter} />
+                {/* <GraphChart filters={appliedFilter} /> */}
+                {hasSearched && (
+  <GraphChart filters={appliedFilter} />
+)}
               </View>
             </View>
           </>
@@ -3145,7 +3160,7 @@ const handleRejectBid = (lotId: string, buyerInterestLotId: number) => {
                     label={t('select_mandi') ?? 'Select mandi'}
                     value=""
                   />
-                  {mandiOptions.map(m => (
+                  {shortTermMandiOptions.map(m => (
                     <Picker.Item key={m} label={m} value={m} />
                   ))}
                   <Picker.Item label="Other" value="Other" />

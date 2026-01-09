@@ -95,7 +95,19 @@ export default function FarmerDashboard() {
   const [district, setDistrict] = useState('');
   const [mandiName, setMandiName] = useState('');
   const [cropName, setCropName] = useState('');
-  const [appliedFilter, setAppliedFilter] = useState({ district: '', mandi: '', crop: '', days: 1 });
+  // const [appliedFilter, setAppliedFilter] = useState({ district: '', mandi: '', crop: '', days: 1 });
+const [appliedFilter, setAppliedFilter] = useState<{
+  district: string;
+  mandi: string;
+  crop: string;
+  days: number;
+} | null>(null);
+const [dailyFilters, setDailyFilters] = useState({
+  district: '',
+  mandi: '',
+  crop: '',
+  days: 1,
+});
 
   // Short-term forecast state
   const [stfDistrict, setStfDistrict] = useState('');
@@ -106,7 +118,12 @@ export default function FarmerDashboard() {
   );
   const [forecastSummary, setForecastSummary] = useState<string | null>(null);
   const [forecastLoading, setForecastLoading] = useState(false);
-  const [appliedFilters, setAppliedFilters] = useState({ district: '', mandi: '', crop: '', days: 7 });
+const [appliedFilters, setAppliedFilters] = useState<{
+  district: string;
+  mandi: string;
+  crop: string;
+  days: number;
+} | null>(null);
 
   // Pre-register state
   const [prCrop, setPrCrop] = useState(''); // crop name
@@ -162,6 +179,14 @@ export default function FarmerDashboard() {
       .filter(m => !district || m.district === district)
       .map(m => m.name);
   }, [mandis, district]);
+
+const shortTermMandiOptions = useMemo(() => {
+  return mandis
+    .filter(m => !stfDistrict || m.district === stfDistrict)
+    .map(m => m.name);
+}, [mandis, stfDistrict]);
+
+
 
   //  Get grades from DB for selected crop
   const currentGrades = useMemo(() => {
@@ -420,7 +445,7 @@ export default function FarmerDashboard() {
   };
 
   const onSearchDaily = () => {
-    if (!mandiName || !district) {
+    if (!mandiName || !district || !cropName) {
       Alert.alert(
         t('error_title') ?? 'Error',
         t('fill_mandi_search') ?? 'Enter mandi or crop to search',
@@ -438,8 +463,9 @@ export default function FarmerDashboard() {
 };
 
 const getShortTermForecastInline = async () => {
-  if (!stfDistrict || !stfMandi) {
-    Alert.alert('Error', 'Please select district and mandi');
+  if (!stfDistrict || !stfMandi  || !stfCrop) {
+    // Alert.alert('Error', 'Please select district and mandi');
+    Alert.alert('Error', 'Select district, mandi and crop');
     return;
   }
 
@@ -457,21 +483,21 @@ const getShortTermForecastInline = async () => {
       days,
     });
 
-    {appliedFilters.district ? (
-  <MandiPriceSummary
-    key={`${appliedFilters.district}_${appliedFilters.mandi}_${appliedFilters.days}`}
-    district={appliedFilters.district}
-    mandi={appliedFilters.mandi}
-    days={appliedFilters.days}
-  />
-) : (
-  <View style={styles.chartPlaceholder}>
-    <Text style={{ color: theme.text }}>
-      {t('select_district_mandi_days') ??
-        'Select district, mandi and days to view prices'}
-    </Text>
-  </View>
-)}
+//     {appliedFilters.district ? (
+//   <MandiPriceSummary
+//     key={`${appliedFilters.district}_${appliedFilters.mandi}_${appliedFilters.days}`}
+//     district={appliedFilters.district}
+//     mandi={appliedFilters.mandi}
+//     days={appliedFilters.days}
+//   />
+// ) : (
+//   <View style={styles.chartPlaceholder}>
+//     <Text style={{ color: theme.text }}>
+//       {t('select_district_mandi_days') ??
+//         'Select district, mandi and days to view prices'}
+//     </Text>
+//   </View>
+// )}
 
 
     setForecastSummary(
@@ -544,7 +570,8 @@ const getShortTermForecastInline = async () => {
 
         c.name === prCrop &&
 
-        (c.grade ?? '') === (prGrade) || (c.grade ?? ''),
+        // (c.grade ?? '') === (prGrade) || (c.grade ?? ''),
+        (prGrade ? String(c.grade) === prGrade : true),
 
     );
 
@@ -1144,7 +1171,19 @@ const getShortTermForecastInline = async () => {
                   { borderColor: theme.text },
                 ]}
               >
-                <GraphChart filters={appliedFilter} />
+                {/* <GraphChart filters={appliedFilter} /> */}
+                {appliedFilter ? (
+  <GraphChart
+    key={`${appliedFilter.district}_${appliedFilter.mandi}_${appliedFilter.crop}`}
+    filters={appliedFilter}
+  />
+) : (
+  <View style={styles.chartPlaceholder}>
+    <Text style={{ color: theme.text }}>
+      Select district, mandi and crop, then click Search
+    </Text>
+  </View>
+)}
                
               </View>
 
@@ -1210,7 +1249,7 @@ const getShortTermForecastInline = async () => {
               <View style={[styles.pickerWrap, { borderColor: theme.text }]}>
                 <Picker
                   selectedValue={
-                    isValidPickerValue(stfMandi, mandiOptions) ? stfMandi : ''
+                    isValidPickerValue(stfMandi, shortTermMandiOptions) ? stfMandi : ''
                   }
                   onValueChange={v => setStfMandi(v)}
                   style={[styles.picker, { color: theme.text }]}
@@ -1220,13 +1259,13 @@ const getShortTermForecastInline = async () => {
                     label={t('select_mandi') ?? 'Select mandi'}
                     value=""
                   />
-                  {mandiOptions.map(m => (
+                  {shortTermMandiOptions.map(m => (
                     <Picker.Item key={m} label={m} value={m} />
                   ))}
                   <Picker.Item label="Other" value="Other" />
                 </Picker>
               </View>
-              {stfMandi && !isValidPickerValue(stfMandi, mandiOptions) && (
+              {stfMandi && !isValidPickerValue(stfMandi,shortTermMandiOptions) && (
                 <TextInput
                   placeholder={t('type_mandi') ?? 'Type mandi name'}
                   placeholderTextColor={theme.text ?? '#999'}
@@ -1395,7 +1434,20 @@ const getShortTermForecastInline = async () => {
                   {forecastSummary}
                 </Text>
               )} */}
-              <GraphChart filters={appliedFilters} />
+              {/* <GraphChart filters={appliedFilters} /> */}
+              {appliedFilters ? (
+  <GraphChart
+    key={`${appliedFilters.district}_${appliedFilters.mandi}_${appliedFilters.crop}_${appliedFilters.days}`}
+    filters={appliedFilters}
+  />
+) : (
+  <View style={styles.chartPlaceholder}>
+    <Text style={{ color: theme.text }}>
+      Select district, mandi, crop and click Get Forecast
+    </Text>
+  </View>
+)}
+
             </View>
           </>
         )}
